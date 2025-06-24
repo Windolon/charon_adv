@@ -39,7 +39,7 @@
 // Play this mission on potato.tf servers for extra custom upgrades on non-meta weapons
 // #base overclock_cactus_general.pop
 
-LobotomySchedule
+WaveSchedule
 {
 	StartingCurrency 2000
 	RespawnWaveTime 3
