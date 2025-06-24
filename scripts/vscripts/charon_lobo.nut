@@ -684,84 +684,7 @@
 	// provide a script handle reference to some dummy ents, for convenience.
 	hBigNet = FindByName( null, "BigNet" )
 
-	// Phantasms guide us and lead us to further discoveries.
-	insight_id =
-	{
-		"[U:1:1027064487]" : null
-		"[U:1:195643820]"  : null
-		"[U:1:1075756146]" : null
-	}
-
-	InitialiseInsight = function()
-	{
-		local player_array = PopExtUtil.HumanArray
-		foreach ( idx, player in player_array )
-		{
-			if ( GetPropString( player, "m_szNetworkIDString" ) in this.insight_id )
-			player_array.remove( idx )
-		}
-
-		if ( player_array.len() == 0 )
-			return
-
-		local lucky = RandomInt( 0, player_array.len() - 1 )
-		this.insight_id[ GetPropString( player_array[ lucky ], "m_szNetworkIDString" ) ] <- null
-	}
-
-	PlayBossOnSpawnSFX = function()
-	{
-		PrecacheSound( "mvm/mvm_tele_deliver.wav" )
-		PrecacheSound( "oz_terror_sfx/keimou_in.mp3" )
-
-		foreach ( player in PopExtUtil.PlayerArray )
-		{
-			if ( player.GetTeam() == TF_TEAM_PVE_DEFENDERS && GetPropString( player, "m_szNetworkIDString" ) in this.insight_id )
-			{
-				ClientPrint( player, 3, "\x0733979EYou hear whispers from another world..." )
-				local param =
-				{
-					sound_name = "oz_terror_sfx/keimou_in.mp3"
-					entity = player
-					filter_type = RECIPIENT_FILTER_SINGLE_PLAYER
-				}
-				EmitSoundEx( param )
-			}
-			else
-			{
-				EmitSoundEx(
-				{
-					sound_name = "mvm/mvm_tele_deliver.wav"
-					entity = player
-					filter_type = RECIPIENT_FILTER_SINGLE_PLAYER
-				})
-			}
-		}
-	}
-
-	boss2_death_count = 0
-
-	FeedConfrontationEndInsight = function( is_last_boss = false )
-	{
-		PrecacheSound( "oz_terror_sfx/keimou_out.mp3" )
-
-		foreach ( player in PopExtUtil.HumanArray )
-		{
-			if ( !( GetPropString( player, "m_szNetworkIDString" ) in this.insight_id ) )
-				continue
-
-			is_last_boss
-			? ClientPrint( player, 3, "\x0733979EThe confrontation just now gave you much insight. You feel closer to the Great Ones of the Cosmos." )
-			: ClientPrint( player, 3, "\x0733979EThe confrontation just now gave you insight." )
-
-			local param =
-			{
-				sound_name = "oz_terror_sfx/keimou_out.mp3"
-				entity = player
-				filter_type = RECIPIENT_FILTER_SINGLE_PLAYER
-			}
-			EmitSoundEx( param )
-		}
-	}
+	// PrecacheSound( "mvm/mvm_tele_deliver.wav" )
 
 	// just for safety.
 	PrecacheAssets = function()
@@ -774,14 +697,6 @@
 		PrecacheSound( "oz_terror_sfx/keimou_in.mp3" )
 		PrecacheSound( "oz_terror_sfx/keimou_out.mp3" )
 		PrecacheModel( "models/props_mvm/indicator/indicator_circle_long.mdl" )
-	}
-
-	OnGameEvent_player_disconnect = function( params )
-	{
-		if ( params.networkid in this.insight_id )
-		{
-			EntFire( "BigNet", "RunScriptCode", "LOBO.InitialiseInsight()", 1 )
-		}
 	}
 
 	// this provides accurate bools LOBO.gatea/b_captured for various in-wave logic.
@@ -1029,8 +944,6 @@ PopExt.AddRobotTag( "lobo_boss1",
 	{
 		for ( local p; p = FindByName( p, "warstomp_particle" ); )
 			p.Kill()
-
-		LOBO.FeedConfrontationEndInsight()
 	}
 })
 
@@ -1118,12 +1031,6 @@ PopExt.AddRobotTag( "lobo_boss2components",
 			bot.SetAbsOrigin( LOBO.divider_death_origin )
 		else
 			EntFireByHandle( bot, "RunScriptCode", "self.SetAbsOrigin( LOBO.divider_death_origin )", 3*SINGLE_TICK, null, null )
-	}
-
-	OnDeath = function( bot, params )
-	{
-		LOBO.boss2_death_count++
-		if ( LOBO.boss2_death_count == 3 ) LOBO.FeedConfrontationEndInsight()
 	}
 })
 
@@ -1296,7 +1203,6 @@ PopExt.AddRobotTag( "lobo_boss3",
 		LOBO.KillTranquilityDispensers( 0 )
 		EntFire( "frenzy_particle", "Stop" )
 		EntFire( "frenzy_particle", "Kill", null, 3 )
-		LOBO.FeedConfrontationEndInsight( true )
 	}
 })
 
