@@ -1002,12 +1002,12 @@ LobotomySchedule
 			Action RunScriptCode
 			Param "
 				// we start the mission at gate B
-				EntFire(`initB`, `Trigger`)
+				EntFire( `initB`, `Trigger` )
 
 				// load popext and the mission script
-				IncludeScript(`popextensions_main`, getroottable())
-				IncludeScript(`charon_lobo`, getroottable())
-				IncludeScript(`seel_ins`, getroottable())
+				IncludeScript( `popextensions_main`, getroottable() )
+				IncludeScript( `charon_lobo`, getroottable() )
+				IncludeScript( `seel_ins`, getroottable() )
 
 				MissionAttrs(
 				{
@@ -1015,9 +1015,9 @@ LobotomySchedule
 				})
 
 				// bomb attributes
-				EntFire(`intel`, `SetReturnTime`, 35)
-				EntFire(`enable_bomb_1`, `Kill`, null, 1) // bye
-				EntFire(`intel2`, `Kill`, null, 1)
+				EntFire( `intel`, `SetReturnTime`, 35 )
+				EntFire( `enable_bomb_1`, `Kill`, null, 1 ) // bye
+				EntFire( `intel2`, `Kill`, null, 1 )
 			"
 		}
 		StartWaveOutput
@@ -1025,22 +1025,22 @@ LobotomySchedule
 			Target BigNet
 			Action RunScriptCode
 			Param "
-				EntFire(`wave_start_relay`, `Trigger`)
+				EntFire( `wave_start_relay`, `Trigger` )
 
-				SINS.ChangeIconFlags(`engineer_pomson_v2`, 1)
+				SINS.ChangeIconFlags( `engineer_pomson_v2`, 1 )
 
-				SINS.ChangeIconByName(`pyro_phlog_v2`, `pyro_flare_atomic_v2`)
-				SINS.ChangeIconFlags(`pyro_flare_atomic_v2`, 1)
+				SINS.ChangeIconByName( `pyro_phlog_v2`, `pyro_flare_atomic_v2` )
+				SINS.ChangeIconFlags( `pyro_flare_atomic_v2`, 1 )
 
-				SINS.ChangeIconByName(`soldier_and_demo`, `soldier`)
-				SINS.ChangeIconFlags(`soldier`, 1)
+				SINS.ChangeIconByName( `soldier_and_demo`, `soldier` )
+				SINS.ChangeIconFlags( `soldier`, 1 )
 
-				SINS.ChangeIconByName(`heavy_fist_nys`, `heavy_gru`)
-				SINS.ChangeIconFlags(`heavy_gru`, 1)
+				SINS.ChangeIconByName( `heavy_fist_nys`, `heavy_gru` )
+				SINS.ChangeIconFlags( `heavy_gru`, 1 )
 
-				SINS.ChangeIconByName(`medic_kritz_quickfix_split`, `medic`)
-				SINS.ChangeIconByName(`scout_capper_saber_litenys`, `scout_batsaber_nys`)
-				SINS.ChangeIconByName(`soldier_buff_conch_mangler_giant`, `soldier_crit_giant`)
+				SINS.ChangeIconByName( `medic_kritz_quickfix_split`, `medic` )
+				SINS.ChangeIconByName( `scout_capper_saber_litenys`, `scout_batsaber_nys` )
+				SINS.ChangeIconByName( `soldier_buff_conch_mangler_giant`, `soldier_crit_giant` )
 
 				LOBO.InitialiseInsight()
 			"
@@ -1137,8 +1137,8 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					SINS.ChangeIconByName(`pyro_flare_atomic_v2`, `pyro`)
-					SINS.ChangeIconByName(`soldier`, `demo_loch_nys`)
+					SINS.ChangeIconByName( `pyro_flare_atomic_v2`, `pyro` )
+					SINS.ChangeIconByName( `soldier`, `demo_loch_nys` )
 				"
 				Delay 3.5
 			}
@@ -1196,9 +1196,7 @@ LobotomySchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "
-					SINS.ChangeIconByName(`medic`, `medic_quickfix_seel2`)
-				"
+				Param "SINS.ChangeIconByName( `medic`, `medic_quickfix_seel2` )"
 			}
 		}
 		WaveSpawn
@@ -1255,22 +1253,22 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					ClientPrint(null, 3, `\x079C1010A boss approaches...`)
+					ClientPrint( null, 3, `\x079C1010A boss approaches...` )
 					// reset just before boss spawns, makes him carry the bomb
-					EntFire(`intel`, `ForceResetSilent`, null, 3.9, null)
+					EntFire( `intel`, `ForceResetSilent`, null, 3.9, null )
 
-					EntFire(`nav_interface`, `RecomputeBlockers`, null, 1)
-					EntFire(`nav_interface`, `RecomputeBlockers`, null, 2)
+					EntFire( `nav_interface`, `RecomputeBlockers`, null, 1 )
+					EntFire( `nav_interface`, `RecomputeBlockers`, null, 2 )
 
-					SINS.ChangeIconByName(`scout_batsaber_nys`, `scout_capper_lite`)
-					SINS.ChangeIconByName(`pyro`, `pyro_phlog_v2`)
+					SINS.ChangeIconByName( `scout_batsaber_nys`, `scout_capper_lite` )
+					SINS.ChangeIconByName( `pyro`, `pyro_phlog_v2` )
 				"
 			}
 			FirstSpawnOutput
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "ClientPrint(null, 3, `\x0799CCFFThe boss is now carrying the bomb.`)"
+				Param "ClientPrint( null, 3, `\x0799CCFFThe boss is now carrying the bomb.` )"
 				Delay 5
 			}
 			FirstSpawnWarningSound mvm/mvm_tele_deliver.wav
@@ -1326,23 +1324,23 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					EntFire(`break1_relay`, `Trigger`)
-					EntFire(`break1_relay`, `Kill`)
+					EntFire( `break1_relay`, `Trigger` )
+					EntFire( `break1_relay`, `Kill` )
 
-					for (local player; player = FindByClassname(player, `player`);)
+					for ( local player; player = FindByClassname( player, `player` ); )
 					{
-						player.SetScriptOverlayMaterial(`oz_terror_overlays/break1_announcement`)
+						player.SetScriptOverlayMaterial( `oz_terror_overlays/break1_announcement` )
 					}
 
 					LOBO.KillAllBotsOnMap()
 
-					SINS.ChangeIconByName(`demo_loch_nys`, `soldier_and_demo`)
+					SINS.ChangeIconByName( `demo_loch_nys`, `soldier_and_demo` )
 
-					SINS.ChangeIconByName(`soldier_crit_giant`, `soldier_buff_burstfire_yoovy_giant`)
-					SINS.ChangeIconFlags(`soldier_buff_burstfire_yoovy_giant`, 1 | 8)
+					SINS.ChangeIconByName( `soldier_crit_giant`, `soldier_buff_burstfire_yoovy_giant` )
+					SINS.ChangeIconFlags( `soldier_buff_burstfire_yoovy_giant`, 1 | 8 )
 
-					SINS.ChangeIconByName(`medic_quickfix_seel2`, `medic_kritz_quickfix_split`)
-					SINS.ChangeIconByName(`heavy_gru`, `heavy_gauntlet_nys`)
+					SINS.ChangeIconByName( `medic_quickfix_seel2`, `medic_kritz_quickfix_split` )
+					SINS.ChangeIconByName( `heavy_gru`, `heavy_gauntlet_nys` )
 				"
 			}
 			FirstSpawnWarningSound vo/mvm_get_to_upgrade01.mp3 // Get to an upgrade station before they return.
@@ -1359,11 +1357,11 @@ LobotomySchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `The front upgrade station is located here.`
-						pos = Vector(1951, 108, -320)
+						pos = Vector( 1951, 108, -320 )
 						lifetime = -1.0
 						id = 2
 					})
-					EntFire(`wave_start_relay`, `RunScriptCode`, `PopExtUtil.HideAnnotation(2)`, 12)
+					EntFire( `wave_start_relay`, `RunScriptCode`, `PopExtUtil.HideAnnotation( 2 )`, 12 )
 				"
 			}
 		}
@@ -1376,9 +1374,9 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					for (local player; player = FindByClassname(player, `player`);)
+					for ( local player; player = FindByClassname( player, `player` ); )
 					{
-						player.SetScriptOverlayMaterial(`oz_terror_overlays/bomb_resets_40_sec`)
+						player.SetScriptOverlayMaterial( `oz_terror_overlays/bomb_resets_40_sec` )
 					}
 				"
 			}
@@ -1392,9 +1390,9 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					for (local player; player = FindByClassname(player, `player`);)
+					for ( local player; player = FindByClassname( player, `player` ); )
 					{
-						player.SetScriptOverlayMaterial(null)
+						player.SetScriptOverlayMaterial( null )
 					}
 				"
 			}
@@ -1416,7 +1414,7 @@ LobotomySchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `These dispensers provide a robot with radial healing when activated.`
-						entity = FindByName(null, `tranquility2_bp`)
+						entity = FindByName( null, `tranquility2_bp` )
 						lifetime = 4.25
 					})
 				"
@@ -1434,7 +1432,7 @@ LobotomySchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `These dispensers provide a robot with radial healing when activated.`
-						entity = FindByName(null, `tranquility1_bp`)
+						entity = FindByName( null, `tranquility1_bp` )
 						lifetime = 4.25
 					})
 				"
@@ -1452,7 +1450,7 @@ LobotomySchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `Destroy them to stop the effect.`
-						entity = FindByName(null, `tranquility1_bp`)
+						entity = FindByName( null, `tranquility1_bp` )
 						lifetime = 7
 					})
 				"
@@ -1470,11 +1468,11 @@ LobotomySchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `These particles indicate that a dispenser is about to activate.`
-						entity = FindByName(null, `tranquility1_bp`)
+						entity = FindByName( null, `tranquility1_bp` )
 						lifetime = 8.5
 					})
-					EntFire(`tranquility1_ready_particles`, `Start`)
-					EntFire(`tranquility2_ready_particles`, `Start`)
+					EntFire( `tranquility1_ready_particles`, `Start` )
+					EntFire( `tranquility2_ready_particles`, `Start` )
 				"
 			}
 		}
@@ -1490,12 +1488,12 @@ LobotomySchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `This sound is played on activation.`
-						entity = FindByName(null, `tranquility1_bp`)
+						entity = FindByName( null, `tranquility1_bp` )
 						lifetime = 7
 						sound = `oz_terror_sfx/tranquility.mp3`
 					})
-					EntFire(`tranquility1_ready_particles`, `Stop`)
-					EntFire(`tranquility2_ready_particles`, `Stop`)
+					EntFire( `tranquility1_ready_particles`, `Stop` )
+					EntFire( `tranquility2_ready_particles`, `Stop` )
 				"
 			}
 		}
@@ -1511,7 +1509,7 @@ LobotomySchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `But beware! Some robots resonate with these signals much more strongly than others...`
-						entity = FindByName(null, `tranquility1_bp`)
+						entity = FindByName( null, `tranquility1_bp` )
 						lifetime = 8.5
 					})
 				"
@@ -1570,9 +1568,9 @@ LobotomySchedule
 						text = `Gatebots will flank regularly from here! Watch out!`
 						lifetime = -1
 						id = 1
-						pos = Vector(3297, 462, -355)
+						pos = Vector( 3297, 462, -355 )
 					})
-					EntFire(`wave_start_relay`, `RunScriptCode`, `PopExtUtil.HideAnnotation(1)`, 8.5)
+					EntFire( `wave_start_relay`, `RunScriptCode`, `PopExtUtil.HideAnnotation( 1 )`, 8.5 )
 				"
 			}
 		}
@@ -1608,12 +1606,14 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					if (!LOBO.gateb_captured) EntFire(`tranquility1_ready_particles`, `Start`)
+					if ( !LOBO.gateb_captured )
+						EntFire( `tranquility1_ready_particles`, `Start` )
+
 					LOBO.is_first_kotg_spawned = true
 
-					SINS.ChangeIconByName(`medic_kritz_quickfix_split`, `medic_kritz2`)
-					SINS.ChangeIconByName(`soldier_buff_burstfire_yoovy_giant`, `soldier_giant`)
-					SINS.ChangeIconByName(`pyro_phlog_v2`, `pyro`)
+					SINS.ChangeIconByName( `medic_kritz_quickfix_split`, `medic_kritz2` )
+					SINS.ChangeIconByName( `soldier_buff_burstfire_yoovy_giant`, `soldier_giant` )
+					SINS.ChangeIconByName( `pyro_phlog_v2`, `pyro` )
 				"
 				Delay 0.1
 			}
@@ -1690,9 +1690,9 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					SINS.ChangeIconByName(`medic_kritz2`, `medic_quickfix_seel2`)
-					SINS.ChangeIconByName(`soldier_and_demo`, `soldier`)
-					SINS.ChangeIconByName(`soldier_giant`, `soldier_buff_burstfire_yoovy_giant`)
+					SINS.ChangeIconByName( `medic_kritz2`, `medic_quickfix_seel2` )
+					SINS.ChangeIconByName( `soldier_and_demo`, `soldier` )
+					SINS.ChangeIconByName( `soldier_giant`, `soldier_buff_burstfire_yoovy_giant` )
 				"
 				Delay 8
 			}
@@ -1761,7 +1761,7 @@ LobotomySchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "if (!LOBO.gateb_captured) EntFire(`tranquility2_ready_particles`, `Start`, null, 8)"
+				Param "if ( !LOBO.gateb_captured ) EntFire( `tranquility2_ready_particles`, `Start`, null, 8 )"
 			}
 			FirstSpawnOutput
 			{
@@ -1811,9 +1811,7 @@ LobotomySchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "
-					SINS.ChangeIconByName(`pyro`, `pyro_flare_atomic_v2`)
-				"
+				Param "SINS.ChangeIconByName( `pyro`, `pyro_flare_atomic_v2` )"
 			}
 		}
 		WaveSpawn
@@ -1865,29 +1863,29 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					if (LOBO.gateb_captured)
+					if ( LOBO.gateb_captured )
 					{
-						EntFire(`boss2_pre_relay`, `Trigger`)
-						ClientPrint(null, 3, `\x079C1010A boss approaches from \x07FFFF66Gate A\x079C1010...`)
+						EntFire( `boss2_pre_relay`, `Trigger` )
+						ClientPrint( null, 3, `\x079C1010A boss approaches from \x07FFFF66Gate A\x079C1010...` )
 					}
 					else
 					{
-						ClientPrint(null, 3, `\x079C1010A boss approaches...`)
-						EntFire(`pop_interface`, `PauseBotSpawning`)
-						EntFire(`pop_interface`, `UnpauseBotSpawning`, null, 10)
+						ClientPrint( null, 3, `\x079C1010A boss approaches...` )
+						EntFire( `pop_interface`, `PauseBotSpawning` )
+						EntFire( `pop_interface`, `UnpauseBotSpawning`, null, 10 )
 					}
-					EntFire(`boss2_pre_relay`, `Kill`)
+					EntFire( `boss2_pre_relay`, `Kill` )
 					// reset just before boss spawns, makes him carry the bomb
-					EntFire(`intel`, `ForceResetSilent`, null, 9.9)
+					EntFire( `intel`, `ForceResetSilent`, null, 9.9 )
 
-					SINS.ChangeIconByName(`pyro_flare_atomic_v2`, `pyro_phlog_v2`)
+					SINS.ChangeIconByName( `pyro_flare_atomic_v2`, `pyro_phlog_v2` )
 				"
 			}
 			FirstSpawnOutput
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "ClientPrint(null, 3, `\x0799CCFFThe boss is now carrying the bomb.`)"
+				Param "ClientPrint( null, 3, `\x0799CCFFThe boss is now carrying the bomb.` )"
 				Delay 5
 			}
 			FirstSpawnWarningSound mvm/mvm_tele_deliver.wav
@@ -1966,28 +1964,28 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					EntFire(`break2_relay`, `Trigger`)
-					EntFire(`break2_relay`, `Kill`)
+					EntFire( `break2_relay`, `Trigger` )
+					EntFire( `break2_relay`, `Kill` )
 
 					LOBO.gateb_captured = false
 
-					for (local player; player = FindByClassname(player, `player`);)
+					for ( local player; player = FindByClassname( player, `player` ); )
 					{
-						player.SetScriptOverlayMaterial(`oz_terror_overlays/break2_announcement`)
+						player.SetScriptOverlayMaterial( `oz_terror_overlays/break2_announcement` )
 					}
 
 					LOBO.KillAllBotsOnMap()
 
 					LOBO.gatea_captured <- false
 
-					SINS.ChangeIconFlags(`pyro_phlog_v2`, 1 | 16)
-					SINS.ChangeIconFlags(`engineer_pomson_v2`, 1 | 16)
-					SINS.ChangeIconFlags(`heavy_gauntlet_nys`, 1 | 16)
+					SINS.ChangeIconFlags( `pyro_phlog_v2`, 1 | 16 )
+					SINS.ChangeIconFlags( `engineer_pomson_v2`, 1 | 16 )
+					SINS.ChangeIconFlags( `heavy_gauntlet_nys`, 1 | 16 )
 
-					SINS.ChangeIconByName(`soldier`, `soldier_and_demo`)
-					SINS.ChangeIconFlags(`soldier_and_demo`, 1 | 16)
+					SINS.ChangeIconByName( `soldier`, `soldier_and_demo` )
+					SINS.ChangeIconFlags( `soldier_and_demo`, 1 | 16 )
 
-					SINS.ChangeIconByName(`soldier_buff_burstfire_yoovy_giant`, `soldier_barrage_conch_atomic_giant`)
+					SINS.ChangeIconByName( `soldier_buff_burstfire_yoovy_giant`, `soldier_barrage_conch_atomic_giant` )
 				"
 			}
 			FirstSpawnWarningSound vo/mvm_get_to_upgrade04.mp3 // Get to an upgrade station.
@@ -2001,9 +1999,9 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					for (local player; player = FindByClassname(player, `player`);)
+					for ( local player; player = FindByClassname( player, `player` ); )
 					{
-						player.SetScriptOverlayMaterial(`oz_terror_overlays/bomb_resets_45_sec`)
+						player.SetScriptOverlayMaterial( `oz_terror_overlays/bomb_resets_45_sec` )
 					}
 				"
 			}
@@ -2017,9 +2015,9 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					for (local player; player = FindByClassname(player, `player`);)
+					for ( local player; player = FindByClassname( player, `player` ); )
 					{
-						player.SetScriptOverlayMaterial(null)
+						player.SetScriptOverlayMaterial( null )
 					}
 				"
 			}
@@ -2117,11 +2115,11 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					SINS.ChangeIconByName(`scout`, `scout_fan`)
-					SINS.ChangeIconByName(`pyro_phlog_v2`, `pyro_flare_atomic_v2`)
+					SINS.ChangeIconByName( `scout`, `scout_fan` )
+					SINS.ChangeIconByName( `pyro_phlog_v2`, `pyro_flare_atomic_v2` )
 
-					SINS.ChangeIconByName(`soldier_and_demo`, `demo_burst`)
-					SINS.ChangeIconFlags(`demo_burst`, 1)
+					SINS.ChangeIconByName( `soldier_and_demo`, `demo_burst` )
+					SINS.ChangeIconFlags( `demo_burst`, 1 )
 				"
 			}
 		}
@@ -2173,9 +2171,7 @@ LobotomySchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "
-					if (!LOBO.gateb_captured) EntFire(`tranquility1_ready_particles`, `Start`, null, 7)
-				"
+				Param "if ( !LOBO.gateb_captured ) EntFire( `tranquility1_ready_particles`, `Start`, null, 7 )"
 			}
 			FirstSpawnOutput
 			{
@@ -2229,8 +2225,8 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					SINS.ChangeIconByName(`demo_burst`, `soldier_crit`)
-					SINS.ChangeIconFlags(`soldier_crit`, 1 | 16)
+					SINS.ChangeIconByName( `demo_burst`, `soldier_crit` )
+					SINS.ChangeIconFlags( `soldier_crit`, 1 | 16 )
 				"
 			}
 		}
@@ -2278,9 +2274,7 @@ LobotomySchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "
-					SINS.ChangeIconByName(`pyro_flare_atomic_v2`, `pyro_phlog_v2`)
-				"
+				Param "SINS.ChangeIconByName( `pyro_flare_atomic_v2`, `pyro_phlog_v2` )"
 			}
 		}
 		WaveSpawn
@@ -2332,7 +2326,7 @@ LobotomySchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "if (!LOBO.gateb_captured) EntFire(`tranquility2_ready_particles`, `Start`, null, 6)"
+				Param "if ( !LOBO.gateb_captured ) EntFire( `tranquility2_ready_particles`, `Start`, null, 6 )"
 			}
 			FirstSpawnOutput
 			{
@@ -2340,7 +2334,7 @@ LobotomySchedule
 				Action RunScriptCode
 				Param "
 					LOBO.is_first_kotg_spawned = true
-					SINS.ChangeIconByName(`pyro_phlog_v2`, `pyro_flare_atomic_v2`)
+					SINS.ChangeIconByName( `pyro_phlog_v2`, `pyro_flare_atomic_v2` )
 				"
 				Delay 0.1
 			}
@@ -2430,41 +2424,41 @@ LobotomySchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					EntFire(`tranquility1_ready_particles`, `Start`, null, 2)
-					EntFire(`tranquility2_ready_particles`, `Start`, null, 2)
+					EntFire( `tranquility1_ready_particles`, `Start`, null, 2 )
+					EntFire( `tranquility2_ready_particles`, `Start`, null, 2 )
 
-					if (LOBO.gateb_captured)
+					if ( LOBO.gateb_captured )
 					{
-						EntFire(`boss3_pre_double_relay`, `Trigger`)
-						ClientPrint(null, 3, `\x079C1010The source of the terrors approaches from the \x07FFFF66farthest spawn\x079C1010... make your last stand!`)
+						EntFire( `boss3_pre_double_relay`, `Trigger` )
+						ClientPrint( null, 3, `\x079C1010The source of the terrors approaches from the \x07FFFF66farthest spawn\x079C1010... make your last stand!` )
 					}
-					else if (LOBO.gatea_captured)
+					else if ( LOBO.gatea_captured )
 					{
-						EntFire(`boss3_pre_single_relay`, `Trigger`)
-						ClientPrint(null, 3, `\x079C1010The source of the terrors approaches from the \x07FFFF66farthest spawn\x079C1010... make your last stand!`)
+						EntFire( `boss3_pre_single_relay`, `Trigger` )
+						ClientPrint( null, 3, `\x079C1010The source of the terrors approaches from the \x07FFFF66farthest spawn\x079C1010... make your last stand!` )
 					}
 					else
 					{
-						EntFire(`pop_interface`, `PauseBotSpawning`)
-						EntFire(`pop_interface`, `UnpauseBotSpawning`, null, 15)
-						ClientPrint(null, 3, `\x079C1010The source of the terrors approaches... make your last stand!`)
+						EntFire( `pop_interface`, `PauseBotSpawning` )
+						EntFire( `pop_interface`, `UnpauseBotSpawning`, null, 15 )
+						ClientPrint( null, 3, `\x079C1010The source of the terrors approaches... make your last stand!` )
 					}
-					EntFire(`boss3_pre_double_relay`, `Kill`)
-					EntFire(`boss3_pre_single_relay`, `Kill`)
+					EntFire( `boss3_pre_double_relay`, `Kill` )
+					EntFire( `boss3_pre_single_relay`, `Kill` )
 
-					EntFire(`intel`, `ForceResetSilent`, null, 14.9)
+					EntFire( `intel`, `ForceResetSilent`, null, 14.9 )
 
-					SINS.ChangeIconByName(`scout_fan`, `scout`)
+					SINS.ChangeIconByName( `scout_fan`, `scout` )
 
-					SINS.ChangeIconByName(`soldier_crit`, `soldier_and_demo`)
-					SINS.ChangeIconFlags(`soldier_and_demo`, 1)
+					SINS.ChangeIconByName( `soldier_crit`, `soldier_and_demo` )
+					SINS.ChangeIconFlags( `soldier_and_demo`, 1 )
 				"
 			}
 			FirstSpawnOutput
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "ClientPrint(null, 3, `\x0799CCFFThe boss is now carrying the bomb.`)"
+				Param "ClientPrint( null, 3, `\x0799CCFFThe boss is now carrying the bomb.` )"
 				Delay 5
 			}
 			FirstSpawnWarningSound mvm/mvm_tele_deliver.wav
