@@ -430,7 +430,8 @@
 	PlaySoundFromEntity = function( ent, arg_soundname, range = 99999 )
 	{
 		local hEnt = ent
-		if ( typeof ent == "string" ) hEnt = FindByName( null, ent )
+		if ( typeof ent == "string" )
+			hEnt = FindByName( null, ent )
 
 		local arg_soundlevel = ( 40 + ( 20 * log10( range / 36.0 ) ) ).tointeger()
 
@@ -585,8 +586,10 @@
 
 	KillTranquilityDispensers = function( c )
 	{
-		if ( c == 0 || c == 1 ) EntFire( "tranquility1_dispenser", "RemoveHealth", 9999 )
-		if ( c == 0 || c == 2 ) EntFire( "tranquility2_dispenser", "RemoveHealth", 9999 )
+		if ( c == 0 || c == 1 )
+			EntFire( "tranquility1_dispenser", "RemoveHealth", 9999 )
+		if ( c == 0 || c == 2 )
+			EntFire( "tranquility2_dispenser", "RemoveHealth", 9999 )
 	}
 
 	// thanks to ocet247, seel, ficool and mince ( holy shit just thank everyone idc )
@@ -1017,7 +1020,8 @@ PopExt.AddRobotTag( "lobo_boss2",
 
 	OnTakeDamage = function( bot, params )
 	{
-		if ( bot.GetScriptScope().is_resisting_damage ) params.damage *= 0.2
+		if ( bot.GetScriptScope().is_resisting_damage )
+			params.damage *= 0.2
 	}
 })
 
