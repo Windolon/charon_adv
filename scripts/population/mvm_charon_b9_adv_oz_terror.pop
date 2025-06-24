@@ -1009,11 +1009,6 @@ WaveSchedule
 				IncludeScript( `charon_lobo`, getroottable() )
 				IncludeScript( `seel_ins`, getroottable() )
 
-				MissionAttrs(
-				{
-					NoRome = 2
-				})
-
 				// bomb attributes
 				EntFire( `intel`, `SetReturnTime`, 35 )
 				EntFire( `enable_bomb_1`, `Kill`, null, 1 ) // bye
