@@ -1270,11 +1270,10 @@ LobotomySchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "
-					LOBO.PlayBossOnSpawnSFX()
-					EntFire(`wave_start_relay`, `RunScriptCode`, `ClientPrint(null, 3, \`\x0799CCFFThe boss is now carrying the bomb.\`)`, 5)
-				"
+				Param "ClientPrint(null, 3, `\x0799CCFFThe boss is now carrying the bomb.`)"
+				Delay 5
 			}
+			FirstSpawnWarningSound mvm/mvm_tele_deliver.wav
 		}
 		WaveSpawn
 		{
@@ -1888,11 +1887,10 @@ LobotomySchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "
-					LOBO.PlayBossOnSpawnSFX()
-					EntFire(`wave_start_relay`, `RunScriptCode`, `ClientPrint(null, 3, \`\x0799CCFFThe boss is now carrying the bomb.\`)`, 5)
-				"
+				Param "ClientPrint(null, 3, `\x0799CCFFThe boss is now carrying the bomb.`)"
+				Delay 5
 			}
+			FirstSpawnWarningSound mvm/mvm_tele_deliver.wav
 		}
 		WaveSpawn
 		{
@@ -2466,11 +2464,10 @@ LobotomySchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "
-					LOBO.PlayBossOnSpawnSFX()
-					EntFire(`wave_start_relay`, `RunScriptCode`, `ClientPrint(null, 3, \`\x0799CCFFThe boss is now carrying the bomb.\`)`, 5)
-				"
+				Param "ClientPrint(null, 3, `\x0799CCFFThe boss is now carrying the bomb.`)"
+				Delay 5
 			}
+			FirstSpawnWarningSound mvm/mvm_tele_deliver.wav
 		}
 		WaveSpawn
 		{

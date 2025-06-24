@@ -684,8 +684,6 @@
 	// provide a script handle reference to some dummy ents, for convenience.
 	hBigNet = FindByName( null, "BigNet" )
 
-	// PrecacheSound( "mvm/mvm_tele_deliver.wav" )
-
 	// just for safety.
 	PrecacheAssets = function()
 	{
