@@ -17,7 +17,7 @@ if ( !( "ConstantNamingConvention" in ROOT ) ) // make sure folding is only done
 }
 
 foreach ( name, method in ::NetProps.getclass() )
-	if ( name != "IsValid" )
+	if ( name != "IsValid" && !( name in ROOT ) )
 		getroottable()[ name ] <- method.bindenv( ::NetProps )
 
 // other external constants
