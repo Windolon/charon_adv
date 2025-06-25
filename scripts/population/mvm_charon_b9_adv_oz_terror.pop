@@ -1409,7 +1409,7 @@ WaveSchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `These dispensers provide a robot with radial healing when activated.`
-						entity = FindByName( null, `tranquility2_bp` )
+						entity = Entities.FindByName( null, `tranquility2_bp` )
 						lifetime = 4.25
 					})
 				"
@@ -1427,7 +1427,7 @@ WaveSchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `These dispensers provide a robot with radial healing when activated.`
-						entity = FindByName( null, `tranquility1_bp` )
+						entity = Entities.FindByName( null, `tranquility1_bp` )
 						lifetime = 4.25
 					})
 				"
@@ -1445,7 +1445,7 @@ WaveSchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `Destroy them to stop the effect.`
-						entity = FindByName( null, `tranquility1_bp` )
+						entity = Entities.FindByName( null, `tranquility1_bp` )
 						lifetime = 7
 					})
 				"
@@ -1463,7 +1463,7 @@ WaveSchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `These particles indicate that a dispenser is about to activate.`
-						entity = FindByName( null, `tranquility1_bp` )
+						entity = Entities.FindByName( null, `tranquility1_bp` )
 						lifetime = 8.5
 					})
 					EntFire( `tranquility1_ready_particles`, `Start` )
@@ -1483,7 +1483,7 @@ WaveSchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `This sound is played on activation.`
-						entity = FindByName( null, `tranquility1_bp` )
+						entity = Entities.FindByName( null, `tranquility1_bp` )
 						lifetime = 7
 						sound = `oz_terror_sfx/tranquility.mp3`
 					})
@@ -1504,7 +1504,7 @@ WaveSchedule
 					PopExtUtil.ShowAnnotation(
 					{
 						text = `But beware! Some robots resonate with these signals much more strongly than others...`
-						entity = FindByName( null, `tranquility1_bp` )
+						entity = Entities.FindByName( null, `tranquility1_bp` )
 						lifetime = 8.5
 					})
 				"

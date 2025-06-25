@@ -1,3 +1,38 @@
+// folds constants and NetProps methods into root, from VDC wiki
+::CONST <- getconsttable()
+::ROOT <- getroottable()
+if ( !( "ConstantNamingConvention" in ROOT ) ) // make sure folding is only done once
+{
+	foreach ( enum_table in Constants )
+	{
+		foreach ( name, value in enum_table )
+		{
+			if ( value == null )
+				value = 0
+
+			CONST[ name ] <- value
+			ROOT[ name ] <- value
+		}
+	}
+}
+
+foreach ( name, method in ::NetProps.getclass() )
+	if ( name != "IsValid" )
+		getroottable()[ name ] <- method.bindenv( ::NetProps )
+
+const SF_ENVTEXT_ALLPLAYERS = 1
+
+const SLOT_PRIMARY = 0
+const SLOT_PDA     = 5
+
+const SPELL_OVERHEAL = 2
+
+const DMG_MELEE = 134217728 // DMG_BLAST_SURFACE
+
+const ID_TAUNT_ROAR_OWAR = 31380
+
+const SINGLE_TICK = 0.015
+
 ::LOBO <-
 {
 	// SpawnEntityGroupFromTable tables
@@ -384,9 +419,9 @@
 	// with help from fellen
 	KillAllBotsOnMap = function()
 	{
-		foreach ( p in this.GetAllPlayers( { team = Constants.ETFTeam.TF_TEAM_PVE_INVADERS } ) )
+		foreach ( p in this.GetAllPlayers( { team = TF_TEAM_PVE_INVADERS } ) )
 		{
-			if ( !p.IsBotOfType( Constants.EBotType.TF_BOT_TYPE ) )
+			if ( !p.IsBotOfType( TF_BOT_TYPE ) )
 				continue
 
 			p.SetIsMiniBoss( false ) // suppress giant death sound spam
@@ -433,13 +468,13 @@
 		player.StopTaunt( true ) // both are needed to fully clear the taunt
 		player.RemoveCond( 7 )
 		weapon.DispatchSpawn()
-		NetProps.SetPropInt( weapon, "m_AttributeManager.m_Item.m_iItemDefinitionIndex", taunt_id )
-		NetProps.SetPropBool( weapon, "m_AttributeManager.m_Item.m_bInitialized", true )
-		NetProps.SetPropBool( weapon, "m_bForcePurgeFixedupStrings", true )
-		NetProps.SetPropEntity( player, "m_hActiveWeapon", weapon )
-		NetProps.SetPropInt( player, "m_iFOV", 0 ) // fix sniper rifles
+		SetPropInt( weapon, "m_AttributeManager.m_Item.m_iItemDefinitionIndex", taunt_id )
+		SetPropBool( weapon, "m_AttributeManager.m_Item.m_bInitialized", true )
+		SetPropBool( weapon, "m_bForcePurgeFixedupStrings", true )
+		SetPropEntity( player, "m_hActiveWeapon", weapon )
+		SetPropInt( player, "m_iFOV", 0 ) // fix sniper rifles
 		player.HandleTauntCommand( 0 )
-		NetProps.SetPropEntity( player, "m_hActiveWeapon", active_weapon )
+		SetPropEntity( player, "m_hActiveWeapon", active_weapon )
 		weapon.Kill()
 	}
 
@@ -449,7 +484,7 @@
 		local spellbook = PopExtUtil.GetItemInSlot( bot, SLOT_PDA )
 
 		SetPropInt( spellbook, "m_iSelectedSpellIndex", SPELL_OVERHEAL )
-		SetPropInt( spellbook, "m_iSpellCharges", INT_MAX )
+		SetPropInt( spellbook, "m_iSpellCharges", 9999 )
 		try
 		{
 			bot.Weapon_Switch( spellbook )
@@ -480,7 +515,7 @@
 	{
 		local hEnt = ent
 		if ( typeof ent == "string" )
-			hEnt = FindByName( null, ent )
+			hEnt = Entities.FindByName( null, ent )
 
 		local arg_soundlevel = ( 40 + ( 20 * log10( range / 36.0 ) ) ).tointeger()
 
@@ -550,7 +585,7 @@
 			})
 			EntFire( "tranquility1_dispenser", "SetHealth", "864" )
 
-			local glow1 = FindByName( null, "tranquility1_glow" )
+			local glow1 = Entities.FindByName( null, "tranquility1_glow" )
 			SetPropEntity( glow1, "m_hTarget", disp1 )
 
 			// this is actually the hardest thing to script in this entire mission, can you believe this?
@@ -597,7 +632,7 @@
 			})
 			EntFire( "tranquility2_dispenser", "SetHealth", "864" )
 
-			local glow2 = FindByName( null, "tranquility2_glow" )
+			local glow2 = Entities.FindByName( null, "tranquility2_glow" )
 			SetPropEntity( glow2, "m_hTarget", disp2 )
 
 			local beam2 = SpawnEntityFromTable( "env_beam",
@@ -622,8 +657,8 @@
 		if ( !bot.IsAlive() )
 			return
 
-		local disp1 = FindByName( null, "tranquility1_dispenser" )
-		local disp2 = FindByName( null, "tranquility2_dispenser" )
+		local disp1 = Entities.FindByName( null, "tranquility1_dispenser" )
+		local disp2 = Entities.FindByName( null, "tranquility2_dispenser" )
 
 		if ( !( disp1 == null && disp2 == null ) )
 			return
@@ -647,7 +682,7 @@
 		local bot_origin = bot.GetOrigin()
 		local victims = this.GetAllPlayers(
 		{
-			team = Constants.ETFTeam.TF_TEAM_PVE_DEFENDERS
+			team = TF_TEAM_PVE_DEFENDERS
 			region = [ bot_origin, 1200 ]
 		})
 
@@ -692,7 +727,7 @@
 
 				local affected = LOBO.GetAllPlayers(
 				{
-					team = Constants.ETFTeam.TF_TEAM_PVE_DEFENDERS
+					team = TF_TEAM_PVE_DEFENDERS
 					region = [ starfall_effect_origin, 230 ]
 				})
 				foreach ( player in affected )
@@ -706,7 +741,7 @@
 					player.SetAbsVelocity( unitvec_direction * 1000 )
 				}
 
-				for ( local building; building = FindByClassnameWithin( building, `obj_*`, starfall_effect_origin, 230 ); )
+				for ( local building; building = Entities.FindByClassnameWithin( building, `obj_*`, starfall_effect_origin, 230 ); )
 				{
 					if ( building.GetTeam() != TF_TEAM_PVE_DEFENDERS )
 						continue
@@ -729,7 +764,7 @@
 	divider_death_origin = Vector()
 
 	// provide a script handle reference to some dummy ents, for convenience.
-	hBigNet = FindByName( null, "BigNet" )
+	hBigNet = Entities.FindByName( null, "BigNet" )
 
 	PrecacheAssets = function()
 	{
@@ -955,7 +990,7 @@ PopExt.AddRobotTag( "lobo_boss1",
 
 				local affected = LOBO.GetAllPlayers(
 				{
-					team = Constants.ETFTeam.TF_TEAM_PVE_DEFENDERS
+					team = TF_TEAM_PVE_DEFENDERS
 					region = [ origin, 318 ]
 				})
 				foreach ( player in affected )
@@ -969,7 +1004,7 @@ PopExt.AddRobotTag( "lobo_boss1",
 					player.SetAbsVelocity( unitvec_direction * 1000 )
 				}
 
-				for ( local building; building = FindByClassnameWithin( building, `obj_*`, origin, 318 ); )
+				for ( local building; building = Entities.FindByClassnameWithin( building, `obj_*`, origin, 318 ); )
 				{
 					if ( building.GetTeam() != TF_TEAM_PVE_DEFENDERS )
 						continue
@@ -990,7 +1025,7 @@ PopExt.AddRobotTag( "lobo_boss1",
 
 	OnDeath = function( bot, params )
 	{
-		for ( local p; p = FindByName( p, "warstomp_particle" ); )
+		for ( local p; p = Entities.FindByName( p, "warstomp_particle" ); )
 			p.Kill()
 	}
 })
@@ -1014,7 +1049,7 @@ PopExt.AddRobotTag( "lobo_boss2",
 
 		scope.ApplyHomingToRocketThink <- function()
 		{
-			for ( local rocket; rocket = FindByClassname( rocket, "tf_projectile_rocket" ); )
+			for ( local rocket; rocket = Entities.FindByClassname( rocket, "tf_projectile_rocket" ); )
 			{
 				if ( rocket.GetOwner() != bot )
 					continue
@@ -1093,7 +1128,7 @@ PopExt.AddRobotTag( "lobo_boss2b",
 
 		bot.GetScriptScope().ApplyHomingToRayThink <- function()
 		{
-			for ( local ray; ray = FindByClassname( ray, "tf_projectile_energy_ring" ); )
+			for ( local ray; ray = Entities.FindByClassname( ray, "tf_projectile_energy_ring" ); )
 			{
 				if ( ray.GetOwner() != bot )
 					continue
@@ -1183,8 +1218,8 @@ PopExt.AddRobotTag( "lobo_boss3",
 					SetPropInt( self, "m_nRenderMode", kRenderNormal )
 					self.SetCustomModelWithClassAnimations( "models/bots/heavy_boss/bot_heavy_boss.mdl" )
 
-					local disp1 = FindByName( null, "tranquility1_dispenser" )
-					local disp2 = FindByName( null, "tranquility2_dispenser" )
+					local disp1 = Entities.FindByName( null, "tranquility1_dispenser" )
+					local disp2 = Entities.FindByName( null, "tranquility2_dispenser" )
 					if ( !( disp1 == null && disp2 == null ) )
 					{
 						EntFireByHandle( self, "RunScriptCode", "self.AddCondEx( TF_COND_RADIUSHEAL_ON_DAMAGE, 9999, null )", 0.1, null, null )
