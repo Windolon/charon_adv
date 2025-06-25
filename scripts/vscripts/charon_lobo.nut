@@ -1,6 +1,6 @@
 ::LOBO <-
 {
-	// store SpawnEntity(Group)FromTable tables in my namespace to reduce insanity.
+	// SpawnEntityGroupFromTable tables
 	breaktime_relays =
 	{
 		[ 0 ] =
@@ -389,8 +389,8 @@
 			if ( !p.IsBotOfType( Constants.EBotType.TF_BOT_TYPE ) )
 				continue
 
-			p.SetIsMiniBoss( false ) // Suppress giant death sound spam.
-			p.SetHealth( 0 ) // Allow killing through uber.
+			p.SetIsMiniBoss( false ) // suppress giant death sound spam
+			p.SetHealth( 0 ) // allow killing through uber
 			p.TakeDamage( 0.9, 0, null )
 		}
 	}
@@ -443,7 +443,7 @@
 		weapon.Kill()
 	}
 
-	// taken from popext
+	// taken and adapted from PopExt
 	CastHealingSpellbook = function( bot )
 	{
 		local spellbook = PopExtUtil.GetItemInSlot( bot, SLOT_PDA )
@@ -462,7 +462,7 @@
 		EntFireByHandle( spellbook, "RunScriptCode", "self.ReapplyProvision()", 1, null, null )
 	}
 
-	// from TankExt, by lite
+	// taken and adapted from TankExt, by lite
 	IsPlayerStealthedOrDisguised = function( hPlayer )
 	{
 		if ( !hPlayer.IsPlayer() )
@@ -475,7 +475,7 @@
 		!hPlayer.InCond( TF_COND_BLEEDING )
 	}
 
-	// thanks to ptyx
+	// with help from ptyx
 	PlaySoundFromEntity = function( ent, arg_soundname, range = 99999 )
 	{
 		local hEnt = ent
@@ -651,7 +651,7 @@
 			region = [ bot_origin, 1200 ]
 		})
 
-		local true_victims = max_victims >= victims.len() ? victims : victims.slice( 0, max_victims ) // ran out of names
+		local true_victims = max_victims >= victims.len() ? victims : victims.slice( 0, max_victims )
 
 		this.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
 		this.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
@@ -731,7 +731,6 @@
 	// provide a script handle reference to some dummy ents, for convenience.
 	hBigNet = FindByName( null, "BigNet" )
 
-	// just for safety.
 	PrecacheAssets = function()
 	{
 		PrecacheSound( "oz_terror_sfx/tranquility.mp3" )
@@ -798,7 +797,7 @@
 }
 __CollectGameEventCallbacks( LOBO.CALLBACKS )
 
-// ty mince
+// with help from Mince
 LOBO.tranquility_setup[ 0 ].prop_dynamic.origin <- LOBO.tranquility1_origin
 LOBO.tranquility_setup[ 1 ].info_particle_system.origin <- LOBO.tranquility1_origin
 LOBO.tranquility_setup[ 2 ].info_particle_system.origin <- LOBO.tranquility1_origin
@@ -807,14 +806,12 @@ LOBO.tranquility_setup[ 4 ].prop_dynamic.origin <- LOBO.tranquility2_origin
 LOBO.tranquility_setup[ 5 ].info_particle_system.origin <- LOBO.tranquility2_origin
 LOBO.tranquility_setup[ 6 ].info_particle_system.origin <- LOBO.tranquility2_origin
 
-// precache stuff for safety
 LOBO.PrecacheAssets()
 
 SpawnEntityGroupFromTable( LOBO.breaktime_relays )
 SpawnEntityGroupFromTable( LOBO.boss_text )
 SpawnEntityGroupFromTable( LOBO.tranquility_setup )
 
-// you can use the popext tools, or write from scratch. its your choice. theres no real recipe really.
 PopExt.AddRobotTag( "lobo_mangler", { OnSpawn = function( bot, tag )
 {
 	local scope = bot.GetScriptScope()
@@ -848,11 +845,11 @@ PopExt.AddRobotTag( "lobo_boss1",
 	{
 		EntFire( "boss_title", "Display" )
 		EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
-		EntFire( "boss_hp", "Display", null, 0.83 + 0.865 ) // ( 17+2 )*0.035 + 0.2
+		EntFire( "boss_hp", "Display", null, 0.83 + 0.865 ) // (17+2)*0.035 + 0.2
 		SINS.ChangeClassIcon( bot, "demo_clusterbomb_hyper_lite" )
 
 		local scope = bot.GetScriptScope()
-		local first_delay = Time() + 19 // 19
+		local first_delay = Time() + 19 // default: 19
 		local cooldown = 13.5
 		local cooldown_time = Time()
 
@@ -943,8 +940,7 @@ PopExt.AddRobotTag( "lobo_boss1",
 			LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
 			LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
 
-			// why isnt the find radius 16 * modelscale???
-			// it actually is about 16 * 2.21 * modelscale, WTF?????
+			// find radius is about 16 * 2.21 * modelscale, WTF?????
 			EntFireByHandle( bot, "RunScriptCode", @"
 				local origin = self.GetOrigin()
 
@@ -1007,7 +1003,7 @@ PopExt.AddRobotTag( "lobo_boss2",
 		EntFire( "boss_hp", "AddOutput", "message \n\n27000 HP" )
 		EntFire( "boss_title", "Display" )
 		EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
-		EntFire( "boss_hp", "Display", null, 0.83 + 0.655 ) // ( 11+2 )*0.035 + 0.2
+		EntFire( "boss_hp", "Display", null, 0.83 + 0.655 ) // (11+2)*0.035 + 0.2
 		SINS.ChangeClassIcon( bot, "soldier_barrage_homing_hyper" )
 
 		bot.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
@@ -1137,7 +1133,7 @@ PopExt.AddRobotTag( "lobo_boss3",
 		EntFire( "boss_hp", "AddOutput", "message \n\n54000 HP" )
 		EntFire( "boss_title", "Display" )
 		EntFire( "boss_name", "Display", null, 0.655 ) // 13*0.035 + 0.2
-		EntFire( "boss_hp", "Display", null, 0.655 + 0.585 ) // ( 9+2 )*0.035 + 0.2
+		EntFire( "boss_hp", "Display", null, 0.655 + 0.585 ) // (9+2)*0.035 + 0.2
 		SINS.ChangeClassIcon( bot, "soldier_bison_spammer_hyper_giant" )
 
 		EntFire( "boss_title", "Kill", null, 10 )
@@ -1149,7 +1145,6 @@ PopExt.AddRobotTag( "lobo_boss3",
 
 		local time_atspawn = Time()
 
-		// old functionality: cast at 42 and 76 secs post spawn
 		scope.TranquilityThink <- function()
 		{
 			if ( bot.GetHealth() < bot.GetMaxHealth() * 0.6666 && tranquility_cast_count == 0 )
@@ -1235,7 +1230,7 @@ PopExt.AddRobotTag( "lobo_boss3",
 		}
 		PopExtUtil.AddThinkToEnt( bot, "FrenzyThink" )
 
-		local first_delay = Time() + 13 // 13
+		local first_delay = Time() + 13 // default: 13
 		local cooldown = 10
 		local cooldown_time = Time()
 
