@@ -700,54 +700,59 @@
 		PrecacheModel( "models/props_mvm/indicator/indicator_circle_long.mdl" )
 	}
 
-	// this provides accurate bools LOBO.gatea/b_captured for various in-wave logic.
-	OnGameEvent_teamplay_point_captured = function( params )
-	{
-		local team = params.team
-		if ( team != TF_TEAM_PVE_INVADERS )
-			return
-
-		// part 3 has not started, any gate capture must be a gate b cap
-		if ( !( "gatea_captured" in this ) )
-		{
-			gateb_captured = true
-			EntFire( "tranquility1_ready_particles", "Stop" )
-			EntFire( "tranquility2_ready_particles", "Stop" )
-			return
-		}
-
-		if ( !gatea_captured )
-		{
-			gatea_captured = true
-			return
-		}
-
-		EntFire( "tranquility1_ready_particles", "Stop" )
-		EntFire( "tranquility2_ready_particles", "Stop" )
-		gateb_captured = true
-	}
-
-	OnScriptHook_OnTakeDamage = function( params )
-	{
-		if ( params.inflictor != this.hMinicrit_dummy )
-			return
-
-		params.crit_type = 1
-	}
-
 	Cleanup = function()
 	{
 		if ( "LOBO" in getroottable() )
 			delete ::LOBO
 	}
-	OnGameEvent_recalculate_holidays = function( _ )
+
+	CALLBACKS =
 	{
-		if ( GetRoundState() == GR_STATE_PREROUND )
-			Cleanup()
+		OnScriptHook_OnTakeDamage = function( params )
+		{
+			if ( params.inflictor != LOBO.hMinicrit_dummy )
+				return
+
+			params.crit_type = 1
+		}
+
+		// this provides accurate bools LOBO.gatea/b_captured for various in-wave logic.
+		OnGameEvent_teamplay_point_captured = function( params )
+		{
+			local team = params.team
+			if ( team != TF_TEAM_PVE_INVADERS )
+				return
+
+			// part 3 has not started, any gate capture must be a gate b cap
+			if ( !( "gatea_captured" in LOBO ) )
+			{
+				LOBO.gateb_captured = true
+				EntFire( "tranquility1_ready_particles", "Stop" )
+				EntFire( "tranquility2_ready_particles", "Stop" )
+				return
+			}
+
+			if ( !LOBO.gatea_captured )
+			{
+				LOBO.gatea_captured = true
+				return
+			}
+
+			EntFire( "tranquility1_ready_particles", "Stop" )
+			EntFire( "tranquility2_ready_particles", "Stop" )
+			LOBO.gateb_captured = true
+		}
+
+		OnGameEvent_recalculate_holidays = function( _ )
+		{
+			if ( GetRoundState() == GR_STATE_PREROUND )
+				LOBO.Cleanup()
+		}
+
+		OnGameEvent_mvm_wave_complete = function( _ ) { LOBO.Cleanup() }
 	}
-	OnGameEvent_mvm_wave_complete = function( _ ) { Cleanup() }
 }
-__CollectGameEventCallbacks( LOBO )
+__CollectGameEventCallbacks( LOBO.CALLBACKS )
 
 // ty mince
 LOBO.tranquility_setup[ 0 ].prop_dynamic.origin <- LOBO.tranquility1_origin
