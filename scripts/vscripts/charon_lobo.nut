@@ -332,17 +332,66 @@
 
 	hMinicrit_dummy = SpawnEntityFromTable( "logic_relay", { targetname = "minicrit_dummy" } )
 
-	// by fellen
+	// with help and inspiration from ficool2 and Pealover
+	GetAllPlayers = function( args = {} )
+	{
+		local team = "team" in args ? args.team : false
+		local region = "region" in args ? args.region : false
+		local alive = "alive" in args ? args.alive : true
+
+		local result = []
+		local distance_to_origin = region ? {} : null
+
+		if ( region )
+		{
+			Assert( typeof region == "array" && region.len() == 2, "GetAllPlayers(): if specified, key `region` must be an array of length 2" )
+
+			for ( local p; p = Entities.FindByClassnameWithin( p, "player", region[ 0 ], region[ 1 ] ); )
+			{
+				if ( team && p.GetTeam() != team )
+					continue
+				if ( alive && !p.IsAlive() )
+					continue
+
+				result.append( p )
+				distance_to_origin[ p ] <- ( player.GetOrigin() - region[ 0 ] ).Length()
+			}
+
+			result.sort( @( a,b ) ( distance_to_origin[ a ] <=> distance_to_origin[ b ] ) )
+		}
+		else
+		{
+			local max_clients = MaxClients().tointeger()
+
+			for ( local i = 1; i <= max_clients; ++i )
+			{
+				local p = PlayerInstanceFromIndex( i )
+
+				if ( !p )
+					continue
+				if ( team && p.GetTeam() != team )
+					continue
+				if ( alive && !p.IsAlive() )
+					continue
+
+				result.append( p )
+			}
+		}
+
+		return result
+	}
+
+	// with help from fellen
 	KillAllBotsOnMap = function()
 	{
-		for ( local p; p = FindByClassname( p, "player" ); )
+		foreach ( p in this.GetAllPlayers( { team = Constants.ETFTeam.TF_TEAM_PVE_INVADERS } ) )
 		{
-			if ( p.GetTeam() == TF_TEAM_PVE_INVADERS )
-			{
-				p.SetIsMiniBoss( false ) // Suppress giant death sound spam.
-				p.SetHealth( 0 ) // Allow killing through uber.
-				p.TakeDamage( 0.9, 0, null )
-			}
+			if ( !p.IsBotOfType( Constants.EBotType.TF_BOT_TYPE ) )
+				continue
+
+			p.SetIsMiniBoss( false ) // Suppress giant death sound spam.
+			p.SetHealth( 0 ) // Allow killing through uber.
+			p.TakeDamage( 0.9, 0, null )
 		}
 	}
 
@@ -592,22 +641,15 @@
 			EntFire( "tranquility2_dispenser", "RemoveHealth", 9999 )
 	}
 
-	// thanks to ocet247, seel, ficool and mince ( holy shit just thank everyone idc )
+	// with help from ocet247, Seelpit, and Mince
 	CastStarfallAbility = function( bot, max_victims )
 	{
-		local victims = []
-		local victims_distance_to_bot = {}
 		local bot_origin = bot.GetOrigin()
-		for ( local player; player = FindByClassnameWithin( player, "player", bot_origin, 1200 ); )
+		local victims = this.GetAllPlayers(
 		{
-			if ( player.GetTeam() != TF_TEAM_PVE_DEFENDERS )
-				continue
-
-			victims.append( player )
-			victims_distance_to_bot[ player ] <- ( player.GetOrigin() - bot_origin ).Length()
-		}
-
-		victims.sort( @( a,b ) ( victims_distance_to_bot[ a ] <=> victims_distance_to_bot[ b ] ) )
+			team = Constants.ETFTeam.TF_TEAM_PVE_DEFENDERS
+			region = [ bot_origin, 1200 ]
+		})
 
 		local true_victims = max_victims >= victims.len() ? victims : victims.slice( 0, max_victims ) // ran out of names
 
@@ -648,11 +690,13 @@
 				LOBO.PlaySoundAtOrigin( starfall_effect_origin, `oz_terror_sfx/warstompbirth1.wav` )
 				LOBO.PlaySoundAtOrigin( starfall_effect_origin, `oz_terror_sfx/thunderclapcaster.mp3` )
 
-				for ( local player; player = FindByClassnameWithin( player, `player`, starfall_effect_origin, 230 ); )
+				local affected = LOBO.GetAllPlayers(
 				{
-					if ( player.GetTeam() != TF_TEAM_PVE_DEFENDERS )
-						continue
-
+					team = Constants.ETFTeam.TF_TEAM_PVE_DEFENDERS
+					region = [ starfall_effect_origin, 230 ]
+				})
+				foreach ( player in affected )
+				{
 					player.TakeDamage( 50, DMG_MELEE, starfall_caster )
 
 					local unitvec_direction = player.GetOrigin() - starfall_effect_origin
@@ -913,11 +957,13 @@ PopExt.AddRobotTag( "lobo_boss1",
 				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
 				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/thunderclapcaster.mp3` )
 
-				for ( local player; player = FindByClassnameWithin( player, `player`, origin, 318 ); )
+				local affected = LOBO.GetAllPlayers(
 				{
-					if ( player.GetTeam() != TF_TEAM_PVE_DEFENDERS )
-						continue
-
+					team = Constants.ETFTeam.TF_TEAM_PVE_DEFENDERS
+					region = [ origin, 318 ]
+				})
+				foreach ( player in affected )
+				{
 					player.TakeDamage( 50, DMG_MELEE, self )
 
 					local unitvec_direction = player.GetOrigin() - origin
