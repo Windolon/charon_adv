@@ -20,6 +20,8 @@ foreach ( name, method in ::NetProps.getclass() )
 	if ( name != "IsValid" )
 		getroottable()[ name ] <- method.bindenv( ::NetProps )
 
+// other external constants
+
 const SF_ENVTEXT_ALLPLAYERS = 1
 
 const SLOT_PRIMARY = 0
