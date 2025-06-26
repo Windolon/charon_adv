@@ -1347,14 +1347,16 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					PopExtUtil.ShowAnnotation(
+					SendGlobalGameEvent( `show_annotation`,
 					{
 						text = `The front upgrade station is located here.`
-						pos = Vector( 1951, 108, -320 )
+						worldPosX = 1951
+						worldPosY = 108
+						worldPosZ = -320
 						lifetime = -1.0
 						id = 2
 					})
-					EntFire( `wave_start_relay`, `RunScriptCode`, `PopExtUtil.HideAnnotation( 2 )`, 12 )
+					EntFire( `wave_start_relay`, `RunScriptCode`, `LOBO.HideAnnotation( 2 )`, 12 )
 				"
 			}
 		}
@@ -1400,10 +1402,10 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					PopExtUtil.ShowAnnotation(
+					SendGlobalGameEvent( `show_annotation`,
 					{
 						text = `These dispensers provide a robot with radial healing when activated.`
-						entity = Entities.FindByName( null, `tranquility2_bp` )
+						follow_entindex = Entities.FindByName( null, `tranquility2_bp` ).entindex()
 						lifetime = 4.25
 					})
 				"
@@ -1418,10 +1420,10 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					PopExtUtil.ShowAnnotation(
+					SendGlobalGameEvent( `show_annotation`,
 					{
 						text = `These dispensers provide a robot with radial healing when activated.`
-						entity = Entities.FindByName( null, `tranquility1_bp` )
+						follow_entindex = Entities.FindByName( null, `tranquility1_bp` ).entindex()
 						lifetime = 4.25
 					})
 				"
@@ -1436,10 +1438,10 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					PopExtUtil.ShowAnnotation(
+					SendGlobalGameEvent( `show_annotation`,
 					{
 						text = `Destroy them to stop the effect.`
-						entity = Entities.FindByName( null, `tranquility1_bp` )
+						follow_entindex = Entities.FindByName( null, `tranquility1_bp` ).entindex()
 						lifetime = 7
 					})
 				"
@@ -1454,10 +1456,10 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					PopExtUtil.ShowAnnotation(
+					SendGlobalGameEvent( `show_annotation`,
 					{
 						text = `These particles indicate that a dispenser is about to activate.`
-						entity = Entities.FindByName( null, `tranquility1_bp` )
+						follow_entindex = Entities.FindByName( null, `tranquility1_bp` ).entindex()
 						lifetime = 8.5
 					})
 					EntFire( `tranquility1_ready_particles`, `Start` )
@@ -1474,12 +1476,12 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					PopExtUtil.ShowAnnotation(
+					SendGlobalGameEvent( `show_annotation`,
 					{
 						text = `This sound is played on activation.`
-						entity = Entities.FindByName( null, `tranquility1_bp` )
+						follow_entindex = Entities.FindByName( null, `tranquility1_bp` ).entindex()
 						lifetime = 7
-						sound = `oz_terror_sfx/tranquility.mp3`
+						play_sound = `oz_terror_sfx/tranquility.mp3`
 					})
 					EntFire( `tranquility1_ready_particles`, `Stop` )
 					EntFire( `tranquility2_ready_particles`, `Stop` )
@@ -1495,10 +1497,10 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					PopExtUtil.ShowAnnotation(
+					SendGlobalGameEvent( `show_annotation`,
 					{
 						text = `But beware! Some robots resonate with these signals much more strongly than others...`
-						entity = Entities.FindByName( null, `tranquility1_bp` )
+						follow_entindex = Entities.FindByName( null, `tranquility1_bp` ).entindex()
 						lifetime = 8.5
 					})
 				"
@@ -1552,14 +1554,16 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					PopExtUtil.ShowAnnotation(
+					SendGlobalGameEvent( `show_annotation`,
 					{
 						text = `Gatebots will flank regularly from here! Watch out!`
-						lifetime = -1
+						worldPosX = 3297
+						worldPosY = 462
+						worldPosZ = -355
+						lifetime = -1.0
 						id = 1
-						pos = Vector( 3297, 462, -355 )
 					})
-					EntFire( `wave_start_relay`, `RunScriptCode`, `PopExtUtil.HideAnnotation( 1 )`, 8.5 )
+					EntFire( `wave_start_relay`, `RunScriptCode`, `LOBO.HideAnnotation( 1 )`, 8.5 )
 				"
 			}
 		}
