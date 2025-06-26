@@ -434,6 +434,23 @@ const SINGLE_TICK = 0.015
 
 	HideAnnotation = function( arg_id ) { SendGlobalGameEvent( "hide_annotation", { id = arg_id } ) }
 
+	// adapted from PopExt
+	PressButton = function( player, button, duration = -1 )
+	{
+		SetPropInt( player, "m_afButtonForced", GetPropInt( player, "m_afButtonForced" ) | button )
+		SetPropInt( player, "m_nButtons", GetPropInt( player, "m_nButtons" ) | button )
+
+		if ( duration != -1 )
+			EntFireByHandle( player, "RunScriptCode", format( "LOBO.ReleaseButton( self, %d )", button ), duration, null, null )
+	}
+
+	// adapted from PopExt
+	ReleaseButton = function( player, button )
+	{
+		SetPropInt( player, "m_afButtonForced", GetPropInt( player, "m_afButtonForced" ) & ~button )
+		SetPropInt( player, "m_nButtons", GetPropInt( player, "m_nButtons" ) & ~button )
+	}
+
 	DisplayIndicatorCircle = function( ent, scale, duration, follow_ent )
 	{
 		local indicator = SpawnEntityFromTable( "prop_dynamic",
@@ -922,26 +939,26 @@ PopExt.AddRobotTag( "lobo_boss1",
 		}
 		_AddThinkToEnt( warstomp_particle2, "FollowBoss" )
 
-		PopExtUtil.PressButton( bot, IN_RELOAD )
+		LOBO.PressButton( bot, IN_RELOAD )
 		scope.wep <- PopExtUtil.GetItemInSlot( bot, SLOT_PRIMARY )
 
 		scope.WeaponFireThink <- function()
 		{
 			if ( bot.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) )
 			{
-				PopExtUtil.ReleaseButton( bot, IN_ATTACK )
+				LOBO.ReleaseButton( bot, IN_ATTACK )
 				return
 			}
 
 			if ( wep.Clip1() == wep.GetMaxClip1() )
 			{
-				PopExtUtil.PressButton( bot, IN_ATTACK )
+				LOBO.PressButton( bot, IN_ATTACK )
 				return
 			}
 
 			if ( wep.Clip1() == 0 )
 			{
-				PopExtUtil.ReleaseButton( bot, IN_ATTACK )
+				LOBO.ReleaseButton( bot, IN_ATTACK )
 				return
 			}
 		}
