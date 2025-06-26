@@ -381,7 +381,7 @@ const SINGLE_TICK = 0.015
 
 		if ( region )
 		{
-			Assert( typeof region == "array" && region.len() == 2, "GetAllPlayers(): if specified, key `region` must be an array of length 2" )
+			Assert( typeof region == "array" && region.len() == 2, "GetAllPlayers(): if specified, key \"region\" must be an array of length 2" )
 
 			for ( local p; p = Entities.FindByClassnameWithin( p, "player", region[ 0 ], region[ 1 ] ); )
 			{
