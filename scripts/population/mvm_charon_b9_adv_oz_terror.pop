@@ -1325,7 +1325,7 @@ WaveSchedule
 					foreach ( player in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_DEFENDERS, alive = false } ) )
 						player.SetScriptOverlayMaterial( `oz_terror_overlays/break1_announcement` )
 
-					LOBO.KillAllBotsOnMap()
+					LOBO.KillAllInvaderBots()
 
 					SINS.ChangeIconByName( `demo_loch_nys`, `soldier_and_demo` )
 
@@ -1961,7 +1961,7 @@ WaveSchedule
 					foreach ( player in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_DEFENDERS, alive = false } ) )
 						player.SetScriptOverlayMaterial( `oz_terror_overlays/break2_announcement` )
 
-					LOBO.KillAllBotsOnMap()
+					LOBO.KillAllInvaderBots()
 
 					LOBO.gatea_captured <- false
 
@@ -2587,7 +2587,7 @@ WaveSchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "LOBO.KillAllBotsOnMap()"
+				Param "LOBO.KillAllInvaderBots()"
 				Delay 0.1
 			}
 		}

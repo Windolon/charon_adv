@@ -419,7 +419,7 @@ const SINGLE_TICK = 0.015
 	}
 
 	// with help from fellen
-	KillAllBotsOnMap = function()
+	KillAllInvaderBots = function()
 	{
 		foreach ( p in this.GetAllPlayers( { team = TF_TEAM_PVE_INVADERS } ) )
 		{
