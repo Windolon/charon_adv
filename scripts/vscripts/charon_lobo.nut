@@ -432,7 +432,7 @@ const SINGLE_TICK = 0.015
 		}
 	}
 
-	function HideAnnotation( arg_id ) { SendGlobalGameEvent( "hide_annotation", { id = arg_id } ) }
+	HideAnnotation = function( arg_id ) { SendGlobalGameEvent( "hide_annotation", { id = arg_id } ) }
 
 	DisplayIndicatorCircle = function( ent, scale, duration, follow_ent )
 	{
