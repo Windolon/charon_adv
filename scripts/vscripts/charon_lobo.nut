@@ -961,7 +961,8 @@ PopExt.AddRobotTag( "lobo_boss1",
 			{
 				if ( Time() > self.GetTauntRemoveTime() )
 				{
-					if ( wearable != null ) wearable.Destroy()
+					if ( wearable != null )
+						wearable.Destroy()
 
 					SetPropInt( self, "m_clrRender", 0xFFFFFF )
 					SetPropInt( self, "m_nRenderMode", kRenderNormal )
