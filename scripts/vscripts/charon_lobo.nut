@@ -452,6 +452,40 @@ const SINGLE_TICK = 0.015
 		SetPropInt( player, "m_nButtons", GetPropInt( player, "m_nButtons" ) & ~button )
 	}
 
+	PlayerBonemergeModel = function( player, model )
+	{
+		local scope = player.GetScriptScope()
+
+		// we can't always assume BonemergeModelThink is the only think running on the player ent
+		// it's better to just force a think table
+		Assert( scope && "ThinkTable" in scope && "RunThinkTable" in scope,
+			"PlayerBonemergeModel(): Think table must be set up and running on " + player + " prior to calling" )
+
+		if ( "bonemerge_model" in scope && scope.bonemerge_model && scope.bonemerge_model.IsValid() )
+			scope.bonemerge_model.Kill()
+
+		local bonemerge_model = CreateByClassname( "tf_wearable" )
+		SetPropString( bonemerge_model, "m_iName", "__util_bonemerge_model" )
+		SetPropInt( bonemerge_model, "m_nModelIndex", PrecacheModel( model ) )
+		SetPropBool( bonemerge_model, "m_bValidatedAttachedEntity", true )
+		SetPropEntity( bonemerge_model, "m_hOwner", player )
+		bonemerge_model.SetTeam( player.GetTeam() )
+		bonemerge_model.SetOwner( player )
+		DispatchSpawn( bonemerge_model )
+		EntFireByHandle( bonemerge_model, "SetParent", "!activator", -1, player, player )
+		SetPropInt( bonemerge_model, "m_fEffects", EF_BONEMERGE | EF_BONEMERGE_FASTCULL )
+		scope.bonemerge_model <- bonemerge_model
+
+		SetPropInt( player, "m_nRenderMode", kRenderTransColor )
+		SetPropInt( player, "m_clrRender", 0 )
+
+		scope.ThinkTable.BonemergeModelThink <- function()
+		{
+			if ( bonemerge_model.IsValid() && ( player.IsTaunting() || bonemerge_model.GetMoveParent() != player ) )
+				bonemerge_model.AcceptInput( "SetParent", "!activator", player, player )
+		}
+	}
+
 	DisplayIndicatorCircle = function( ent, scale, duration, follow_ent )
 	{
 		local indicator = SpawnEntityFromTable( "prop_dynamic",
@@ -976,13 +1010,13 @@ PopExt.AddRobotTag( "lobo_boss1",
 			local botmodel = "models/bots/demo_boss/bot_demo_boss.mdl"
 			LOBO.ForceTaunt( bot, ID_TAUNT_ROAR_OWAR )
 			bot.SetCustomModelWithClassAnimations( "models/player/demo.mdl" )
-			PopExtUtil.PlayerRobotModel( bot, botmodel )
+			PopExtUtil.PlayerBonemergeModel( bot, botmodel )
 			PlayerThinkTable.BotModelThink = function()
 			{
 				if ( Time() > self.GetTauntRemoveTime() )
 				{
-					if ( wearable != null )
-						wearable.Destroy()
+					if ( bonemerge_model != null )
+						bonemerge_model.Destroy()
 
 					SetPropInt( self, "m_clrRender", 0xFFFFFF )
 					SetPropInt( self, "m_nRenderMode", kRenderNormal )
