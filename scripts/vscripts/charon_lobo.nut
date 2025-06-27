@@ -1,7 +1,8 @@
 // folds constants and NetProps methods into root, from VDC wiki
-::CONST <- getconsttable()
-::ROOT <- getroottable()
-if ( !( "ConstantNamingConvention" in ROOT ) ) // make sure folding is only done once
+local __root = getroottable()
+local __const = getconsttable()
+
+if ( !( "ConstantNamingConvention" in __root ) ) // make sure folding is only done once
 {
 	foreach ( enum_table in Constants )
 	{
@@ -10,15 +11,15 @@ if ( !( "ConstantNamingConvention" in ROOT ) ) // make sure folding is only done
 			if ( value == null )
 				value = 0
 
-			CONST[ name ] <- value
-			ROOT[ name ] <- value
+			__const[ name ] <- value
+			__root[ name ] <- value
 		}
 	}
 }
 
 foreach ( name, method in ::NetProps.getclass() )
-	if ( name != "IsValid" && !( name in ROOT ) )
-		getroottable()[ name ] <- method.bindenv( ::NetProps )
+	if ( name != "IsValid" && !( name in __root ) )
+		__root[ name ] <- method.bindenv( ::NetProps )
 
 // other external constants
 
