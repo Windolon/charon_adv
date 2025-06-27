@@ -25,8 +25,9 @@ foreach ( name, method in ::NetProps.getclass() )
 
 const SF_ENVTEXT_ALLPLAYERS = 1
 
-const SLOT_PRIMARY = 0
-const SLOT_PDA     = 5
+const SLOT_PRIMARY   = 0
+const SLOT_SECONDARY = 1
+const SLOT_PDA       = 5
 
 const SPELL_OVERHEAL = 2
 
@@ -486,6 +487,21 @@ const SINGLE_TICK = 0.015
 		}
 	}
 
+	GetItemInSlot = function( player, slot )
+	{
+		local item
+		for ( local i = 0; i < 7; i++ )
+		{
+			local wep = GetPropEntityArray( player, "m_hMyWeapons", i )
+			if ( wep == null || wep.GetSlot() != slot )
+				continue
+
+			item = wep
+			break
+		}
+		return item
+	}
+
 	DisplayIndicatorCircle = function( ent, scale, duration, follow_ent )
 	{
 		local indicator = SpawnEntityFromTable( "prop_dynamic",
@@ -537,7 +553,7 @@ const SINGLE_TICK = 0.015
 	// taken and adapted from PopExt
 	CastHealingSpellbook = function( bot )
 	{
-		local spellbook = PopExtUtil.GetItemInSlot( bot, SLOT_PDA )
+		local spellbook = LOBO.GetItemInSlot( bot, SLOT_PDA )
 
 		SetPropInt( spellbook, "m_iSelectedSpellIndex", SPELL_OVERHEAL )
 		SetPropInt( spellbook, "m_iSpellCharges", 9999 )
@@ -907,8 +923,11 @@ SpawnEntityGroupFromTable( LOBO.tranquility_setup )
 PopExt.AddRobotTag( "lobo_mangler", { OnSpawn = function( bot, tag )
 {
 	local scope = bot.GetScriptScope()
-	local mangler = PopExtUtil.GetItemInSlot( bot, SLOT_PRIMARY )
-	local banner = PopExtUtil.HasItemInLoadout( bot, "tf_weapon_buff_item" )
+	local mangler = LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
+
+	local banner = LOBO.GetItemInSlot( bot, SLOT_SECONDARY )
+	if ( banner.GetClassname() != "tf_weapon_buff_item" )
+		banner = null
 
 	scope.ManglerThink <- function() // i think to charge my mangler
 	{
@@ -976,7 +995,7 @@ PopExt.AddRobotTag( "lobo_boss1",
 		_AddThinkToEnt( warstomp_particle2, "FollowBoss" )
 
 		LOBO.PressButton( bot, IN_RELOAD )
-		scope.wep <- PopExtUtil.GetItemInSlot( bot, SLOT_PRIMARY )
+		scope.wep <- LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
 
 		scope.WeaponFireThink <- function()
 		{
@@ -1312,7 +1331,7 @@ PopExt.AddRobotTag( "lobo_boss3",
 			}
 			_AddThinkToEnt( frenzy_particle, "FollowBoss" )
 
-			local wep = PopExtUtil.GetItemInSlot( bot, SLOT_PRIMARY )
+			local wep = LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
 			wep.AddAttribute( "override projectile type", 2, -1 ) // fires rockets
 			wep.AddAttribute( "fire rate penalty", 4, -1 )
 			// reset
