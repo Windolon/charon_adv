@@ -1322,7 +1322,7 @@ WaveSchedule
 					EntFire( `break1_relay`, `Trigger` )
 					EntFire( `break1_relay`, `Kill` )
 
-					foreach ( player in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_DEFENDERS, alive = false } ) )
+					foreach ( player in LOBO.GetAllPlayers( { alive = false } ) )
 						player.SetScriptOverlayMaterial( `oz_terror_overlays/break1_announcement` )
 
 					LOBO.KillAllInvaderBots()
@@ -1369,7 +1369,7 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					foreach ( player in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_DEFENDERS, alive = false } ) )
+					foreach ( player in LOBO.GetAllPlayers( { alive = false } ) )
 						player.SetScriptOverlayMaterial( `oz_terror_overlays/bomb_resets_40_sec` )
 				"
 			}
@@ -1383,7 +1383,7 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					foreach ( player in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_DEFENDERS, alive = false } ) )
+					foreach ( player in LOBO.GetAllPlayers( { alive = false } ) )
 						player.SetScriptOverlayMaterial( null )
 				"
 			}
@@ -1962,7 +1962,7 @@ WaveSchedule
 
 					LOBO.gateb_captured = false
 
-					foreach ( player in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_DEFENDERS, alive = false } ) )
+					foreach ( player in LOBO.GetAllPlayers( { alive = false } ) )
 						player.SetScriptOverlayMaterial( `oz_terror_overlays/break2_announcement` )
 
 					LOBO.KillAllInvaderBots()
@@ -1990,7 +1990,7 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					foreach ( player in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_DEFENDERS, alive = false } ) )
+					foreach ( player in LOBO.GetAllPlayers( { alive = false } ) )
 						player.SetScriptOverlayMaterial( `oz_terror_overlays/bomb_resets_45_sec` )
 				"
 			}
@@ -2004,7 +2004,7 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					foreach ( player in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_DEFENDERS, alive = false } ) )
+					foreach ( player in LOBO.GetAllPlayers( { alive = false } ) )
 						player.SetScriptOverlayMaterial( null )
 				"
 			}
