@@ -57,6 +57,13 @@ local flWaveProgress = 1
 				delete hScope.iszClassIconOld
 		}
 
+		// root table cleanup
+		local __root = getroottable()
+		if ( "hTFOR" in __root )
+			delete ::hTFOR
+		if ( "IconCountThink" in __root )
+			delete ::IconCountThink
+
 
 		// keep this at the end
 		if (SINS)
