@@ -821,6 +821,7 @@ const SINGLE_TICK = 0.015
 
 	// provide a script handle reference to some dummy ents, for convenience.
 	hBigNet = Entities.FindByName( null, "BigNet" )
+	hWorldspawn = Entities.First()
 
 	PrecacheAssets = function()
 	{
@@ -1149,7 +1150,7 @@ PopExt.AddRobotTag( "lobo_boss2",
 				DispatchParticleEffect( `drg_wrenchmotron_impact`, origin, Vector() )
 
 				LOBO.divider_death_origin = origin
-				self.TakeDamage( 99999999, DMG_MELEE, PopExtUtil.Worldspawn )
+				self.TakeDamage( 99999999, DMG_MELEE, LOBO.hWorldspawn )
 			", 3, null, null )
 
 			delete PlayerThinkTable.SplitThink
