@@ -1011,7 +1011,7 @@ PopExt.AddRobotTag( "lobo_boss1",
 			local botmodel = "models/bots/demo_boss/bot_demo_boss.mdl"
 			LOBO.ForceTaunt( bot, ID_TAUNT_ROAR_OWAR )
 			bot.SetCustomModelWithClassAnimations( "models/player/demo.mdl" )
-			PopExtUtil.PlayerBonemergeModel( bot, botmodel )
+			LOBO.PlayerBonemergeModel( bot, botmodel )
 			PlayerThinkTable.BotModelThink = function()
 			{
 				if ( Time() > self.GetTauntRemoveTime() )
