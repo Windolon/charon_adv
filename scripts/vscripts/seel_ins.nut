@@ -35,28 +35,19 @@
 
 //////////////////////////////////////////////////////////
 
-//Namespace base by ficool
-foreach(k,v in NetProps.getclass())
-	if (k != "IsValid")
-		getroottable()[k] <- NetProps[k].bindenv(NetProps);
-
-printl("Seelpit's Icon maNipulator Script loaded and ready for use.")
-
 local iMaxEnemyCount = 0
 local iCurrentEnemyCount = 0
 local flWaveProgress = 1
 ::hTFOR <- Entities.FindByClassname(null,"tf_objective_resource")
-if (!("TF_BOT_TYPE" in this))
-	::TF_BOT_TYPE <- 1337
-	
-::SINS <- 
+
+::SINS <-
 {
 	Cleanup = function()
 	{
 		// cleanup any persistent changes here
-		
+
 		AddThinkToEnt(hTFOR, null)
-		
+
 		for(local i = 1; i <= MaxPlayers ; i++)
 		{
 			local hPlayer = PlayerInstanceFromIndex(i)
@@ -65,28 +56,28 @@ if (!("TF_BOT_TYPE" in this))
 			if ( "iszClassIconOld" in hScope )
 				delete hScope.iszClassIconOld
 		}
-		
-		
+
+
 		// keep this at the end
 		if (SINS)
 			delete ::SINS;
 	}
-	
+
 	// mandatory events
 	OnGameEvent_recalculate_holidays = function(_) { if (GetRoundState() == 3) Cleanup() }
 	OnGameEvent_mvm_wave_complete = function(_) { Cleanup() }
-	
-	
+
+
 	DEBUG = false
 	EngageDebugMode = function()
 	{
 		printl("SINS - Debug mode manually engaged!")
 		DEBUG = true
 	}
-	
-	
+
+
 	MaxPlayers = MaxClients().tointeger()
-	
+
 	tbIconFlags = {
 		"1" : "mainwave",
 		"2" : "support",
@@ -101,13 +92,13 @@ if (!("TF_BOT_TYPE" in this))
 		giant = 8,
 		crit = 16,
 	}
-	
+
 	IconsToChangeTable = {}
 	HiddenIcons = {}
 	tbIconMemory = {}
 	tbTankMemory = {}
 	arStartWave = []
-	
+
 	OnGameEvent_mvm_begin_wave = function(_)
 	{
 		foreach(func in arStartWave)
@@ -116,11 +107,11 @@ if (!("TF_BOT_TYPE" in this))
 	OnGameEvent_player_death = function(params)
 	{
 		local hDied = GetPlayerFromUserID(params.userid)
-		
+
 		if ( !(hDied.IsBotOfType(TF_BOT_TYPE)) ) return;
-		
+
 		local hScope = hDied.GetScriptScope()
-		
+
 		local iszClassIcon = GetIconByHandle(hDied)
 		if ( "iszClassIconOld" in hScope )
 		{
@@ -128,24 +119,24 @@ if (!("TF_BOT_TYPE" in this))
 			// Result: decrement from original icon and delete scope variable.
 			if ( iszClassIcon != hScope.iszClassIconOld && GetIndexOfIcon(hScope.iszClassIconOld) )
 				DecrementIconCountByName(hScope.iszClassIconOld)
-			
+
 			// CASE: the bot's ClassIcon was changed, but its current or original icon are NOT on the wavebar.
-			// Result: check memory for newly matching icon. 
+			// Result: check memory for newly matching icon.
 			else if ( iszClassIcon in tbIconMemory )
 					DecrementIconCountByName(tbIconMemory[iszClassIcon])
-				
+
 			// CASE: the bot's ClassIcon was changed, but its current or original icon are NOT on the wavebar,
 			// 		 AND its "new" icon is not in memory.
 			// Result: check memory for old icon as final resort.
 			else if ( hScope.iszClassIconOld in tbIconMemory )
 					DecrementIconCountByName(tbIconMemory[hScope.iszClassIconOld])
-			
+
 			else
 				printl(" [[MEMORY]] I don't know what you did, but you didn't fit in any of my cases. Incredible!")
-			
+
 			delete hScope.iszClassIconOld
 		}
-		
+
 		// CASE: the bot's ClassIcon is unchanged, not on the wavebar, and inside memory.
 		else if ( !(GetIndexOfIcon(iszClassIcon)) && iszClassIcon in tbIconMemory )
 		{
@@ -163,7 +154,7 @@ if (!("TF_BOT_TYPE" in this))
 			if( hEnt.GetHealth() <= 0 )
 			{
 				if (DEBUG) print("[[MEMORY]] Tank "+sTankName+" died, checking memory...");
-				
+
 				if( sTankName in tbTankMemory )
 				{
 					if (DEBUG) printl("found "+sTankName+" in memory, decrementing icon "+tbTankMemory[sTankName]+".");
@@ -172,7 +163,7 @@ if (!("TF_BOT_TYPE" in this))
 				if (DEBUG) printl("nothing found in memory, ignoring.");
 			}
 		}
-		
+
 	}
 	// Returns the icon name found at the given index. Index starts at 0, ends at 23.
 	// @integer	iIndex	: index from where the icon should be grabbed from.
@@ -183,14 +174,14 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS GetIconByIndex WARNING: highest index is 23! Clamping value to 23...")
 			iIndex = 23
 		}
-		
+
 		local i = 0
 		local two = ""
 		local i2 = 0
 		if (iIndex >= 12) two = "2.",i2 = 12;
-		
+
 		if (DEBUG) printf("Trying to find icon at index %i...",iIndex);
-		
+
 		local sName = GetPropStringArray(hTFOR, "m_iszMannVsMachineWaveClassNames"+two, iIndex-i2)
 		if ( sName.len() == 0 )
 		{
@@ -210,7 +201,7 @@ if (!("TF_BOT_TYPE" in this))
 		}
 		return GetPropString(hPlayer, "m_PlayerClass.m_iszClassIcon")
 	}
-	
+
 	//@string sTag	: tag of the bot.
 	GetIconByTag = function(sTag)
 	{
@@ -222,7 +213,7 @@ if (!("TF_BOT_TYPE" in this))
 			if (GetPropInt(player, "m_lifeState") != 0) continue
 			if (!player.IsBotOfType(TF_BOT_TYPE)) continue
 			if (!player.HasBotTag(tag)) continue
-			
+
 			local sName = GetIconByHandle(player)
 			if (DEBUG) printf("Found icon %s on bot #%i",sName,iBotCount);
 			iBotCount = iBotCount + 1
@@ -230,7 +221,7 @@ if (!("TF_BOT_TYPE" in this))
 		if (iBotCount == 1)
 			if (DEBUG) printf("Couldn't find any bots with tag %s!\n",sTag)
 	}
-	
+
 	//Finds the index of the given icon on the wavebar. Intended for internal use, but global for accessibility.
 	//@string sName	: name of the icon.
 	//@return int	: integer index of icon. If not found, returns NULL.
@@ -243,7 +234,7 @@ if (!("TF_BOT_TYPE" in this))
 		for(i; i < 24; i++) //Check: and thus, do I end at 24, or 23?
 		{
 			if (i >= 12) two = "2.",i2 = 12;
-			
+
 			local _sName = GetPropStringArray(hTFOR, "m_iszMannVsMachineWaveClassNames"+two, i-i2)
 			if (_sName == sName)
 			{
@@ -264,7 +255,7 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS GetIconCountByIndex ERROR: highest index is 23!")
 			return 0
 		}
-		
+
 		local two = ""
 		local i2 = 0
 		if (iIndex >= 12) two = "2.",i2 = 12;
@@ -277,9 +268,9 @@ if (!("TF_BOT_TYPE" in this))
 	GetIconCountByName = function(sName)
 	{
 		local iIndex = FindIndexOfIcon(sName)
-		
+
 		if (iIndex == null) return 0;
-		
+
 		return GetIconCountByIndex(iIndex)
 	}
 
@@ -289,7 +280,7 @@ if (!("TF_BOT_TYPE" in this))
 	//@return int	: integer index of icon. If not found, returns NULL.
 	GetIndexOfIcon = function(sName){ 	return FindIndexOfIcon(sName) }
 	GetIconIndex = function(sName)	{	return FindIndexOfIcon(sName) }
-	
+
 	//Wrappers for FindCountOfIcon [DEPRECATED] so both can be used.
 	//Finds the enemy count of the given icon on the wavebar. Intended for internal use, but global for accessibility.
 	//@string sName	: name of the icon.
@@ -297,7 +288,7 @@ if (!("TF_BOT_TYPE" in this))
 	// GetCountOfIcon = function(sName){	return  }
 	// GetIconCount = function(sName)	{	return  }
 	// GetIconCount = function(sName)	{	return  }
-	
+
 	//Returns the flags of the icon with the specified name.
 	//@string sName : name of the icon to get the flags of.
 	//If the icon is not on the wavebar, returns NULL.
@@ -308,7 +299,7 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS SetIconCountByIndex ERROR: highest index is 23!")
 			return null
 		}
-		
+
 		local two = ""
 		local i2 = 0
 		if (iIndex >= 12) two = "2.",i2 = 12; //Was this dot ever fixed? Getting fixed? Hopefully.
@@ -322,10 +313,10 @@ if (!("TF_BOT_TYPE" in this))
 	{
 		local iIndex = FindIndexOfIcon(sName)
 		if (iIndex == null) return null;
-		
+
 		return GetIconFlagsByIndex(iIndex)
 	}
-	
+
 	//Wrapper for GetIconFlagsByName. Returns the flags of the icon with the specified name.
 	//@string sName : name of the icon to get the flags of.
 	//If the icon is not on the wavebar, returns NULL.
@@ -333,7 +324,7 @@ if (!("TF_BOT_TYPE" in this))
 	{
 		return GetIconFlagsByName(sName)
 	}
-	
+
 	// Translates a given integer (flags) to a comma-delineated string.
 	//@int	iFlags : flags to translate into a string.
 	FlagsToString = function(iFlags)
@@ -360,7 +351,7 @@ if (!("TF_BOT_TYPE" in this))
 		}
 		return sFlags
 	}
-	
+
 	//Loops through and prints all icon names.
 	PrintAllIconNames = function()
 	{
@@ -370,15 +361,15 @@ if (!("TF_BOT_TYPE" in this))
 		for(i; i < 24; i++)
 		{
 			if (i >= 12) two = "2.",i2 = 12;
-			
+
 			local sName = GetPropStringArray(hTFOR, "m_iszMannVsMachineWaveClassNames"+two, i-i2)
 			printf("Icon %i: %s\n",i+1,sName)
 		}
 	}
-	
-	
+
+
 	// ### All functions that change wavebar icons are dependent on this function!!! ###
-	
+
 	//Changes icon of specified index on the wavebar to icon with the specified name. Uses parts of lite's hideicons script.
 	//@integer	iIndex	: index of the given icon. Can be determined by counting unique icons in WaveSpawn order.
 	//@string	sName	: name of the new icon.
@@ -391,16 +382,16 @@ if (!("TF_BOT_TYPE" in this))
 			if (DEBUG) ClientPrint(null,2,"SINS ChangeIconByIndex ERROR: Index is null!");
 			return;
 		}
-		
+
 		if (GetRoundState() == 10 && bStore)
 			arStartWave.append(function() ChangeIconByIndex(iIndex,sName))
-		
+
 		local two = ""
 		local i2 = 0
 		if (iIndex >= 12) two = "2.",i2 = 12; //Was this dot ever fixed? Getting fixed? Hopefully.
-		
+
 		local sNameOld = GetPropStringArray(hTFOR, "m_iszMannVsMachineWaveClassNames"+two, iIndex-i2)
-		
+
 		if (sNameOld.len() != 0)
 		{
 			if ( sNameOld == sName )
@@ -408,7 +399,7 @@ if (!("TF_BOT_TYPE" in this))
 				if (DEBUG) printl("SINS ChangeIconByIndex WARNING: Redundant operation! '"+sNameOld+"' **is** '"+sName+"'!");
 				return
 			}
-			
+
 			if (bMemory)
 			{
 				// CASE: icon was not changed on the wavebar before; is neither a key nor a value in memory.
@@ -433,12 +424,12 @@ if (!("TF_BOT_TYPE" in this))
 				}
 			}
 		}
-		
-		
+
+
 		if (DEBUG) printl("# Wavebar Icon changed: index "+iIndex+" is now "+sName+".");
 		SetPropStringArray(hTFOR, "m_iszMannVsMachineWaveClassNames"+two, sName, iIndex-i2)
 	}
-	
+
 	//Changes only the wavebar icon with the specified name to the icon with the specified new name.
 	//@string	sNameOld	: name of the icon to change.
 	//@string	sNameNew	: name of the new icon.
@@ -457,12 +448,12 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS ChangeIconByName ERROR: Redundant operation! '"+sNameOld+"' **is** '"+sName+"'!")
 			return
 		}
-		
+
 		if (DEBUG) printf("'%s' found at %i! Changing to '%s'...\n",sNameOld,iIndex,sName)
 		ChangeIconByIndex(iIndex,sName,bMemory,bStore)
 	}
-	
-	
+
+
 	//Wrapper that changes the given player's class icon. More convenient than writing it all out.
 	//Does NOT change the wavebar icon, but can change the icon on a boss health bar.
 	//@handle	hPlayer	: player to change the classicon of.
@@ -473,7 +464,7 @@ if (!("TF_BOT_TYPE" in this))
 		local hScope = hPlayer.GetScriptScope()
 		if ( !("iszClassIconOld" in hScope) && bStore)
 			hScope.iszClassIconOld <- GetPropString(hPlayer, "m_PlayerClass.m_iszClassIcon")
-		
+
 		SetPropString(hPlayer, "m_PlayerClass.m_iszClassIcon", sName)
 	}
 
@@ -484,10 +475,10 @@ if (!("TF_BOT_TYPE" in this))
 	ChangeClassIconAndWavebar = function(hPlayer, sName, bMemory = false, bStore = false)
 	{
 		if (!(hPlayer)) return;
-		
+
 		local sNameOld = GetIconByHandle(hPlayer)
 		local iIndex = FindIndexOfIcon(sNameOld)
-		
+
 		if (iIndex == null)
 		{
 			printl("SINS ChangeClassIconAndWavebar ERROR: couldn't find ")
@@ -498,12 +489,12 @@ if (!("TF_BOT_TYPE" in this))
 			if (DEBUG) printl("SINS ChangeClassIconAndWavebar WARNING: Redundant operation! '"+sNameOld+"' **is** '"+sName+"'!");
 			return
 		}
-		
+
 		if (DEBUG) printf("%s found at %d! Changing to %s...\n",sNameOld,iIndex,sName);
 		ChangeClassIcon(hPlayer, sName, false)
 		ChangeIconByIndex(iIndex,sName,bMemory,bStore) //Since this gets executed on a player, it's PROBABLY not done in setup...
 	}
-	
+
 	//Changes icons of all bots that match the provided tag and are currently alive.
 	//@string	tag				: tag of the bots whose icon should be changed.
 	//@string	iconName		: name of the icon to change to.
@@ -518,25 +509,25 @@ if (!("TF_BOT_TYPE" in this))
 			if (GetPropInt(player, "m_lifeState") != 0) continue
 			if (!player.IsBotOfType(TF_BOT_TYPE)) continue
 			if (!player.HasBotTag(tag)) continue
-			
+
 			local oldIcon = GetIconByHandle(player)
 			if (updateWavebarIcon && oldIcon != iconName)
 			{
 				local iconIndex = FindIndexOfIcon(oldIcon)
-				
+
 				if (iconIndex == null && DEBUG)
 					ClientPrint(null,2,"SINS ChangeIconByTag ERROR: Index is null!");
-				else 
+				else
 					ChangeIconByIndex(iconIndex,iconName,bMemory,bStore);
 			}
-			
+
 			// Should the bot's icon (healthbar) be changed?
 			// Don't store it if we're changing both!
 			if (updateClassIcon)
 				ChangeClassIcon(player,iconName,!(updateWavebarIcon && updateClassIcon) )
 		}
 	}
-	
+
 	//Changes "flags" of the given icon.
 	//@string	sName	: name of the icon whose flags to change.
 	//@int		iFlags	: flags to set on the icon. Valid values below.
@@ -550,18 +541,18 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS ChangeIconFlagsByIndex ERROR: highest index is 23!")
 			return false
 		}
-		
+
 		local two = ""
 		local i2 = 0
 		if (iIndex >= 12) two = "2.",i2 = 12; //Was this dot ever fixed? Getting fixed? Hopefully.
-		
+
 		if (GetRoundState() == 10 && bStore)
 			arStartWave.append(function() SetPropIntArray(hTFOR, "m_nMannVsMachineWaveClassFlags"+two, iFlags, iIndex-i2))
-		
+
 		if (DEBUG) printl("# Icon Flags changed: icon '"+GetIconByIndex(iIndex)+"' now has flags "+iFlags+"");
 		SetPropIntArray(hTFOR, "m_nMannVsMachineWaveClassFlags"+two, iFlags, iIndex-i2)
 	}
-	
+
 	//Changes "flags" of the given icon.
 	//@string	sName	: name of the icon whose flags to change.
 	//@int		iFlags	: flags to set on the icon. Valid values below.
@@ -571,12 +562,12 @@ if (!("TF_BOT_TYPE" in this))
 	ChangeIconFlags = function(sName,iFlags,bStore = true)
 	{
 		local iIndex = FindIndexOfIcon(sName)
-		
+
 		if (iIndex == null) return;
-		
+
 		ChangeIconFlagsByIndex(iIndex,iFlags,bStore)
 	}
-	
+
 	//Changes "flags" of the given icon based on a string.
 	//@string	sName	: name of the icon whose flags to change.
 	//@string	sFlags	: string of flags to set the icon to. Formatted as: SINS.ChangeIconFlagsString("soldier","mainwave|giant")
@@ -597,7 +588,7 @@ if (!("TF_BOT_TYPE" in this))
 		}
 		ChangeIconFlags(sName,iNewFlags, bStore)
 	}
-	
+
 	//TODO: finish
 	//Toggles "flags" of the given icon based on a string.
 	//@string	sName	: name of the icon whose flags to change.
@@ -605,7 +596,7 @@ if (!("TF_BOT_TYPE" in this))
 	ToggleIconFlagsString = function(sName,sFlags)
 	{
 		local iFlagsOld = GetIconFlags(sName)
-		
+
 		local arFlags = split(sFlags,"|")
 		foreach(flag in arFlags)
 		{
@@ -618,7 +609,7 @@ if (!("TF_BOT_TYPE" in this))
 			}
 		}
 	}
-	
+
 	//Increments the given icon index by the given count. Returns true if succesful, false if unsuccesful.
 	//@string	sName	: icon name to increment.
 	//@int		iCount	: amount to set count to (default: 1).
@@ -631,27 +622,27 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS SetIconCountByIndex ERROR: highest index is 23!")
 			return false
 		}
-		
+
 		local two = ""
 		local i2 = 0
 		if (iIndex >= 12) two = "2.",i2 = 12;
-		
+
 		local iCountOld = GetIconCountByIndex( iIndex )
-		
+
 		if (GetRoundState() == 10 && bStore)
 		{
 			arStartWave.append(function() SetPropIntArray(hTFOR, "m_nMannVsMachineWaveClassCounts"+two, iCount, iIndex-i2) )
 			arStartWave.append(function() SetPropInt(hTFOR,"m_nMannVsMachineWaveEnemyCount",iMaxEnemyCount + iCount - iCountOld) )
 		}
-		
+
 		SetPropInt(hTFOR,"m_nMannVsMachineWaveEnemyCount",iMaxEnemyCount + iCount - iCountOld)
 		SetPropIntArray(hTFOR, "m_nMannVsMachineWaveClassCounts"+two, iCount, iIndex-i2)
-		
+
 		if (DEBUG) printl("Set icon count of index "+iIndex+" from "+iCountOld+" to "+iCount);
-		
+
 		return true
 	}
-	
+
 	//Sets the given icon's name to the given count. Returns true if succesful, false if unsuccesful.
 	//@string	sName	: icon name to increment.
 	//@int		iCount	: amount to set count to (default: 1).
@@ -665,8 +656,8 @@ if (!("TF_BOT_TYPE" in this))
 		}
 		return SetIconCountByIndex(iIndex,iCount,bUpdate,bStore)
 	}
-	
-	
+
+
 	//Increments the given icon index by the given count. Returns true if succesful, false if unsuccesful.
 	//@string	sName	: icon name to increment.
 	//@int		iCount	: amount to increment by (default: 1).
@@ -677,12 +668,12 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS IncrementIconCountByIndex WARNING: highest index is 23! Clamping value to 23...")
 			iIndex = 23
 		}
-		
+
 		SetPropInt(hTFOR,"m_nMannVsMachineWaveEnemyCount",iMaxEnemyCount + iCount)
 		if (DEBUG) printl("Incrementing icon count of index "+iIndex+" by "+iCount+"; new total should be "+ (iMaxEnemyCount + iCount) );
 		return SetIconCountByIndex( iIndex, GetIconCountByIndex( iIndex ) + iCount, bUpdate, bStore)
 	}
-	
+
 	//Increments the given icon's name by the given count. Returns true if succesful, false if unsuccesful.
 	//@string	sName	: icon name to increment.
 	//@int		iCount	: amount to increment by (default: 1).
@@ -696,8 +687,8 @@ if (!("TF_BOT_TYPE" in this))
 		}
 		return IncrementIconCountByIndex(iIndex,iCount,bUpdate,bStore)
 	}
-	
-	
+
+
 	//Decrements the given icon's count by the given count. Returns true if succesful, false if unsuccesful.
 	//@string	sName	: icon name to decrement.
 	//@int		iCount	: amount to decrement by (default: 1).
@@ -709,12 +700,12 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS DecrementIconCountByName ERROR: couldn't find index of icon '"+sName+"'!")
 			return false;
 		}
-		
+
 		return SetIconCountByName( sName, GetIconCountByIndex( iIndex ) - iCount, bUpdate, bStore)
 	}
 
 	// Inserts a bot icon at the given index. Use InsertTankIconAtIndex for Tank icons!!!
-	// 
+	//
 	InsertIconAtIndex = function(iIndex,sName,iCount = 1,iFlags = 1)
 	{
 		if (iIndex > 23)
@@ -722,21 +713,21 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS InsertIconAtIndex ERROR: highest index is 23!")
 			return
 		}
-		
+
 		local i = 23
 		local two = ""
 		local i2 = 0
 		if(iIndex >= 12) two = "2.",i2 = 12;
-		
+
 		local sNameCurrent = GetPropStringArray(hTFOR, "m_iszMannVsMachineWaveClassNames"+two, iIndex-i2)
-		
+
 		// CASE: The icon is already on the wavebar! Don't insert it, just send a message to let them know.
 		if( GetIconIndex(sName) != null )
 		{
 			printl("SINS InsertIconAtIndex ERROR: Icon already exists on the wavebar! Try SINS.IncrementIconCountByIndex or SINS.SetIconCountByIndex instead!")
 			return
 		}
-		
+
 		// CASE: It's empty! And therefore, Free Real Estate. Insert the icon, count, and apply flags.
 		if( sNameCurrent.len() == 0 )
 		{
@@ -747,7 +738,7 @@ if (!("TF_BOT_TYPE" in this))
 			SetPropInt(hTFOR, "m_nMannVsMachineWaveEnemyCount", iMaxEnemyCount + iCount)
 			return
 		}
-		
+
 		// CASE: It's NOT empty, push all other icons up.
 		for(i; i >= iIndex; i--)
 		{
@@ -755,7 +746,7 @@ if (!("TF_BOT_TYPE" in this))
 			local _i2 = 0
 			if(i >= 12) _two = "2.",_i2 = 12;
 			sNameCurrent = GetPropStringArray(hTFOR, "m_iszMannVsMachineWaveClassNames"+_two, i-_i2)
-			
+
 			if (DEBUG) print("Checking index "+i+"...");
 			// CASE: Current icon is empty & not at index yet, let's move on.
 			if( sNameCurrent.len() == 0 )
@@ -763,16 +754,16 @@ if (!("TF_BOT_TYPE" in this))
 				if (DEBUG) printl("it's empty, continuing...");
 				continue
 			}
-			
+
 			// CASE: Current icon is NOT empty! First, check if we have space to push it down.
 			if( i == 23 )
 			{
 				printl("SINS InsertIconAtIndex ERROR: cannot insert, wavebar is already full!")
 				return
 			}
-			
+
 			local iFlagsNew = GetIconFlagsByIndex(i)
-			
+
 			// We've got space! Push it up to the next index.
 			ChangeIconByIndex(i+1, sNameCurrent, false)
 			SetIconCountByIndex(i+1, GetIconCountByIndex(i), false, false )
@@ -785,8 +776,8 @@ if (!("TF_BOT_TYPE" in this))
 		ChangeIconFlags(sName,iFlags)
 		SetPropInt(hTFOR, "m_nMannVsMachineWaveEnemyCount", iMaxEnemyCount + iCount)
 	}
-	
-	// This function PRESUMES that 
+
+	// This function PRESUMES that
 	InsertTankIconAtIndex = function(iIndex,sName,sTankName,iCount = 1,iFlags = 9)
 	{
 		if (iIndex > 23)
@@ -794,34 +785,34 @@ if (!("TF_BOT_TYPE" in this))
 			printl("SINS InsertIconAtIndex ERROR: highest index is 23!")
 			return
 		}
-		
+
 		local i = 23
 		local two = ""
 		local i2 = 0
 		if(iIndex >= 12) two = "2.",i2 = 12;
-		
+
 		local sNameCurrent = GetPropStringArray(hTFOR, "m_iszMannVsMachineWaveClassNames"+two, iIndex-i2)
-		
+
 		// CASE: The icon is already on the wavebar! Don't insert it, just send a message to let them know.
 		if( GetIconIndex(sName) != null )
 		{
 			printl("SINS InsertIconAtIndex ERROR: Icon already exists on the wavebar! Try SINS.IncrementIconCountByIndex or SINS.SetIconCountByIndex instead!")
 			return
 		}
-		
+
 		// CASE: It's empty! And therefore, Free Real Estate. Insert the icon, count, and apply flags.
 		if( sNameCurrent.len() == 0 )
 		{
 			if (DEBUG) printl("Index is empty - inserting icon '"+sName+"'!");
-			
+
 			ChangeIconByIndex(iIndex,sName,false)
 			SetIconCountByIndex(iIndex,iCount)
 			ChangeIconFlags(sName,iFlags)
 			SetPropInt(hTFOR, "m_nMannVsMachineWaveEnemyCount", iMaxEnemyCount + iCount)
-			
+
 			return
 		}
-		
+
 		// CASE: It's NOT empty, push all other icons up.
 		for(i; i >= iIndex; i--)
 		{
@@ -829,7 +820,7 @@ if (!("TF_BOT_TYPE" in this))
 			local _i2 = 0
 			if(i >= 12) _two = "2.",_i2 = 12;
 			sNameCurrent = GetPropStringArray(hTFOR, "m_iszMannVsMachineWaveClassNames"+_two, i-_i2)
-			
+
 			if (DEBUG) print("Checking index "+i+"...");
 			// CASE: Current icon is empty & not at index yet, let's move on.
 			if( sNameCurrent.len() == 0 )
@@ -837,16 +828,16 @@ if (!("TF_BOT_TYPE" in this))
 				if (DEBUG) printl("it's empty, continuing...");
 				continue
 			}
-			
+
 			// CASE: Current icon is NOT empty! First, check if we have space to push it down.
 			if( i == 23 )
 			{
 				printl("SINS InsertIconAtIndex ERROR: cannot insert, wavebar is already full!")
 				return
 			}
-			
+
 			local iFlagsNew = GetIconFlagsByIndex(i)
-			
+
 			// We've got space! Push it up to the next index.
 			ChangeIconByIndex(i+1, sNameCurrent, false)
 			SetIconCountByIndex(i+1, GetIconCountByIndex(i), false, false )
@@ -859,20 +850,20 @@ if (!("TF_BOT_TYPE" in this))
 		ChangeIconFlags(sName,iFlags)
 		SetPropInt(hTFOR, "m_nMannVsMachineWaveEnemyCount", iMaxEnemyCount + iCount)
 	}
-	
+
 	HideIcon = function(name)
 	{
 		local iIndex 					= FindIndexOfIcon(name)
 		local iEnemyCount				= GetIconCountByName(name)
 		local iFlags 					= GetIconFlags(name)
 		local iMaxEnemyCountAfterHide 	= (GetIconFlags(name) & 1) == 1 ? iMaxEnemyCount - iIconEnemyCount : iMaxEnemyCount //Only subtract if icons were mainwave.
-		
+
 		HiddenIcons[name] <- { flags = iFlags, count = iEnemyCount }
-		
+
 		ChangeIconFlags(name,0)
 		SetPropInt(hTFOR,"m_nMannVsMachineWaveEnemyCount",iMaxEnemyCountAfterHide)
 	}
-	
+
 	UnhideIcon = function(name)
 	{
 		local iIconFlags = GetIconFlags(name)
@@ -884,11 +875,11 @@ if (!("TF_BOT_TYPE" in this))
 		iIconFlags 						= HiddenIcons[name].flags
 		local iIconCount 				= HiddenIcons[name].count
 		local iMaxEnemyCountAfterUnhide = iMaxEnemyCount + iIconCount
-		
+
 		ChangeIconFlags(name, HiddenIcons[name].flags)
 		SetPropInt(hTFOR,"m_nMannVsMachineWaveEnemyCount",iMaxEnemyCountAfterUnhide)
 	}
-	
+
 	// TODO
 	// Advanced function that changes the ENTIRE wavebar to the predefined set of icons, passed in an array.
 	// The array should be set up as follows:
@@ -906,28 +897,28 @@ if (SINS.DEBUG)
 ::IconCountThink <- function()
 {
 	local iCurrentEnemyCount = 0
-	
+
 	local i = 0
 	local two = ""
 	local i2 = 0
 	for(i; i < 24; i++)
 	{
 		if (i >= 12) two = "2.",i2 = 12;
-		
+
 		local iFlags = GetPropIntArray(hTFOR, "m_nMannVsMachineWaveClassFlags"+two, i-i2)
 		if (!(iFlags & 1)) continue; //Support is not counted, nor are any that are invisible.
-		
+
 		local iIconCount = GetPropIntArray(hTFOR, "m_nMannVsMachineWaveClassCounts"+two, i-i2)
 		iCurrentEnemyCount = iCurrentEnemyCount + iIconCount
 	}
-	
+
 	iMaxEnemyCount = GetPropInt(hTFOR,"m_nMannVsMachineWaveEnemyCount")
-	
+
 	if(SINS.DEBUG)
 	{
 		ClientPrint(null,4,format("Current enemy count / max enemy count:\n%i / %i",iCurrentEnemyCount,iMaxEnemyCount))
 	}
-	
+
 	flWaveProgress = iCurrentEnemyCount.tofloat() / iMaxEnemyCount.tofloat()
 	return -1
 }
