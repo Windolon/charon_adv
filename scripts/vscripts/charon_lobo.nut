@@ -524,7 +524,7 @@ const SINGLE_TICK = 0.015
 			{
 				self.SetLocalOrigin( ent.GetOrigin() )
 			}
-			PopExtUtil.AddThinkToEnt( indicator, "FollowEntity" )
+			AddThinkToEnt( indicator, "FollowEntity" )
 		}
 
 		EntFireByHandle( indicator, "SetAnimation", "end", duration, null, null )
@@ -947,7 +947,7 @@ PopExt.AddRobotTag( "lobo_mangler", { OnSpawn = function( bot, tag )
 
 		mangler.SecondaryAttack()
 	}
-	PopExtUtil.AddThinkToEnt( bot, "ManglerThink" )
+	AddThinkToEnt( bot, "ManglerThink" )
 }})
 
 PopExt.AddRobotTag( "lobo_boss1",
@@ -978,7 +978,7 @@ PopExt.AddRobotTag( "lobo_boss1",
 		{
 			self.SetLocalOrigin( bot.GetOrigin() )
 		}
-		_AddThinkToEnt( warstomp_particle1, "FollowBoss" )
+		AddThinkToEnt( warstomp_particle1, "FollowBoss" )
 
 		local warstomp_particle2 = SpawnEntityFromTable( "info_particle_system",
 		{
@@ -992,12 +992,12 @@ PopExt.AddRobotTag( "lobo_boss1",
 		{
 			self.SetLocalOrigin( bot.GetOrigin() )
 		}
-		_AddThinkToEnt( warstomp_particle2, "FollowBoss" )
+		AddThinkToEnt( warstomp_particle2, "FollowBoss" )
 
 		LOBO.PressButton( bot, IN_RELOAD )
 		scope.wep <- LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
 
-		scope.WeaponFireThink <- function()
+		scope.ThinkTable.WeaponFireThink <- function()
 		{
 			if ( bot.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) )
 			{
@@ -1017,9 +1017,8 @@ PopExt.AddRobotTag( "lobo_boss1",
 				return
 			}
 		}
-		PopExtUtil.AddThinkToEnt( bot, "WeaponFireThink" )
 
-		scope.WarStompThink <- function()
+		scope.ThinkTable.WarStompThink <- function()
 		{
 			if ( Time() < first_delay || Time() < cooldown_time )
 				return
@@ -1031,7 +1030,7 @@ PopExt.AddRobotTag( "lobo_boss1",
 			LOBO.ForceTaunt( bot, ID_TAUNT_ROAR_OWAR )
 			bot.SetCustomModelWithClassAnimations( "models/player/demo.mdl" )
 			LOBO.PlayerBonemergeModel( bot, botmodel )
-			PlayerThinkTable.BotModelThink = function()
+			ThinkTable.BonemergeModelThink = function()
 			{
 				if ( Time() > self.GetTauntRemoveTime() )
 				{
@@ -1042,7 +1041,7 @@ PopExt.AddRobotTag( "lobo_boss1",
 					SetPropInt( self, "m_nRenderMode", kRenderNormal )
 					self.SetCustomModelWithClassAnimations( botmodel )
 
-					delete PlayerThinkTable.BotModelThink
+					delete ThinkTable.BonemergeModelThink
 				}
 			}
 
@@ -1097,7 +1096,6 @@ PopExt.AddRobotTag( "lobo_boss1",
 
 			cooldown_time = Time() + cooldown
 		}
-		PopExtUtil.AddThinkToEnt( bot, "WarStompThink" )
 	}
 
 	OnDeath = function( bot, params )
@@ -1124,7 +1122,7 @@ PopExt.AddRobotTag( "lobo_boss2",
 
 		scope.is_resisting_damage <- false
 
-		scope.ApplyHomingToRocketThink <- function()
+		scope.ThinkTable.ApplyHomingToRocketThink <- function()
 		{
 			for ( local rocket; rocket = Entities.FindByClassname( rocket, "tf_projectile_rocket" ); )
 			{
@@ -1152,9 +1150,8 @@ PopExt.AddRobotTag( "lobo_boss2",
 				IncludeScript( "charon_homingprojectiles", rocket_scope )
 			}
 		}
-		PopExtUtil.AddThinkToEnt( bot, "ApplyHomingToRocketThink" )
 
-		scope.SplitThink <- function()
+		scope.ThinkTable.SplitThink <- function()
 		{
 			if ( bot.GetHealth() > bot.GetMaxHealth() * 0.5 )
 				return
@@ -1172,9 +1169,8 @@ PopExt.AddRobotTag( "lobo_boss2",
 				self.TakeDamage( 99999999, DMG_MELEE, LOBO.hWorldspawn )
 			", 3, null, null )
 
-			delete PlayerThinkTable.SplitThink
+			delete ThinkTable.SplitThink
 		}
-		PopExtUtil.AddThinkToEnt( bot, "SplitThink" )
 	}
 
 	OnTakeDamage = function( bot, params )
@@ -1231,7 +1227,7 @@ PopExt.AddRobotTag( "lobo_boss2b",
 				IncludeScript( "charon_homingprojectiles", ray_scope )
 			}
 		}
-		PopExtUtil.AddThinkToEnt( bot, "ApplyHomingToRayThink" )
+		AddThinkToEnt( bot, "ApplyHomingToRayThink" )
 	}
 })
 
@@ -1257,7 +1253,7 @@ PopExt.AddRobotTag( "lobo_boss3",
 
 		local time_atspawn = Time()
 
-		scope.TranquilityThink <- function()
+		scope.ThinkTable.TranquilityThink <- function()
 		{
 			if ( bot.GetHealth() < bot.GetMaxHealth() * 0.6666 && tranquility_cast_count == 0 )
 			{
@@ -1270,9 +1266,8 @@ PopExt.AddRobotTag( "lobo_boss3",
 				LOBO.CastTranquilityAbility( bot, tranquility_cast_count )
 			}
 		}
-		PopExtUtil.AddThinkToEnt( bot, "TranquilityThink" )
 
-		scope.FrenzyThink <- function()
+		scope.ThinkTable.FrenzyThink <- function()
 		{
 			if ( !( bot.GetHealth() < bot.GetMaxHealth() * 0.35 ) )
 				return
@@ -1287,7 +1282,7 @@ PopExt.AddRobotTag( "lobo_boss3",
 
 			bot.SetCustomModelWithClassAnimations( "models/bots/heavy/bot_heavy.mdl" )
 			bot.HandleTauntCommand( 0 )
-			PlayerThinkTable.RevertModelThink <- function()
+			ThinkTable.RevertModelThink <- function()
 			{
 				if ( Time() > self.GetTauntRemoveTime() )
 				{
@@ -1311,10 +1306,10 @@ PopExt.AddRobotTag( "lobo_boss3",
 						{
 							self.SetLocalOrigin( bot.GetOrigin() )
 						}
-						_AddThinkToEnt( amputator_particle, "FollowBoss" )
+						AddThinkToEnt( amputator_particle, "FollowBoss" )
 					}
 
-					delete PlayerThinkTable.RevertModelThink
+					delete ThinkTable.RevertModelThink
 				}
 			}
 
@@ -1329,7 +1324,7 @@ PopExt.AddRobotTag( "lobo_boss3",
 			{
 				self.SetLocalOrigin( bot.GetOrigin() + Vector( 0, 0, 75 ) )
 			}
-			_AddThinkToEnt( frenzy_particle, "FollowBoss" )
+			AddThinkToEnt( frenzy_particle, "FollowBoss" )
 
 			local wep = LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
 			wep.AddAttribute( "override projectile type", 2, -1 ) // fires rockets
@@ -1338,15 +1333,14 @@ PopExt.AddRobotTag( "lobo_boss3",
 			wep.AddAttribute( "energy weapon penetration", 0, -1 )
 			wep.AddAttribute( "dmg bonus vs buildings", 1, -1 )
 
-			delete PlayerThinkTable.FrenzyThink
+			delete ThinkTable.FrenzyThink
 		}
-		PopExtUtil.AddThinkToEnt( bot, "FrenzyThink" )
 
 		local first_delay = Time() + 13 // default: 13
 		local cooldown = 10
 		local cooldown_time = Time()
 
-		scope.StarfallThink <- function()
+		scope.ThinkTable.StarfallThink <- function()
 		{
 			if ( Time() < first_delay || Time() < cooldown_time )
 				return
@@ -1355,7 +1349,6 @@ PopExt.AddRobotTag( "lobo_boss3",
 
 			cooldown_time = Time() + cooldown
 		}
-		PopExtUtil.AddThinkToEnt( bot, "StarfallThink" )
 	}
 
 	OnDeath = function( bot, params )
