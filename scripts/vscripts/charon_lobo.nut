@@ -949,6 +949,44 @@ const SINGLE_TICK = 0.015
 
 		OnScriptHook_OnTakeDamage = function( params )
 		{
+			local bot = params.const_entity
+
+			if ( !bot.IsPlayer() || bot.GetTeam() != TF_TEAM_PVE_INVADERS ||
+				 !bot.IsBotOfType( TF_BOT_TYPE ) || !bot.HasBotTag( "lobo_boss2" ) ||
+				 !bot.GetScriptScope().is_resisting_damage )
+				return
+
+			params.damage *= 0.2
+		}
+
+		OnGameEvent_player_hurt = function( params )
+		{
+			local bot = GetPlayerFromUserID( params.userid )
+
+			if ( bot.GetTeam() != TF_TEAM_PVE_INVADERS || !bot.IsBotOfType( TF_BOT_TYPE ) )
+				return
+
+			if ( bot.HasBotTag( "lobo_kotg1" ) )
+			{
+				if ( LOBO.is_tranquility_on_hold || LOBO.gateb_captured )
+					return
+
+				LOBO.is_tranquility_on_hold = true
+				LOBO.CastTranquilityAbility( bot, 1 )
+			}
+
+			if ( bot.HasBotTag( "lobo_kotg2" ) )
+			{
+				if ( LOBO.is_tranquility_on_hold || LOBO.gateb_captured )
+					return
+
+				LOBO.is_tranquility_on_hold = true
+				LOBO.CastTranquilityAbility( bot, 2 )
+			}
+		}
+
+		OnGameEvent_player_death = function( params )
+		{
 
 		}
 
@@ -1257,12 +1295,6 @@ PopExt.AddRobotTag( "lobo_boss2",
 			delete ThinkTable.SplitThink
 		}
 	}
-
-	OnTakeDamage = function( bot, params )
-	{
-		if ( bot.GetScriptScope().is_resisting_damage )
-			params.damage *= 0.2
-	}
 })
 
 PopExt.AddRobotTag( "lobo_boss2components",
@@ -1454,15 +1486,6 @@ PopExt.AddRobotTag( "lobo_kotg1",
 		bot.KeyValueFromString( "targetname", "kotg" )
 	}
 
-	OnTakeDamagePost = function( bot, params )
-	{
-		if ( LOBO.is_tranquility_on_hold || LOBO.gateb_captured )
-			return
-
-		LOBO.is_tranquility_on_hold = true
-		LOBO.CastTranquilityAbility( bot, 1 )
-	}
-
 	OnDeath = function( bot, params )
 	{
 		if ( GetPropString( bot, "m_iName" ) == "kotg" )
@@ -1481,15 +1504,6 @@ PopExt.AddRobotTag( "lobo_kotg2",
 			return
 
 		bot.KeyValueFromString( "targetname", "kotg" )
-	}
-
-	OnTakeDamagePost = function( bot, params )
-	{
-		if ( LOBO.is_tranquility_on_hold || LOBO.gateb_captured )
-			return
-
-		LOBO.is_tranquility_on_hold = true
-		LOBO.CastTranquilityAbility( bot, 2 )
 	}
 
 	OnDeath = function( bot, params )
