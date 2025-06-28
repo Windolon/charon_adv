@@ -66,6 +66,7 @@ WaveSchedule
 			WeaponRestrictions PrimaryOnly
 			Tag bot_giant
 			Tag lobo_boss1
+			Tag lobo_thinktable
 			ItemAttributes
 			{
 				ItemName "The Iron Bomber"
@@ -104,6 +105,7 @@ WaveSchedule
 			Tag bot_giant
 			Tag lobo_boss2
 			Tag "popext_rocketcustomtrail{ name = `eyeboss_projectile` }"
+			Tag lobo_thinktable
 			ItemAttributes
 			{
 				ItemName "TF_WEAPON_ROCKETLAUNCHER"
@@ -236,6 +238,7 @@ WaveSchedule
 			Attributes UseBossHealthBar
 			Tag bot_giant
 			Tag lobo_boss3
+			Tag lobo_thinktable
 			ItemAttributes
 			{
 				ItemName "TF_WEAPON_MINIGUN"

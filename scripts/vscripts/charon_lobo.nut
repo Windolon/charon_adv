@@ -849,6 +849,79 @@ const SINGLE_TICK = 0.015
 		PrecacheModel( "models/props_mvm/indicator/indicator_circle_long.mdl" )
 	}
 
+	BotTagCheck = function()
+	{
+		if ( self.HasBotTag( "lobo_thinktable" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_mangler" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_boss1" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_boss2" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_boss2components" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_boss2b" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_boss3" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_kotg1" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_kotg2" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_homingrockettrail" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_healingspell" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_useengibotmodel" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_usepomson" ) )
+		{
+
+		}
+
+		if ( self.HasBotTag( "lobo_userapidpomson" ) )
+		{
+
+		}
+	}
+
 	Cleanup = function()
 	{
 		if ( "LOBO" in getroottable() )
@@ -857,6 +930,23 @@ const SINGLE_TICK = 0.015
 
 	CALLBACKS =
 	{
+		OnGameEvent_player_spawn = function( params )
+		{
+			local player = GetPlayerFromUserID( params.userid )
+			local team = params.team
+
+			if ( team == TEAM_UNASSIGNED )
+			{
+				player.ValidateScriptScope()
+				return
+			}
+
+			if ( team == TF_TEAM_PVE_INVADERS && player.IsBotOfType( TF_BOT_TYPE ) )
+			{
+				EntFireByHandle( player, "RunScriptCode", "LOBO.BotTagCheck()", 0.1, null, null )
+			}
+		}
+
 		OnScriptHook_OnTakeDamage = function( params )
 		{
 
