@@ -369,8 +369,6 @@ const SINGLE_TICK = 0.015
 	is_tranquility_on_hold = false
 	is_first_kotg_spawned  = false
 
-	hMinicrit_dummy = SpawnEntityFromTable( "logic_relay", { targetname = "minicrit_dummy" } )
-
 	// with help and inspiration from ficool2 and Pealover
 	GetAllPlayers = function( args = {} )
 	{
@@ -861,10 +859,7 @@ const SINGLE_TICK = 0.015
 	{
 		OnScriptHook_OnTakeDamage = function( params )
 		{
-			if ( params.inflictor != LOBO.hMinicrit_dummy )
-				return
 
-			params.crit_type = 1
 		}
 
 		// this provides accurate bools LOBO.gatea/b_captured for various in-wave logic.
