@@ -526,6 +526,12 @@ const SINGLE_TICK = 0.015
 		scope.ThinkTable[ name ] <- func.bindenv( scope )
 	}
 
+	ModifyThink = function( ent, name, func )
+	{
+		local scope = ent.GetScriptScope()
+		scope.ThinkTable[ name ] = func.bindenv( scope )
+	}
+
 	DeleteThink = function( ent, name ) { delete ent.GetScriptScope().ThinkTable[ name ] }
 
 	DisplayIndicatorCircle = function( ent, scale, duration, follow_ent )
@@ -986,7 +992,7 @@ const SINGLE_TICK = 0.015
 				self.SetCustomModelWithClassAnimations( "models/player/demo.mdl" )
 				LOBO.PlayerBonemergeModel( self, botmodel )
 
-				LOBO.AddThink( self, "BonemergeModelThink", function()
+				LOBO.ModifyThink( self, "BonemergeModelThink", function()
 				{
 					if ( Time() > self.GetTauntRemoveTime() )
 					{
