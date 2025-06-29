@@ -886,7 +886,31 @@ const SINGLE_TICK = 0.015
 
 		if ( self.HasBotTag( "lobo_mangler" ) )
 		{
+			local mangler = LOBO.GetItemInSlot( self, SLOT_PRIMARY )
 
+			local banner = LOBO.GetItemInSlot( self, SLOT_SECONDARY )
+			if ( banner.GetClassname() != "tf_weapon_buff_item" )
+				banner = null
+
+			// i think to charge my mangler
+			LOBO.AddThink( self, "ManglerThink", function()
+			{
+				// in the spawn room, try to use the banner if there is one
+				if ( self.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) && banner )
+				{
+					self.Weapon_Switch( banner )
+					banner.PrimaryAttack()
+					return
+				}
+				// no banner: do nothing
+				if ( self.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) && !banner )
+					return
+
+				if ( self.InCond( TF_COND_MVM_BOT_STUN_RADIOWAVE ) )
+					return
+
+				mangler.SecondaryAttack()
+			})
 		}
 
 		if ( self.HasBotTag( "lobo_boss1" ) )
@@ -1070,36 +1094,6 @@ LOBO.PrecacheAssets()
 SpawnEntityGroupFromTable( LOBO.breaktime_relays )
 SpawnEntityGroupFromTable( LOBO.boss_text )
 SpawnEntityGroupFromTable( LOBO.tranquility_setup )
-
-PopExt.AddRobotTag( "lobo_mangler", { OnSpawn = function( bot, tag )
-{
-	local scope = bot.GetScriptScope()
-	local mangler = LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
-
-	local banner = LOBO.GetItemInSlot( bot, SLOT_SECONDARY )
-	if ( banner.GetClassname() != "tf_weapon_buff_item" )
-		banner = null
-
-	scope.ManglerThink <- function() // i think to charge my mangler
-	{
-		// in the spawn room, try to use the banner if there is one
-		if ( bot.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) && banner != null )
-		{
-			bot.Weapon_Switch( banner )
-			banner.PrimaryAttack()
-			return
-		}
-		// no banner: do nothing
-		if ( bot.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) && banner == null )
-			return
-
-		if ( bot.InCond( TF_COND_MVM_BOT_STUN_RADIOWAVE ) )
-			return
-
-		mangler.SecondaryAttack()
-	}
-	AddThinkToEnt( bot, "ManglerThink" )
-}})
 
 PopExt.AddRobotTag( "lobo_boss1",
 {
