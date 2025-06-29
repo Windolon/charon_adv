@@ -915,7 +915,143 @@ const SINGLE_TICK = 0.015
 
 		if ( self.HasBotTag( "lobo_boss1" ) )
 		{
+			self.AddCustomAttribute( "gesture speed increase", 1.28, -1 )
 
+			local bot = self
+			local warstomp_particle1 = SpawnEntityFromTable( "info_particle_system",
+			{
+				targetname = "warstomp_particle"
+				effect_name = "eyeboss_doorway_vortex"
+				start_active = false
+				origin = bot.GetOrigin()
+			})
+			warstomp_particle1.ValidateScriptScope()
+			warstomp_particle1.GetScriptScope().FollowBoss <- function()
+			{
+				self.SetLocalOrigin( bot.GetOrigin() )
+			}
+			AddThinkToEnt( warstomp_particle1, "FollowBoss" )
+
+			local warstomp_particle2 = SpawnEntityFromTable( "info_particle_system",
+			{
+				targetname = "warstomp_particle"
+				effect_name = "eyeboss_vortex_blue"
+				start_active = false
+				origin = bot.GetOrigin()
+			})
+			warstomp_particle2.ValidateScriptScope()
+			warstomp_particle2.GetScriptScope().FollowBoss <- function()
+			{
+				self.SetLocalOrigin( bot.GetOrigin() )
+			}
+			AddThinkToEnt( warstomp_particle2, "FollowBoss" )
+
+			LOBO.PressButton( self, IN_RELOAD )
+			scope.wep <- LOBO.GetItemInSlot( self, SLOT_PRIMARY )
+
+			LOBO.AddThink( self, "WeaponFireThink", function()
+			{
+				if ( self.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) )
+				{
+					LOBO.ReleaseButton( self, IN_ATTACK )
+					return
+				}
+
+				if ( wep.Clip1() == wep.GetMaxClip1() )
+				{
+					LOBO.PressButton( self, IN_ATTACK )
+					return
+				}
+
+				if ( wep.Clip1() == 0 )
+				{
+					LOBO.ReleaseButton( self, IN_ATTACK )
+					return
+				}
+			})
+
+			local first_delay = Time() + 19 // default: 19
+			local cooldown = 13.5
+			local cooldown_time = Time()
+			LOBO.AddThink( self, "WarStompThink", function()
+			{
+				if ( Time() < first_delay || Time() < cooldown_time )
+					return
+
+				LOBO.DisplayIndicatorCircle( self, 9, 3, true )
+				EntFire( "warstomp_particle", "Start" )
+
+				local botmodel = "models/bots/demo_boss/bot_demo_boss.mdl"
+				LOBO.ForceTaunt( self, ID_TAUNT_ROAR_OWAR )
+				self.SetCustomModelWithClassAnimations( "models/player/demo.mdl" )
+				LOBO.PlayerBonemergeModel( self, botmodel )
+
+				LOBO.AddThink( self, "BonemergeModelThink", function()
+				{
+					if ( Time() > self.GetTauntRemoveTime() )
+					{
+						if ( bonemerge_model != null )
+							bonemerge_model.Destroy()
+
+						SetPropInt( self, "m_clrRender", 0xFFFFFF )
+						SetPropInt( self, "m_nRenderMode", kRenderNormal )
+						self.SetCustomModelWithClassAnimations( botmodel )
+
+						LOBO.DeleteThink( self, "BonemergeModelThink" )
+					}
+				})
+
+				// play similiar sound to starfall on cast as an "audio tutorial".
+				LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
+				LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
+				LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
+				LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
+
+				// find radius is about 16 * 2.21 * modelscale, WTF?????
+				EntFireByHandle( self, "RunScriptCode", @"
+					local origin = self.GetOrigin()
+
+					LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
+					LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/thunderclapcaster.mp3` )
+					LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
+					LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/thunderclapcaster.mp3` )
+					LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
+					LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/thunderclapcaster.mp3` )
+					LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
+					LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/thunderclapcaster.mp3` )
+
+					local affected = LOBO.GetAllPlayers(
+					{
+						team = TF_TEAM_PVE_DEFENDERS
+						region = [ origin, 318 ]
+					})
+					foreach ( player in affected )
+					{
+						player.TakeDamage( 50, DMG_MELEE, self )
+
+						local unitvec_direction = player.GetOrigin() - origin
+						unitvec_direction.z >= 0 ? unitvec_direction.z += 75 : unitvec_direction.z -= 75
+						unitvec_direction *= 1 / unitvec_direction.Length()
+
+						player.SetAbsVelocity( unitvec_direction * 1000 )
+					}
+
+					for ( local building; building = Entities.FindByClassnameWithin( building, `obj_*`, origin, 318 ); )
+					{
+						if ( building.GetTeam() != TF_TEAM_PVE_DEFENDERS )
+							continue
+
+						building.TakeDamage( 200, DMG_MELEE, self )
+					}
+
+					EntFire( `warstomp_particle`, `Stop` )
+					DispatchParticleEffect( `powerup_supernova_explode_blue`, origin, Vector() )
+				", 3, null, null )
+
+				EntFireByHandle( self, "RunScriptCode", "self.StopTaunt( true )", 4, null, null )
+
+				cooldown_time = Time() + cooldown
+			})
 		}
 
 		if ( self.HasBotTag( "lobo_boss2" ) )
@@ -1097,151 +1233,6 @@ SpawnEntityGroupFromTable( LOBO.tranquility_setup )
 
 PopExt.AddRobotTag( "lobo_boss1",
 {
-	OnSpawn = function( bot, tag )
-	{
-		EntFire( "boss_title", "Display" )
-		EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
-		EntFire( "boss_hp", "Display", null, 0.83 + 0.865 ) // (17+2)*0.035 + 0.2
-		SINS.ChangeClassIcon( bot, "demo_clusterbomb_hyper_lite" )
-
-		local scope = bot.GetScriptScope()
-		local first_delay = Time() + 19 // default: 19
-		local cooldown = 13.5
-		local cooldown_time = Time()
-
-		bot.AddCustomAttribute( "gesture speed increase", 1.28, -1 )
-
-		local warstomp_particle1 = SpawnEntityFromTable( "info_particle_system",
-		{
-			targetname = "warstomp_particle"
-			effect_name = "eyeboss_doorway_vortex"
-			start_active = false
-			origin = bot.GetOrigin()
-		})
-		warstomp_particle1.ValidateScriptScope()
-		warstomp_particle1.GetScriptScope().FollowBoss <- function()
-		{
-			self.SetLocalOrigin( bot.GetOrigin() )
-		}
-		AddThinkToEnt( warstomp_particle1, "FollowBoss" )
-
-		local warstomp_particle2 = SpawnEntityFromTable( "info_particle_system",
-		{
-			targetname = "warstomp_particle"
-			effect_name = "eyeboss_vortex_blue"
-			start_active = false
-			origin = bot.GetOrigin()
-		})
-		warstomp_particle2.ValidateScriptScope()
-		warstomp_particle2.GetScriptScope().FollowBoss <- function()
-		{
-			self.SetLocalOrigin( bot.GetOrigin() )
-		}
-		AddThinkToEnt( warstomp_particle2, "FollowBoss" )
-
-		LOBO.PressButton( bot, IN_RELOAD )
-		scope.wep <- LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
-
-		scope.ThinkTable.WeaponFireThink <- function()
-		{
-			if ( bot.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) )
-			{
-				LOBO.ReleaseButton( bot, IN_ATTACK )
-				return
-			}
-
-			if ( wep.Clip1() == wep.GetMaxClip1() )
-			{
-				LOBO.PressButton( bot, IN_ATTACK )
-				return
-			}
-
-			if ( wep.Clip1() == 0 )
-			{
-				LOBO.ReleaseButton( bot, IN_ATTACK )
-				return
-			}
-		}
-
-		scope.ThinkTable.WarStompThink <- function()
-		{
-			if ( Time() < first_delay || Time() < cooldown_time )
-				return
-
-			LOBO.DisplayIndicatorCircle( bot, 9, 3, true )
-			EntFire( "warstomp_particle", "Start" )
-
-			local botmodel = "models/bots/demo_boss/bot_demo_boss.mdl"
-			LOBO.ForceTaunt( bot, ID_TAUNT_ROAR_OWAR )
-			bot.SetCustomModelWithClassAnimations( "models/player/demo.mdl" )
-			LOBO.PlayerBonemergeModel( bot, botmodel )
-			ThinkTable.BonemergeModelThink = function()
-			{
-				if ( Time() > self.GetTauntRemoveTime() )
-				{
-					if ( bonemerge_model != null )
-						bonemerge_model.Destroy()
-
-					SetPropInt( self, "m_clrRender", 0xFFFFFF )
-					SetPropInt( self, "m_nRenderMode", kRenderNormal )
-					self.SetCustomModelWithClassAnimations( botmodel )
-
-					delete ThinkTable.BonemergeModelThink
-				}
-			}
-
-			// play similiar sound to starfall on cast as an "audio tutorial".
-			LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
-			LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
-			LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
-			LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
-
-			// find radius is about 16 * 2.21 * modelscale, WTF?????
-			EntFireByHandle( bot, "RunScriptCode", @"
-				local origin = self.GetOrigin()
-
-				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
-				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/thunderclapcaster.mp3` )
-				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
-				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/thunderclapcaster.mp3` )
-				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
-				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/thunderclapcaster.mp3` )
-				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
-				LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/thunderclapcaster.mp3` )
-
-				local affected = LOBO.GetAllPlayers(
-				{
-					team = TF_TEAM_PVE_DEFENDERS
-					region = [ origin, 318 ]
-				})
-				foreach ( player in affected )
-				{
-					player.TakeDamage( 50, DMG_MELEE, self )
-
-					local unitvec_direction = player.GetOrigin() - origin
-					unitvec_direction.z >= 0 ? unitvec_direction.z += 75 : unitvec_direction.z -= 75
-					unitvec_direction *= 1 / unitvec_direction.Length()
-
-					player.SetAbsVelocity( unitvec_direction * 1000 )
-				}
-
-				for ( local building; building = Entities.FindByClassnameWithin( building, `obj_*`, origin, 318 ); )
-				{
-					if ( building.GetTeam() != TF_TEAM_PVE_DEFENDERS )
-						continue
-
-					building.TakeDamage( 200, DMG_MELEE, self )
-				}
-
-				EntFire( `warstomp_particle`, `Stop` )
-				DispatchParticleEffect( `powerup_supernova_explode_blue`, origin, Vector() )
-			", 3, null, null )
-
-			EntFireByHandle( bot, "RunScriptCode", "self.StopTaunt( true )", 4, null, null )
-
-			cooldown_time = Time() + cooldown
-		}
-	}
 
 	OnDeath = function( bot, params )
 	{
