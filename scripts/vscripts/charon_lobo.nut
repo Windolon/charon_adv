@@ -478,11 +478,11 @@ const SINGLE_TICK = 0.015
 		SetPropInt( player, "m_nRenderMode", kRenderTransColor )
 		SetPropInt( player, "m_clrRender", 0 )
 
-		scope.ThinkTable.BonemergeModelThink <- function()
+		LOBO.AddThink( player, "BonemergeModelThink", function()
 		{
 			if ( bonemerge_model.IsValid() && ( player.IsTaunting() || bonemerge_model.GetMoveParent() != player ) )
 				bonemerge_model.AcceptInput( "SetParent", "!activator", player, player )
-		}
+		})
 	}
 
 	GetItemInSlot = function( player, slot )
@@ -879,10 +879,10 @@ const SINGLE_TICK = 0.015
 
 	BotTagCheck = function()
 	{
-		if ( self.HasBotTag( "lobo_thinktable" ) )
-		{
+		local scope = self.GetScriptScope()
 
-		}
+		if ( self.HasBotTag( "lobo_thinktable" ) )
+			LOBO.SetUpThinkTable( self )
 
 		if ( self.HasBotTag( "lobo_mangler" ) )
 		{
