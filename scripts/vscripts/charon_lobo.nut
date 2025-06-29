@@ -500,6 +500,34 @@ const SINGLE_TICK = 0.015
 		return item
 	}
 
+	SetUpThinkTable = function( ent )
+	{
+		local scope = ent.GetScriptScope()
+		if ( !scope )
+		{
+			ent.ValidateScriptScope()
+			scope = ent.GetScriptScope()
+		}
+
+		scope.ThinkTable <- {}
+		scope.RunThinkTable <- function()
+		{
+			foreach ( func in scope.ThinkTable )
+				func()
+
+			return -1
+		}
+		AddThinkToEnt( ent, "RunThinkTable" )
+	}
+
+	AddThink = function( ent, name, func )
+	{
+		local scope = ent.GetScriptScope()
+		scope.ThinkTable[ name ] <- func.bindenv( scope )
+	}
+
+	DeleteThink = function( ent, name ) { delete ent.GetScriptScope().ThinkTable[ name ] }
+
 	DisplayIndicatorCircle = function( ent, scale, duration, follow_ent )
 	{
 		local indicator = SpawnEntityFromTable( "prop_dynamic",
