@@ -177,6 +177,7 @@ WaveSchedule
 			Tag bot_giant
 			Tag lobo_boss2components
 			Tag lobo_boss2b
+			Tag lobo_healingspell
 			Tag lobo_thinktable
 			ItemAttributes
 			{

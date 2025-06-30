@@ -1131,21 +1131,6 @@ const ID_TAUNT_ROAR_OWAR = 31380
 		{
 			self.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
 
-			EntFireByHandle( self, "RunScriptCode", "LOBO.CastHealingSpellbook( self )", 1, null, null )
-
-			local cooldown = 7.5
-			local next_cast_time = Time() + 1 + cooldown
-
-			LOBO.AddThink( self, "CastSpellbookThink", function()
-			{
-				local current_time = Time()
-				if ( current_time < next_cast_time )
-					return
-
-				LOBO.CastHealingSpellbook( self )
-				next_cast_time = current_time + cooldown
-			})
-
 			LOBO.AddThink( self, "ApplyHomingToRayThink", function()
 			{
 				for ( local ray; ray = Entities.FindByClassname( ray, "tf_projectile_energy_ring" ); )
@@ -1307,6 +1292,24 @@ const ID_TAUNT_ROAR_OWAR = 31380
 		if ( self.HasBotTag( "lobo_homingrockettrail" ) )
 		{
 
+		}
+
+		if ( self.HasBotTag( "lobo_healingspell" ) )
+		{
+			EntFireByHandle( self, "RunScriptCode", "LOBO.CastHealingSpellbook( self )", 1, null, null )
+
+			local cooldown = 7.5
+			local next_cast_time = Time() + 1 + cooldown
+
+			LOBO.AddThink( self, "CastSpellbookThink", function()
+			{
+				local current_time = Time()
+				if ( current_time < next_cast_time )
+					return
+
+				LOBO.CastHealingSpellbook( self )
+				next_cast_time = current_time + cooldown
+			})
 		}
 
 		if ( self.HasBotTag( "lobo_useengibotmodel" ) )
