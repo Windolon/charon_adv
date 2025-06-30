@@ -1178,7 +1178,122 @@ const ID_TAUNT_ROAR_OWAR = 31380
 
 		if ( self.HasBotTag( "lobo_boss3" ) )
 		{
+			self.KeyValueFromString( "targetname", "kotg" )
+			EntFire( "boss_title", "AddOutput", "message TERROR SOURCE\n\n" )
+			EntFire( "boss_name", "AddOutput", "message THE NEXUS" )
+			EntFire( "boss_hp", "AddOutput", "message \n\n54000 HP" )
+			EntFire( "boss_title", "Display" )
+			EntFire( "boss_name", "Display", null, 0.655 ) // 13*0.035 + 0.2
+			EntFire( "boss_hp", "Display", null, 0.655 + 0.585 ) // (9+2)*0.035 + 0.2
+			SINS.ChangeClassIcon( self, "soldier_bison_spammer_hyper_giant" )
 
+			EntFire( "boss_title", "Kill", null, 10 )
+			EntFire( "boss_name", "Kill", null, 10 )
+			EntFire( "boss_hp", "Kill", null, 10 )
+
+			scope.tranquility_cast_count <- 0
+
+			local time_atspawn = Time()
+
+			LOBO.AddThink( self, "TranquilityThink", function()
+			{
+				if ( self.GetHealth() < self.GetMaxHealth() * 0.6666 && tranquility_cast_count == 0 )
+				{
+					tranquility_cast_count++
+					LOBO.CastTranquilityAbility( self, tranquility_cast_count )
+				}
+				else if ( self.GetHealth() < self.GetMaxHealth() * 0.3333 && tranquility_cast_count == 1 )
+				{
+					tranquility_cast_count++
+					LOBO.CastTranquilityAbility( self, tranquility_cast_count )
+				}
+			})
+
+			LOBO.AddThink( self, "FrenzyThink", function()
+			{
+				if ( !( self.GetHealth() < self.GetMaxHealth() * 0.35 ) )
+					return
+
+				ClientPrint( null, 3, "\x0799CCFFThe Nexus is entering \x07FFFF66frenzy mode\x0799CCFF, shooting rockets instead of lasers!" )
+				SINS.ChangeClassIcon( self, "soldier_spammer_giant" )
+
+				LOBO.PlaySoundToEveryone( "oz_terror_sfx/howlofterror.mp3" )
+				LOBO.PlaySoundToEveryone( "oz_terror_sfx/howlofterror.mp3" )
+				LOBO.PlaySoundToEveryone( "oz_terror_sfx/howlofterror.mp3" )
+				LOBO.PlaySoundToEveryone( "oz_terror_sfx/howlofterror.mp3" )
+
+				self.SetCustomModelWithClassAnimations( "models/bots/heavy/bot_heavy.mdl" )
+				self.HandleTauntCommand( 0 )
+
+				LOBO.AddThink( self, "RevertModelThink", function()
+				{
+					if ( Time() > self.GetTauntRemoveTime() )
+					{
+						SetPropInt( self, "m_clrRender", 0xFFFFFF )
+						SetPropInt( self, "m_nRenderMode", kRenderNormal )
+						self.SetCustomModelWithClassAnimations( "models/bots/heavy_boss/bot_heavy_boss.mdl" )
+
+						local disp1 = Entities.FindByName( null, "tranquility1_dispenser" )
+						local disp2 = Entities.FindByName( null, "tranquility2_dispenser" )
+						if ( !( disp1 == null && disp2 == null ) )
+						{
+							EntFireByHandle( self, "RunScriptCode", "self.AddCondEx( TF_COND_RADIUSHEAL_ON_DAMAGE, 9999, null )", 0.1, null, null )
+							local amputator_particle = SpawnEntityFromTable( "info_particle_system",
+							{
+								targetname = "amputator_particle"
+								effect_name = "medic_radiusheal_blue_spiral"
+								start_active = true
+							})
+							local bot = self
+							amputator_particle.ValidateScriptScope()
+							amputator_particle.GetScriptScope().FollowBoss <- function()
+							{
+								self.SetLocalOrigin( bot.GetOrigin() )
+							}
+							AddThinkToEnt( amputator_particle, "FollowBoss" )
+						}
+
+						LOBO.DeleteThink( self, "RevertModelThink" )
+					}
+				})
+
+				local frenzy_particle = SpawnEntityFromTable( "info_particle_system",
+				{
+					targetname = "frenzy_particle"
+					effect_name = "eyeboss_team_blue"
+					start_active = true
+				})
+				local bot = self
+				frenzy_particle.ValidateScriptScope()
+				frenzy_particle.GetScriptScope().FollowBoss <- function()
+				{
+					self.SetLocalOrigin( bot.GetOrigin() + Vector( 0, 0, 75 ) )
+				}
+				AddThinkToEnt( frenzy_particle, "FollowBoss" )
+
+				local wep = LOBO.GetItemInSlot( self, SLOT_PRIMARY )
+				wep.AddAttribute( "override projectile type", 2, -1 ) // fires rockets
+				wep.AddAttribute( "fire rate penalty", 4, -1 )
+				// reset
+				wep.AddAttribute( "energy weapon penetration", 0, -1 )
+				wep.AddAttribute( "dmg bonus vs buildings", 1, -1 )
+
+				LOBO.DeleteThink( self, "FrenzyThink" )
+			})
+
+			local first_delay = Time() + 13 // default: 13
+			local cooldown = 10
+			local next_cast_time = Time()
+
+			LOBO.AddThink( self, "StarfallThink", function()
+			{
+				if ( Time() < first_delay || Time() < next_cast_time )
+					return
+
+				LOBO.CastStarfallAbility( self, 2 )
+
+				next_cast_time = Time() + cooldown
+			})
 		}
 
 		if ( self.HasBotTag( "lobo_kotg1" ) )
@@ -1375,127 +1490,6 @@ LOBO.PrecacheAssets()
 SpawnEntityGroupFromTable( LOBO.breaktime_relays )
 SpawnEntityGroupFromTable( LOBO.boss_text )
 SpawnEntityGroupFromTable( LOBO.tranquility_setup )
-
-PopExt.AddRobotTag( "lobo_boss3",
-{
-	OnSpawn = function( bot, tag )
-	{
-		bot.KeyValueFromString( "targetname", "kotg" )
-		EntFire( "boss_title", "AddOutput", "message TERROR SOURCE\n\n" )
-		EntFire( "boss_name", "AddOutput", "message THE NEXUS" )
-		EntFire( "boss_hp", "AddOutput", "message \n\n54000 HP" )
-		EntFire( "boss_title", "Display" )
-		EntFire( "boss_name", "Display", null, 0.655 ) // 13*0.035 + 0.2
-		EntFire( "boss_hp", "Display", null, 0.655 + 0.585 ) // (9+2)*0.035 + 0.2
-		SINS.ChangeClassIcon( bot, "soldier_bison_spammer_hyper_giant" )
-
-		EntFire( "boss_title", "Kill", null, 10 )
-		EntFire( "boss_name", "Kill", null, 10 )
-		EntFire( "boss_hp", "Kill", null, 10 )
-
-		local scope = bot.GetScriptScope()
-		scope.tranquility_cast_count <- 0
-
-		local time_atspawn = Time()
-
-		scope.ThinkTable.TranquilityThink <- function()
-		{
-			if ( bot.GetHealth() < bot.GetMaxHealth() * 0.6666 && tranquility_cast_count == 0 )
-			{
-				tranquility_cast_count++
-				LOBO.CastTranquilityAbility( bot, tranquility_cast_count )
-			}
-			else if ( bot.GetHealth() < bot.GetMaxHealth() * 0.3333 && tranquility_cast_count == 1 )
-			{
-				tranquility_cast_count++
-				LOBO.CastTranquilityAbility( bot, tranquility_cast_count )
-			}
-		}
-
-		scope.ThinkTable.FrenzyThink <- function()
-		{
-			if ( !( bot.GetHealth() < bot.GetMaxHealth() * 0.35 ) )
-				return
-
-			ClientPrint( null, 3, "\x0799CCFFThe Nexus is entering \x07FFFF66frenzy mode\x0799CCFF, shooting rockets instead of lasers!" )
-			SINS.ChangeClassIcon( bot, "soldier_spammer_giant" )
-
-			LOBO.PlaySoundToEveryone( "oz_terror_sfx/howlofterror.mp3" )
-			LOBO.PlaySoundToEveryone( "oz_terror_sfx/howlofterror.mp3" )
-			LOBO.PlaySoundToEveryone( "oz_terror_sfx/howlofterror.mp3" )
-			LOBO.PlaySoundToEveryone( "oz_terror_sfx/howlofterror.mp3" )
-
-			bot.SetCustomModelWithClassAnimations( "models/bots/heavy/bot_heavy.mdl" )
-			bot.HandleTauntCommand( 0 )
-			ThinkTable.RevertModelThink <- function()
-			{
-				if ( Time() > self.GetTauntRemoveTime() )
-				{
-					SetPropInt( self, "m_clrRender", 0xFFFFFF )
-					SetPropInt( self, "m_nRenderMode", kRenderNormal )
-					self.SetCustomModelWithClassAnimations( "models/bots/heavy_boss/bot_heavy_boss.mdl" )
-
-					local disp1 = Entities.FindByName( null, "tranquility1_dispenser" )
-					local disp2 = Entities.FindByName( null, "tranquility2_dispenser" )
-					if ( !( disp1 == null && disp2 == null ) )
-					{
-						EntFireByHandle( self, "RunScriptCode", "self.AddCondEx( TF_COND_RADIUSHEAL_ON_DAMAGE, 9999, null )", 0.1, null, null )
-						local amputator_particle = SpawnEntityFromTable( "info_particle_system",
-						{
-							targetname = "amputator_particle"
-							effect_name = "medic_radiusheal_blue_spiral"
-							start_active = true
-						})
-						amputator_particle.ValidateScriptScope()
-						amputator_particle.GetScriptScope().FollowBoss <- function()
-						{
-							self.SetLocalOrigin( bot.GetOrigin() )
-						}
-						AddThinkToEnt( amputator_particle, "FollowBoss" )
-					}
-
-					delete ThinkTable.RevertModelThink
-				}
-			}
-
-			local frenzy_particle = SpawnEntityFromTable( "info_particle_system",
-			{
-				targetname = "frenzy_particle"
-				effect_name = "eyeboss_team_blue"
-				start_active = true
-			})
-			frenzy_particle.ValidateScriptScope()
-			frenzy_particle.GetScriptScope().FollowBoss <- function()
-			{
-				self.SetLocalOrigin( bot.GetOrigin() + Vector( 0, 0, 75 ) )
-			}
-			AddThinkToEnt( frenzy_particle, "FollowBoss" )
-
-			local wep = LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
-			wep.AddAttribute( "override projectile type", 2, -1 ) // fires rockets
-			wep.AddAttribute( "fire rate penalty", 4, -1 )
-			// reset
-			wep.AddAttribute( "energy weapon penetration", 0, -1 )
-			wep.AddAttribute( "dmg bonus vs buildings", 1, -1 )
-
-			delete ThinkTable.FrenzyThink
-		}
-
-		local first_delay = Time() + 13 // default: 13
-		local cooldown = 10
-		local cooldown_time = Time()
-
-		scope.ThinkTable.StarfallThink <- function()
-		{
-			if ( Time() < first_delay || Time() < cooldown_time )
-				return
-
-			LOBO.CastStarfallAbility( bot, 2 )
-
-			cooldown_time = Time() + cooldown
-		}
-	}
-})
 
 PopExt.AddRobotTag( "lobo_kotg1",
 {
