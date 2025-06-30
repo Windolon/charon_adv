@@ -372,22 +372,23 @@ const SINGLE_TICK = 0.015
 	// with help and inspiration from ficool2 and Pealover
 	GetAllPlayers = function( args = {} )
 	{
-		local team = "team" in args ? args.team : false
+		// team is defaulted to null for the case when args.team == 0 (TEAM_UNASSIGNED)
+		local team = "team" in args ? args.team : null
 		local region = "region" in args ? args.region : false
-		local alive = "alive" in args ? args.alive : true
+		local check_alive = "check_alive" in args ? args.check_alive : true
 
 		local result = []
 		local distance_to_origin = region ? {} : null
 
 		if ( region )
 		{
-			Assert( typeof region == "array" && region.len() == 2, "GetAllPlayers(): if specified, key \"region\" must be an array of length 2" )
-
 			for ( local p; p = Entities.FindByClassnameWithin( p, "player", region[ 0 ], region[ 1 ] ); )
 			{
-				if ( team && p.GetTeam() != team )
+				// we need the (team != null) check here, rather than simply (team)
+				//	to account for team == 0
+				if ( team != null && p.GetTeam() != team )
 					continue
-				if ( alive && !p.IsAlive() )
+				if ( check_alive && !p.IsAlive() )
 					continue
 
 				result.append( p )
@@ -406,9 +407,9 @@ const SINGLE_TICK = 0.015
 
 				if ( !p )
 					continue
-				if ( team && p.GetTeam() != team )
+				if ( team != null && p.GetTeam() != team )
 					continue
-				if ( alive && !p.IsAlive() )
+				if ( check_alive && !p.IsAlive() )
 					continue
 
 				result.append( p )
