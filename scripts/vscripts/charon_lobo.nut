@@ -900,7 +900,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 				banner = null
 
 			// i think to charge my mangler
-			LOBO.AddThink( self, "ManglerThink", function()
+			scope.ManglerThink <- function()
 			{
 				// in the spawn room, try to use the banner if there is one
 				if ( self.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) && banner )
@@ -917,7 +917,8 @@ const SF_TRIGGER_ALLOW_ALL = 64
 					return
 
 				mangler.SecondaryAttack()
-			})
+			}
+			AddThinkToEnt( self, "ManglerThink" )
 		}
 
 		if ( self.HasBotTag( "lobo_boss1" ) )
