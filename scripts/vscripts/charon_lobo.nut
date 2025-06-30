@@ -1132,7 +1132,51 @@ const ID_TAUNT_ROAR_OWAR = 31380
 
 		if ( self.HasBotTag( "lobo_boss2b" ) )
 		{
+			self.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
 
+			EntFireByHandle( self, "RunScriptCode", "LOBO.CastHealingSpellbook( self )", 1, null, null )
+
+			local cooldown = 7.5
+			local next_cast_time = Time() + 1 + cooldown
+
+			LOBO.AddThink( self, "CastSpellbookThink", function()
+			{
+				local current_time = Time()
+				if ( current_time < next_cast_time )
+					return
+
+				LOBO.CastHealingSpellbook( self )
+				next_cast_time = current_time + cooldown
+			})
+
+			LOBO.AddThink( self, "ApplyHomingToRayThink", function()
+			{
+				for ( local ray; ray = Entities.FindByClassname( ray, "tf_projectile_energy_ring" ); )
+				{
+					if ( ray.GetOwner() != self )
+						continue
+
+					ray.ValidateScriptScope()
+					local ray_scope = ray.GetScriptScope()
+					if ( "is_homing" in ray_scope )
+						continue
+
+					ray_scope.is_homing <- true
+					ray_scope.HomingParams <-
+					{
+						Target                = null
+						RocketSpeed           = 0.2
+						TurnPower             = 0.1
+						MaxAimError           = 80
+						AimTime               = -1
+						AimTimeStart          = 0
+						Acceleration          = 0
+						AccelerationTime      = -1
+						AccelerationTimeStart = 0
+					}
+					IncludeScript( "charon_homingprojectiles", ray_scope )
+				}
+			})
 		}
 
 		if ( self.HasBotTag( "lobo_boss3" ) )
@@ -1151,11 +1195,6 @@ const ID_TAUNT_ROAR_OWAR = 31380
 		}
 
 		if ( self.HasBotTag( "lobo_homingrockettrail" ) )
-		{
-
-		}
-
-		if ( self.HasBotTag( "lobo_healingspell" ) )
 		{
 
 		}
@@ -1339,46 +1378,6 @@ LOBO.PrecacheAssets()
 SpawnEntityGroupFromTable( LOBO.breaktime_relays )
 SpawnEntityGroupFromTable( LOBO.boss_text )
 SpawnEntityGroupFromTable( LOBO.tranquility_setup )
-
-PopExt.AddRobotTag( "lobo_boss2b",
-{
-	OnSpawn = function( bot, tag )
-	{
-		bot.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
-
-		EntFireByHandle( bot, "RunScriptCode", "LOBO.CastHealingSpellbook( self )", 1, null, null )
-
-		bot.GetScriptScope().ApplyHomingToRayThink <- function()
-		{
-			for ( local ray; ray = Entities.FindByClassname( ray, "tf_projectile_energy_ring" ); )
-			{
-				if ( ray.GetOwner() != bot )
-					continue
-
-				ray.ValidateScriptScope()
-				local ray_scope = ray.GetScriptScope()
-				if ( "is_homing" in ray_scope )
-					continue
-
-				ray_scope.is_homing <- true
-				ray_scope.HomingParams <-
-				{
-					Target                = null
-					RocketSpeed           = 0.2
-					TurnPower             = 0.1
-					MaxAimError           = 80
-					AimTime               = -1
-					AimTimeStart          = 0
-					Acceleration          = 0
-					AccelerationTime      = -1
-					AccelerationTimeStart = 0
-				}
-				IncludeScript( "charon_homingprojectiles", ray_scope )
-			}
-		}
-		AddThinkToEnt( bot, "ApplyHomingToRayThink" )
-	}
-})
 
 PopExt.AddRobotTag( "lobo_boss3",
 {

@@ -176,7 +176,7 @@ WaveSchedule
 			Tag bot_giant
 			Tag lobo_boss2components
 			Tag lobo_boss2b
-			Tag "popext_spell{ type = SPELL_OVERHEAL, cooldown = 7.5 }"
+			Tag lobo_thinktable
 			ItemAttributes
 			{
 				ItemName "The Righteous Bison"
