@@ -1062,7 +1062,66 @@ const SINGLE_TICK = 0.015
 
 		if ( self.HasBotTag( "lobo_boss2" ) )
 		{
+			EntFire( "boss_name", "AddOutput", "message THE DIVIDER" )
+			EntFire( "boss_hp", "AddOutput", "message \n\n27000 HP" )
+			EntFire( "boss_title", "Display" )
+			EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
+			EntFire( "boss_hp", "Display", null, 0.83 + 0.655 ) // (11+2)*0.035 + 0.2
+			SINS.ChangeClassIcon( self, "soldier_barrage_homing_hyper" )
 
+			self.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
+
+			scope.is_resisting_damage <- false
+
+			LOBO.AddThink( self, "ApplyHomingToRocketThink", function()
+			{
+				for ( local rocket; rocket = Entities.FindByClassname( rocket, "tf_projectile_rocket" ); )
+				{
+					if ( rocket.GetOwner() != self )
+						continue
+
+					rocket.ValidateScriptScope()
+					local rocket_scope = rocket.GetScriptScope()
+					if ( "is_homing" in rocket_scope )
+						continue
+
+					rocket_scope.is_homing <- true
+					rocket_scope.HomingParams <-
+					{
+						Target                = null
+						RocketSpeed           = 0.25
+						TurnPower             = 0.1
+						MaxAimError           = 80
+						AimTime               = -1
+						AimTimeStart          = 0
+						Acceleration          = 0
+						AccelerationTime      = -1
+						AccelerationTimeStart = 0
+					}
+					IncludeScript( "charon_homingprojectiles", rocket_scope )
+				}
+			})
+
+			LOBO.AddThink( self, "SplitThink", function()
+			{
+				if ( self.GetHealth() > self.GetMaxHealth() * 0.5 )
+					return
+
+				self.AddCondEx( TF_COND_MVM_BOT_STUN_RADIOWAVE, 99, null )
+				scope.is_resisting_damage = true
+
+				EntFireByHandle( self, "RunScriptCode", @"
+					local origin = self.GetOrigin()
+
+					DispatchParticleEffect( `drg_wrenchmotron_teleport`, origin, Vector() )
+					DispatchParticleEffect( `drg_wrenchmotron_impact`, origin, Vector() )
+
+					LOBO.divider_death_origin = origin
+					self.TakeDamage( 99999999, DMG_MELEE, LOBO.hWorldspawn )
+				", 3, null, null )
+
+				LOBO.DeleteThink( self, "SplitThink" )
+			})
 		}
 
 		if ( self.HasBotTag( "lobo_boss2components" ) )
@@ -1279,75 +1338,6 @@ LOBO.PrecacheAssets()
 SpawnEntityGroupFromTable( LOBO.breaktime_relays )
 SpawnEntityGroupFromTable( LOBO.boss_text )
 SpawnEntityGroupFromTable( LOBO.tranquility_setup )
-
-PopExt.AddRobotTag( "lobo_boss2",
-{
-	OnSpawn = function( bot, tag )
-	{
-		EntFire( "boss_name", "AddOutput", "message THE DIVIDER" )
-		EntFire( "boss_hp", "AddOutput", "message \n\n27000 HP" )
-		EntFire( "boss_title", "Display" )
-		EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
-		EntFire( "boss_hp", "Display", null, 0.83 + 0.655 ) // (11+2)*0.035 + 0.2
-		SINS.ChangeClassIcon( bot, "soldier_barrage_homing_hyper" )
-
-		bot.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
-
-		local scope = bot.GetScriptScope()
-
-		scope.is_resisting_damage <- false
-
-		scope.ThinkTable.ApplyHomingToRocketThink <- function()
-		{
-			for ( local rocket; rocket = Entities.FindByClassname( rocket, "tf_projectile_rocket" ); )
-			{
-				if ( rocket.GetOwner() != bot )
-					continue
-
-				rocket.ValidateScriptScope()
-				local rocket_scope = rocket.GetScriptScope()
-				if ( "is_homing" in rocket_scope )
-					continue
-
-				rocket_scope.is_homing <- true
-				rocket_scope.HomingParams <-
-				{
-					Target                = null
-					RocketSpeed           = 0.25
-					TurnPower             = 0.1
-					MaxAimError           = 80
-					AimTime               = -1
-					AimTimeStart          = 0
-					Acceleration          = 0
-					AccelerationTime      = -1
-					AccelerationTimeStart = 0
-				}
-				IncludeScript( "charon_homingprojectiles", rocket_scope )
-			}
-		}
-
-		scope.ThinkTable.SplitThink <- function()
-		{
-			if ( bot.GetHealth() > bot.GetMaxHealth() * 0.5 )
-				return
-
-			bot.AddCondEx( TF_COND_MVM_BOT_STUN_RADIOWAVE, 99, null )
-			is_resisting_damage = true
-
-			EntFireByHandle( bot, "RunScriptCode", @"
-				local origin = self.GetOrigin()
-
-				DispatchParticleEffect( `drg_wrenchmotron_teleport`, origin, Vector() )
-				DispatchParticleEffect( `drg_wrenchmotron_impact`, origin, Vector() )
-
-				LOBO.divider_death_origin = origin
-				self.TakeDamage( 99999999, DMG_MELEE, LOBO.hWorldspawn )
-			", 3, null, null )
-
-			delete ThinkTable.SplitThink
-		}
-	}
-})
 
 PopExt.AddRobotTag( "lobo_boss2components",
 {
