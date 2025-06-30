@@ -285,8 +285,9 @@ WaveSchedule
 			WeaponRestrictions PrimaryOnly
 			Attributes MiniBoss
 			Tag bot_giant
-			Tag "popext_giveweapon{ weapon = `tf_weapon_drg_pomson`, id = ID_POMSON_6000, attr = { `fire rate bonus`: 0.55, `damage penalty`: 0.8, `faster reload rate`: -0.8 } }"
-			Tag "popext_usecustommodel{ model = `models/bots/engineer/bot_engineer.mdl` }"
+			Tag lobo_usepomson
+			Tag lobo_userapidpomson // fire rate 0.55, dmg penalty 0.8, faster reload rate -0.8
+			Tag lobo_useengibotmodel
 			Item "The Brainiac Hairpiece"
 			Item "The Brainiac Goggles"
 			CharacterAttributes
@@ -796,8 +797,8 @@ WaveSchedule
 			Skill Expert
 			MaxVisionRange 1200
 			WeaponRestrictions PrimaryOnly
-			Tag "popext_giveweapon{ weapon = `tf_weapon_drg_pomson`, id = ID_POMSON_6000 }"
-			Tag "popext_usecustommodel{ model = `models/bots/engineer/bot_engineer.mdl` }"
+			Tag lobo_usepomson
+			Tag lobo_useengibotmodel
 			Item "The Brainiac Hairpiece"
 			Item "The Brainiac Goggles"
 			CharacterAttributes

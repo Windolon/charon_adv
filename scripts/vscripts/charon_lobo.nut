@@ -1342,17 +1342,32 @@ const SF_TRIGGER_ALLOW_ALL = 64
 
 		if ( self.HasBotTag( "lobo_useengibotmodel" ) )
 		{
+			local model = "models/bots/engineer/bot_engineer.mdl"
+			if ( !IsModelPrecached( model ) )
+				PrecacheModel( model )
 
+			EntFireByHandle( self, "SetCustomModelWithClassAnimations", model, -1, null, null )
 		}
 
 		if ( self.HasBotTag( "lobo_usepomson" ) )
 		{
+			local pomson = Entities.CreateByClassname( "tf_weapon_drg_pomson" )
+			SetPropInt( pomson, "m_AttributeManager.m_Item.m_iItemDefinitionIndex", 588 )
+			SetPropBool( pomson, "m_AttributeManager.m_Item.m_bInitialized", true)
+			SetPropBool( pomson, "m_bValidatedAttachedEntity", true)
+			pomson.SetTeam( TF_TEAM_PVE_INVADERS )
+			DispatchSpawn( pomson )
 
-		}
+			LOBO.GetItemInSlot( self, pomson.GetSlot() ).Destroy()
 
-		if ( self.HasBotTag( "lobo_userapidpomson" ) )
-		{
+			self.Weapon_Equip( pomson )
 
+			if ( !self.HasBotTag( "lobo_userapidpomson" ) )
+				return
+
+			pomson.AddAttribute( "fire rate bonus", 0.55, -1 )
+			pomson.AddAttribute( "damage penalty", 0.8, -1 )
+			pomson.AddAttribute( "faster reload rate", -0.8, -1 )
 		}
 	}
 
