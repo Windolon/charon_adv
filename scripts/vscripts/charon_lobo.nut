@@ -35,6 +35,12 @@ const DMG_MELEE = 134217728 // DMG_BLAST_SURFACE
 
 const ID_TAUNT_ROAR_OWAR = 31380
 
+const EFL_PROJECTILE = 2097152
+
+const PATTACH_ABSORIGIN_FOLLOW = 1
+
+const SF_TRIGGER_ALLOW_ALL = 64
+
 ::LOBO <-
 {
 	// SpawnEntityGroupFromTable tables
@@ -1291,7 +1297,29 @@ const ID_TAUNT_ROAR_OWAR = 31380
 
 		if ( self.HasBotTag( "lobo_homingrockettrail" ) )
 		{
+			LOBO.AddThink( self, "HomingRocketTrailThink", function()
+			{
+				for ( local projectile; projectile = Entities.FindByClassname( projectile, "tf_projectile_*" ); )
+				{
+					if ( projectile.IsEFlagSet( EFL_PROJECTILE ) || GetPropEntity( projectile, "m_hOwnerEntity" ) != self )
+						continue
 
+					EntFireByHandle( projectile, "DispatchEffect", "ParticleEffectStop", -1, null, null )
+
+					local particle = Entities.CreateByClassname( "trigger_particle" )
+
+					particle.KeyValueFromString( "particle_name", "eyeboss_projectile" )
+					particle.KeyValueFromInt( "attachment_type", PATTACH_ABSORIGIN_FOLLOW )
+					particle.KeyValueFromInt( "spawnflags", SF_TRIGGER_ALLOW_ALL )
+
+					DispatchSpawn( particle )
+
+					EntFireByHandle( particle, "StartTouch", "!activator", -1, projectile, projectile )
+					EntFireByHandle( particle, "Kill", "", -1, null, null )
+
+					projectile.AddEFlags( EFL_PROJECTILE )
+				}
+			})
 		}
 
 		if ( self.HasBotTag( "lobo_healingspell" ) )

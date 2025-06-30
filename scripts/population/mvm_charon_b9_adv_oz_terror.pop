@@ -104,7 +104,7 @@ WaveSchedule
 			Attributes HoldFireUntilFullReload
 			Tag bot_giant
 			Tag lobo_boss2
-			Tag "popext_rocketcustomtrail{ name = `eyeboss_projectile` }"
+			Tag lobo_homingrockettrail
 			Tag lobo_thinktable
 			ItemAttributes
 			{
