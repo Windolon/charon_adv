@@ -35,8 +35,6 @@ const DMG_MELEE = 134217728 // DMG_BLAST_SURFACE
 
 const ID_TAUNT_ROAR_OWAR = 31380
 
-const SINGLE_TICK = 0.015
-
 ::LOBO <-
 {
 	// SpawnEntityGroupFromTable tables
@@ -1126,7 +1124,10 @@ const SINGLE_TICK = 0.015
 
 		if ( self.HasBotTag( "lobo_boss2components" ) )
 		{
-
+			if ( self.HasBotTag( "lobo_boss2teleportfirst" ) )
+				self.SetAbsOrigin( LOBO.divider_death_origin )
+			else
+				EntFireByHandle( self, "RunScriptCode", "self.SetAbsOrigin( LOBO.divider_death_origin )", 0.05, null, null )
 		}
 
 		if ( self.HasBotTag( "lobo_boss2b" ) )
@@ -1338,17 +1339,6 @@ LOBO.PrecacheAssets()
 SpawnEntityGroupFromTable( LOBO.breaktime_relays )
 SpawnEntityGroupFromTable( LOBO.boss_text )
 SpawnEntityGroupFromTable( LOBO.tranquility_setup )
-
-PopExt.AddRobotTag( "lobo_boss2components",
-{
-	OnSpawn = function( bot, tag )
-	{
-		if ( bot.HasBotTag( "lobo_boss2teleportfirst" ) )
-			bot.SetAbsOrigin( LOBO.divider_death_origin )
-		else
-			EntFireByHandle( bot, "RunScriptCode", "self.SetAbsOrigin( LOBO.divider_death_origin )", 3*SINGLE_TICK, null, null )
-	}
-})
 
 PopExt.AddRobotTag( "lobo_boss2b",
 {
