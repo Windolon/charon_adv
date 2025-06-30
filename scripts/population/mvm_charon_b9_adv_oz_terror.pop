@@ -170,6 +170,7 @@ WaveSchedule
 			Health 4500
 			Item "The Righteous Bison"
 			Item "The Space Bracers"
+			Item "Basic Spellbook"
 			Attributes MiniBoss
 			Attributes UseBossHealthBar
 			WeaponRestrictions SecondaryOnly
