@@ -1116,6 +1116,17 @@ const SINGLE_TICK = 0.015
 		}
 	}
 
+	CleanupScriptScope = function( ent )
+	{
+		local scope = ent.GetScriptScope()
+		local protected_keys = [ "self", "__vrefs", "__vname" ]
+		foreach ( k, v in scope )
+		{
+			if ( !( k in protected_keys ) )
+				delete scope[ k ]
+		}
+	}
+
 	Cleanup = function()
 	{
 		if ( "LOBO" in getroottable() )
@@ -1181,7 +1192,39 @@ const SINGLE_TICK = 0.015
 
 		OnGameEvent_player_death = function( params )
 		{
+			local victim = GetPlayerFromUserID( params.userid )
 
+			if ( victim.GetTeam() != TF_TEAM_PVE_INVADERS || !victim.IsBotOfType( TF_BOT_TYPE ) )
+				return
+
+			SetPropString( ent, "m_iszScriptThinkFunction", "" )
+			AddThinkToEnt( ent, null )
+			LOBO.CleanupScriptScope( victim )
+
+			if ( victim.HasBotTag( "lobo_boss1" ) )
+			{
+				for ( local p; p = Entities.FindByName( p, "warstomp_particle" ); )
+					p.Kill()
+			}
+
+			if ( victim.HasBotTag( "lobo_boss3" ) )
+			{
+				LOBO.KillTranquilityDispensers( 0 )
+				EntFire( "frenzy_particle", "Stop" )
+				EntFire( "frenzy_particle", "Kill", null, 3 )
+			}
+
+			if ( victim.HasBotTag( "lobo_kotg1" ) || victim.HasBotTag( "lobo_kotg2" ) )
+			{
+				if ( GetPropString( victim, "m_iName" ) == "kotg" )
+				{
+					victim.KeyValueFromString( "targetname", "__obsolete" )
+
+					victim.HasBotTag( "lobo_kotg1" ) ?
+						LOBO.KillTranquilityDispensers( 1 ) :
+						LOBO.KillTranquilityDispensers( 2 )
+				}
+			}
 		}
 
 		// this provides accurate bools LOBO.gatea/b_captured for various in-wave logic.
@@ -1236,16 +1279,6 @@ LOBO.PrecacheAssets()
 SpawnEntityGroupFromTable( LOBO.breaktime_relays )
 SpawnEntityGroupFromTable( LOBO.boss_text )
 SpawnEntityGroupFromTable( LOBO.tranquility_setup )
-
-PopExt.AddRobotTag( "lobo_boss1",
-{
-
-	OnDeath = function( bot, params )
-	{
-		for ( local p; p = Entities.FindByName( p, "warstomp_particle" ); )
-			p.Kill()
-	}
-})
 
 PopExt.AddRobotTag( "lobo_boss2",
 {
@@ -1486,13 +1519,6 @@ PopExt.AddRobotTag( "lobo_boss3",
 			cooldown_time = Time() + cooldown
 		}
 	}
-
-	OnDeath = function( bot, params )
-	{
-		LOBO.KillTranquilityDispensers( 0 )
-		EntFire( "frenzy_particle", "Stop" )
-		EntFire( "frenzy_particle", "Kill", null, 3 )
-	}
 })
 
 PopExt.AddRobotTag( "lobo_kotg1",
@@ -1504,15 +1530,6 @@ PopExt.AddRobotTag( "lobo_kotg1",
 
 		bot.KeyValueFromString( "targetname", "kotg" )
 	}
-
-	OnDeath = function( bot, params )
-	{
-		if ( GetPropString( bot, "m_iName" ) == "kotg" )
-		{
-			LOBO.KillTranquilityDispensers( 1 )
-			bot.KeyValueFromString( "targetname", "__obsolete" )
-		}
-	}
 })
 
 PopExt.AddRobotTag( "lobo_kotg2",
@@ -1523,14 +1540,5 @@ PopExt.AddRobotTag( "lobo_kotg2",
 			return
 
 		bot.KeyValueFromString( "targetname", "kotg" )
-	}
-
-	OnDeath = function( bot, params )
-	{
-		if ( GetPropString( bot, "m_iName" ) == "kotg" )
-		{
-			LOBO.KillTranquilityDispensers( 2 )
-			bot.KeyValueFromString( "targetname", "__obsolete" )
-		}
 	}
 })
