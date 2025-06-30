@@ -1296,14 +1296,12 @@ const ID_TAUNT_ROAR_OWAR = 31380
 			})
 		}
 
-		if ( self.HasBotTag( "lobo_kotg1" ) )
+		if ( self.HasBotTag( "lobo_kotg1" ) || self.HasBotTag( "lobo_kotg2" ) )
 		{
+			if ( LOBO.is_first_kotg_spawned || LOBO.is_tranquility_on_hold || LOBO.gateb_captured )
+				return
 
-		}
-
-		if ( self.HasBotTag( "lobo_kotg2" ) )
-		{
-
+			self.KeyValueFromString( "targetname", "kotg" )
 		}
 
 		if ( self.HasBotTag( "lobo_homingrockettrail" ) )
@@ -1490,25 +1488,3 @@ LOBO.PrecacheAssets()
 SpawnEntityGroupFromTable( LOBO.breaktime_relays )
 SpawnEntityGroupFromTable( LOBO.boss_text )
 SpawnEntityGroupFromTable( LOBO.tranquility_setup )
-
-PopExt.AddRobotTag( "lobo_kotg1",
-{
-	OnSpawn = function( bot, tag )
-	{
-		if ( LOBO.is_first_kotg_spawned || LOBO.is_tranquility_on_hold || LOBO.gateb_captured )
-			return
-
-		bot.KeyValueFromString( "targetname", "kotg" )
-	}
-})
-
-PopExt.AddRobotTag( "lobo_kotg2",
-{
-	OnSpawn = function( bot, tag )
-	{
-		if ( LOBO.is_first_kotg_spawned || LOBO.is_tranquility_on_hold || LOBO.gateb_captured )
-			return
-
-		bot.KeyValueFromString( "targetname", "kotg" )
-	}
-})
