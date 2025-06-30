@@ -587,13 +587,10 @@ const ID_TAUNT_ROAR_OWAR = 31380
 
 		SetPropInt( spellbook, "m_iSelectedSpellIndex", SPELL_OVERHEAL )
 		SetPropInt( spellbook, "m_iSpellCharges", 9999 )
-		try
-		{
-			bot.Weapon_Switch( spellbook )
-			spellbook.AddAttribute( "disable weapon switch", 1, 1 )
-			spellbook.ReapplyProvision()
-		} catch ( e )
-			printl( "can't find spellbook!" )
+
+		bot.Weapon_Switch( spellbook )
+		spellbook.AddAttribute( "disable weapon switch", 1, 1 )
+		spellbook.ReapplyProvision()
 
 		EntFireByHandle( spellbook, "RunScriptCode", "self.RemoveAttribute( `disable weapon switch` )", 1, null, null )
 		EntFireByHandle( spellbook, "RunScriptCode", "self.ReapplyProvision()", 1, null, null )
