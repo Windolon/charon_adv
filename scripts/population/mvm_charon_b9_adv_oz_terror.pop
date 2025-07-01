@@ -1010,8 +1010,7 @@ WaveSchedule
 				// we start the mission at gate B
 				EntFire( `initB`, `Trigger` )
 
-				// load popext and the mission script
-				IncludeScript( `popextensions_main`, getroottable() )
+				// load mission script and SINS
 				IncludeScript( `charon_lobo`, getroottable() )
 				IncludeScript( `seel_ins`, getroottable() )
 
