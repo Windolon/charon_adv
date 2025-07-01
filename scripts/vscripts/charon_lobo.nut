@@ -1375,7 +1375,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 		local protected_keys = [ "self", "__vrefs", "__vname" ]
 		foreach ( k, v in scope )
 		{
-			if ( !( k in protected_keys ) )
+			if ( protected_keys.find( k ) == null )
 				delete scope[ k ]
 		}
 	}
