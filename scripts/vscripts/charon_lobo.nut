@@ -884,18 +884,18 @@ const SF_TRIGGER_ALLOW_ALL = 64
 		PrecacheModel( "models/props_mvm/indicator/indicator_circle_long.mdl" )
 	}
 
-	BotTagCheck = function()
+	BotTagCheck = function( bot )
 	{
-		local scope = self.GetScriptScope()
+		local scope = bot.GetScriptScope()
 
-		if ( self.HasBotTag( "lobo_thinktable" ) )
-			LOBO.SetUpThinkTable( self )
+		if ( bot.HasBotTag( "lobo_thinktable" ) )
+			LOBO.SetUpThinkTable( bot )
 
-		if ( self.HasBotTag( "lobo_mangler" ) )
+		if ( bot.HasBotTag( "lobo_mangler" ) )
 		{
-			local mangler = LOBO.GetItemInSlot( self, SLOT_PRIMARY )
+			local mangler = LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
 
-			local banner = LOBO.GetItemInSlot( self, SLOT_SECONDARY )
+			local banner = LOBO.GetItemInSlot( bot, SLOT_SECONDARY )
 			if ( banner.GetClassname() != "tf_weapon_buff_item" )
 				banner = null
 
@@ -918,14 +918,13 @@ const SF_TRIGGER_ALLOW_ALL = 64
 
 				mangler.SecondaryAttack()
 			}
-			AddThinkToEnt( self, "ManglerThink" )
+			AddThinkToEnt( bot, "ManglerThink" )
 		}
 
-		if ( self.HasBotTag( "lobo_boss1" ) )
+		if ( bot.HasBotTag( "lobo_boss1" ) )
 		{
-			self.AddCustomAttribute( "gesture speed increase", 1.28, -1 )
+			bot.AddCustomAttribute( "gesture speed increase", 1.28, -1 )
 
-			local bot = self
 			local warstomp_particle1 = SpawnEntityFromTable( "info_particle_system",
 			{
 				targetname = "warstomp_particle"
@@ -954,10 +953,10 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			}
 			AddThinkToEnt( warstomp_particle2, "FollowBoss" )
 
-			LOBO.PressButton( self, IN_RELOAD )
-			scope.wep <- LOBO.GetItemInSlot( self, SLOT_PRIMARY )
+			LOBO.PressButton( bot, IN_RELOAD )
+			scope.wep <- LOBO.GetItemInSlot( bot, SLOT_PRIMARY )
 
-			LOBO.AddThink( self, "WeaponFireThink", function()
+			LOBO.AddThink( bot, "WeaponFireThink", function()
 			{
 				if ( self.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) )
 				{
@@ -981,7 +980,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			local first_delay = Time() + 19 // default: 19
 			local cooldown = 13.5
 			local cooldown_time = Time()
-			LOBO.AddThink( self, "WarStompThink", function()
+			LOBO.AddThink( bot, "WarStompThink", function()
 			{
 				if ( Time() < first_delay || Time() < cooldown_time )
 					return
@@ -1016,7 +1015,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 				LOBO.PlaySoundToEveryone( "oz_terror_sfx/starfallcaster1.mp3" )
 
 				// find radius is about 16 * 2.21 * modelscale, WTF?????
-				EntFireByHandle( self, "RunScriptCode", @"
+				EntFireByHandle( bot, "RunScriptCode", @"
 					local origin = self.GetOrigin()
 
 					LOBO.PlaySoundFromEntity( self, `oz_terror_sfx/warstompbirth1.wav` )
@@ -1056,26 +1055,26 @@ const SF_TRIGGER_ALLOW_ALL = 64
 					DispatchParticleEffect( `powerup_supernova_explode_blue`, origin, Vector() )
 				", 3, null, null )
 
-				EntFireByHandle( self, "RunScriptCode", "self.StopTaunt( true )", 4, null, null )
+				EntFireByHandle( bot, "RunScriptCode", "self.StopTaunt( true )", 4, null, null )
 
 				cooldown_time = Time() + cooldown
 			})
 		}
 
-		if ( self.HasBotTag( "lobo_boss2" ) )
+		if ( bot.HasBotTag( "lobo_boss2" ) )
 		{
 			EntFire( "boss_name", "AddOutput", "message THE DIVIDER" )
 			EntFire( "boss_hp", "AddOutput", "message \n\n27000 HP" )
 			EntFire( "boss_title", "Display" )
 			EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
 			EntFire( "boss_hp", "Display", null, 0.83 + 0.655 ) // (11+2)*0.035 + 0.2
-			SINS.ChangeClassIcon( self, "soldier_barrage_homing_hyper" )
+			SINS.ChangeClassIcon( bot, "soldier_barrage_homing_hyper" )
 
-			self.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
+			bot.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
 
 			scope.is_resisting_damage <- false
 
-			LOBO.AddThink( self, "ApplyHomingToRocketThink", function()
+			LOBO.AddThink( bot, "ApplyHomingToRocketThink", function()
 			{
 				for ( local rocket; rocket = Entities.FindByClassname( rocket, "tf_projectile_rocket" ); )
 				{
@@ -1104,7 +1103,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 				}
 			})
 
-			LOBO.AddThink( self, "SplitThink", function()
+			LOBO.AddThink( bot, "SplitThink", function()
 			{
 				if ( self.GetHealth() > self.GetMaxHealth() * 0.5 )
 					return
@@ -1126,19 +1125,19 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			})
 		}
 
-		if ( self.HasBotTag( "lobo_boss2components" ) )
+		if ( bot.HasBotTag( "lobo_boss2components" ) )
 		{
-			if ( self.HasBotTag( "lobo_boss2teleportfirst" ) )
-				self.SetAbsOrigin( LOBO.divider_death_origin )
+			if ( bot.HasBotTag( "lobo_boss2teleportfirst" ) )
+				bot.SetAbsOrigin( LOBO.divider_death_origin )
 			else
-				EntFireByHandle( self, "RunScriptCode", "self.SetAbsOrigin( LOBO.divider_death_origin )", 0.05, null, null )
+				EntFireByHandle( bot, "RunScriptCode", "self.SetAbsOrigin( LOBO.divider_death_origin )", 0.05, null, null )
 		}
 
-		if ( self.HasBotTag( "lobo_boss2b" ) )
+		if ( bot.HasBotTag( "lobo_boss2b" ) )
 		{
-			self.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
+			bot.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
 
-			LOBO.AddThink( self, "ApplyHomingToRayThink", function()
+			LOBO.AddThink( bot, "ApplyHomingToRayThink", function()
 			{
 				for ( local ray; ray = Entities.FindByClassname( ray, "tf_projectile_energy_ring" ); )
 				{
@@ -1168,16 +1167,16 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			})
 		}
 
-		if ( self.HasBotTag( "lobo_boss3" ) )
+		if ( bot.HasBotTag( "lobo_boss3" ) )
 		{
-			self.KeyValueFromString( "targetname", "kotg" )
+			bot.KeyValueFromString( "targetname", "kotg" )
 			EntFire( "boss_title", "AddOutput", "message TERROR SOURCE\n\n" )
 			EntFire( "boss_name", "AddOutput", "message THE NEXUS" )
 			EntFire( "boss_hp", "AddOutput", "message \n\n54000 HP" )
 			EntFire( "boss_title", "Display" )
 			EntFire( "boss_name", "Display", null, 0.655 ) // 13*0.035 + 0.2
 			EntFire( "boss_hp", "Display", null, 0.655 + 0.585 ) // (9+2)*0.035 + 0.2
-			SINS.ChangeClassIcon( self, "soldier_bison_spammer_hyper_giant" )
+			SINS.ChangeClassIcon( bot, "soldier_bison_spammer_hyper_giant" )
 
 			EntFire( "boss_title", "Kill", null, 10 )
 			EntFire( "boss_name", "Kill", null, 10 )
@@ -1187,7 +1186,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 
 			local time_atspawn = Time()
 
-			LOBO.AddThink( self, "TranquilityThink", function()
+			LOBO.AddThink( bot, "TranquilityThink", function()
 			{
 				if ( self.GetHealth() < self.GetMaxHealth() * 0.6666 && tranquility_cast_count == 0 )
 				{
@@ -1201,7 +1200,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 				}
 			})
 
-			LOBO.AddThink( self, "FrenzyThink", function()
+			LOBO.AddThink( bot, "FrenzyThink", function()
 			{
 				if ( !( self.GetHealth() < self.GetMaxHealth() * 0.35 ) )
 					return
@@ -1236,11 +1235,10 @@ const SF_TRIGGER_ALLOW_ALL = 64
 								effect_name = "medic_radiusheal_blue_spiral"
 								start_active = true
 							})
-							local bot = self
 							amputator_particle.ValidateScriptScope()
 							amputator_particle.GetScriptScope().FollowBoss <- function()
 							{
-								self.SetLocalOrigin( bot.GetOrigin() )
+								bot.SetLocalOrigin( bot.GetOrigin() )
 							}
 							AddThinkToEnt( amputator_particle, "FollowBoss" )
 						}
@@ -1255,7 +1253,6 @@ const SF_TRIGGER_ALLOW_ALL = 64
 					effect_name = "eyeboss_team_blue"
 					start_active = true
 				})
-				local bot = self
 				frenzy_particle.ValidateScriptScope()
 				frenzy_particle.GetScriptScope().FollowBoss <- function()
 				{
@@ -1277,7 +1274,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			local cooldown = 10
 			local next_cast_time = Time()
 
-			LOBO.AddThink( self, "StarfallThink", function()
+			LOBO.AddThink( bot, "StarfallThink", function()
 			{
 				if ( Time() < first_delay || Time() < next_cast_time )
 					return
@@ -1288,17 +1285,17 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			})
 		}
 
-		if ( self.HasBotTag( "lobo_kotg1" ) || self.HasBotTag( "lobo_kotg2" ) )
+		if ( bot.HasBotTag( "lobo_kotg1" ) || bot.HasBotTag( "lobo_kotg2" ) )
 		{
 			if ( LOBO.is_first_kotg_spawned || LOBO.is_tranquility_on_hold || LOBO.gateb_captured )
 				return
 
-			self.KeyValueFromString( "targetname", "kotg" )
+			bot.KeyValueFromString( "targetname", "kotg" )
 		}
 
-		if ( self.HasBotTag( "lobo_homingrockettrail" ) )
+		if ( bot.HasBotTag( "lobo_homingrockettrail" ) )
 		{
-			LOBO.AddThink( self, "HomingRocketTrailThink", function()
+			LOBO.AddThink( bot, "HomingRocketTrailThink", function()
 			{
 				for ( local projectile; projectile = Entities.FindByClassname( projectile, "tf_projectile_*" ); )
 				{
@@ -1323,14 +1320,14 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			})
 		}
 
-		if ( self.HasBotTag( "lobo_healingspell" ) )
+		if ( bot.HasBotTag( "lobo_healingspell" ) )
 		{
-			EntFireByHandle( self, "RunScriptCode", "LOBO.CastHealingSpellbook( self )", 1, null, null )
+			EntFireByHandle( bot, "RunScriptCode", "LOBO.CastHealingSpellbook( self )", 1, null, null )
 
 			local cooldown = 7.5
 			local next_cast_time = Time() + 1 + cooldown
 
-			LOBO.AddThink( self, "CastSpellbookThink", function()
+			LOBO.AddThink( bot, "CastSpellbookThink", function()
 			{
 				local current_time = Time()
 				if ( current_time < next_cast_time )
@@ -1341,16 +1338,16 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			})
 		}
 
-		if ( self.HasBotTag( "lobo_useengibotmodel" ) )
+		if ( bot.HasBotTag( "lobo_useengibotmodel" ) )
 		{
 			local model = "models/bots/engineer/bot_engineer.mdl"
 			if ( !IsModelPrecached( model ) )
 				PrecacheModel( model )
 
-			EntFireByHandle( self, "SetCustomModelWithClassAnimations", model, -1, null, null )
+			EntFireByHandle( bot, "SetCustomModelWithClassAnimations", model, -1, null, null )
 		}
 
-		if ( self.HasBotTag( "lobo_usepomson" ) )
+		if ( bot.HasBotTag( "lobo_usepomson" ) )
 		{
 			local pomson = Entities.CreateByClassname( "tf_weapon_drg_pomson" )
 			SetPropInt( pomson, "m_AttributeManager.m_Item.m_iItemDefinitionIndex", 588 )
@@ -1359,11 +1356,11 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			pomson.SetTeam( TF_TEAM_PVE_INVADERS )
 			DispatchSpawn( pomson )
 
-			LOBO.GetItemInSlot( self, pomson.GetSlot() ).Destroy()
+			LOBO.GetItemInSlot( bot, pomson.GetSlot() ).Destroy()
 
-			self.Weapon_Equip( pomson )
+			bot.Weapon_Equip( pomson )
 
-			if ( !self.HasBotTag( "lobo_userapidpomson" ) )
+			if ( !bot.HasBotTag( "lobo_userapidpomson" ) )
 				return
 
 			pomson.AddAttribute( "fire rate bonus", 0.55, -1 )
