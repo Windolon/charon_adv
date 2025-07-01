@@ -1041,8 +1041,6 @@ WaveSchedule
 				SINS.ChangeIconByName( `medic_kritz_quickfix_split`, `medic` )
 				SINS.ChangeIconByName( `scout_capper_saber_litenys`, `scout_batsaber_nys` )
 				SINS.ChangeIconByName( `soldier_buff_conch_mangler_giant`, `soldier_crit_giant` )
-
-				LOBO.InitialiseInsight()
 			"
 		}
 
