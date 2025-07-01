@@ -1453,8 +1453,8 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			if ( victim.GetTeam() != TF_TEAM_PVE_INVADERS || !victim.IsBotOfType( TF_BOT_TYPE ) )
 				return
 
-			SetPropString( ent, "m_iszScriptThinkFunction", "" )
-			AddThinkToEnt( ent, null )
+			SetPropString( victim, "m_iszScriptThinkFunction", "" )
+			AddThinkToEnt( victim, null )
 			LOBO.CleanupScriptScope( victim )
 
 			if ( victim.HasBotTag( "lobo_boss1" ) )
