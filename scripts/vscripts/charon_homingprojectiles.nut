@@ -91,4 +91,4 @@ function HomingThink()
 	}
 	return -1
 }
-PopExtUtil.AddThinkToEnt(self, "HomingThink")
+AddThinkToEnt(self, "HomingThink")
