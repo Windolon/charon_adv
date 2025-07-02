@@ -467,7 +467,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 		if ( "bonemerge_model" in scope && scope.bonemerge_model && scope.bonemerge_model.IsValid() )
 			scope.bonemerge_model.Kill()
 
-		local bonemerge_model = CreateByClassname( "tf_wearable" )
+		local bonemerge_model = Entities.CreateByClassname( "tf_wearable" )
 		SetPropString( bonemerge_model, "m_iName", "__util_bonemerge_model" )
 		SetPropInt( bonemerge_model, "m_nModelIndex", PrecacheModel( model ) )
 		SetPropBool( bonemerge_model, "m_bValidatedAttachedEntity", true )
@@ -923,6 +923,11 @@ const SF_TRIGGER_ALLOW_ALL = 64
 
 		if ( bot.HasBotTag( "lobo_boss1" ) )
 		{
+			EntFire( "boss_title", "Display" )
+			EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
+			EntFire( "boss_hp", "Display", null, 0.83 + 0.865 ) // (17+2)*0.035 + 0.2
+			SINS.ChangeClassIcon( bot, "demo_clusterbomb_hyper_lite" )
+
 			bot.AddCustomAttribute( "gesture speed increase", 1.28, -1 )
 
 			local warstomp_particle1 = SpawnEntityFromTable( "info_particle_system",
