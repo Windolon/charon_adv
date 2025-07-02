@@ -1406,7 +1406,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 
 			if ( team == TF_TEAM_PVE_INVADERS && player.IsBotOfType( TF_BOT_TYPE ) )
 			{
-				EntFireByHandle( player, "RunScriptCode", "LOBO.BotTagCheck( self )", 0.1, null, null )
+				EntFireByHandle( player, "RunScriptCode", "LOBO.BotTagCheck( self )", 0.8, null, null )
 			}
 		}
 
