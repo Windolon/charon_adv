@@ -395,7 +395,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 					continue
 
 				result.append( p )
-				distance_to_origin[ p ] <- ( player.GetOrigin() - region[ 0 ] ).Length()
+				distance_to_origin[ p ] <- ( p.GetOrigin() - region[ 0 ] ).Length()
 			}
 
 			result.sort( @( a,b ) ( distance_to_origin[ a ] <=> distance_to_origin[ b ] ) )
