@@ -474,7 +474,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 		SetPropEntity( bonemerge_model, "m_hOwner", player )
 		bonemerge_model.SetTeam( player.GetTeam() )
 		bonemerge_model.SetOwner( player )
-		DispatchSpawn( bonemerge_model )
+		Entities.DispatchSpawn( bonemerge_model )
 		EntFireByHandle( bonemerge_model, "SetParent", "!activator", -1, player, player )
 		SetPropInt( bonemerge_model, "m_fEffects", EF_BONEMERGE | EF_BONEMERGE_FASTCULL )
 		scope.bonemerge_model <- bonemerge_model
@@ -1310,7 +1310,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 					particle.KeyValueFromInt( "attachment_type", PATTACH_ABSORIGIN_FOLLOW )
 					particle.KeyValueFromInt( "spawnflags", SF_TRIGGER_ALLOW_ALL )
 
-					DispatchSpawn( particle )
+					Entities.DispatchSpawn( particle )
 
 					EntFireByHandle( particle, "StartTouch", "!activator", -1, projectile, projectile )
 					EntFireByHandle( particle, "Kill", "", -1, null, null )
@@ -1354,7 +1354,7 @@ const SF_TRIGGER_ALLOW_ALL = 64
 			SetPropBool( pomson, "m_AttributeManager.m_Item.m_bInitialized", true)
 			SetPropBool( pomson, "m_bValidatedAttachedEntity", true)
 			pomson.SetTeam( TF_TEAM_PVE_INVADERS )
-			DispatchSpawn( pomson )
+			Entities.DispatchSpawn( pomson )
 
 			LOBO.GetItemInSlot( bot, pomson.GetSlot() ).Destroy()
 
