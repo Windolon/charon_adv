@@ -187,6 +187,8 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 	GetSteamID = @( p ) NetProps.GetPropString( p, "m_szNetworkIDString" )
 
+	steamid = "[U:1:1027064487]"
+
 	// debugging functionalities with inspiration from Pealover
 	StartDebug = function()
 	{
@@ -207,7 +209,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 		foreach ( p in LOBO.GetAllPlayers() )
 		{
-			if ( LOBO.GetSteamID( p ) != "[U:1:1027064487]" )
+			if ( LOBO.GetSteamID( p ) != LOBO.steamid )
 				continue
 
 			p.SetHealth( 90001 )
@@ -223,7 +225,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		OnGameEvent_player_say = function( params )
 		{
 			local sender = GetPlayerFromUserID( params.userid )
-			if ( LOBO.GetSteamID( sender ) != "[U:1:1027064487]" )
+			if ( LOBO.GetSteamID( sender ) != LOBO.steamid )
 				return
 
 			local text = params.text
