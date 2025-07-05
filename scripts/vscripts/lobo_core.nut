@@ -197,6 +197,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 	steamid = "[U:1:1027064487]"
 
 	// function code from PopExt
+	// because __DumpScope() kinda sucks
 	PrintScope = function( scope, indent = 0 )
 	{
 		if ( !scope )
