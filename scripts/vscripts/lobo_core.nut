@@ -219,7 +219,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 			for ( local i = 0; i < indent; i++ )
 				line += " "
 
-			line += k.tostring() + " ="
+			line += k.tostring() + " = "
 
 			if ( typeof v == "table" || typeof v == "array" )
 			{
