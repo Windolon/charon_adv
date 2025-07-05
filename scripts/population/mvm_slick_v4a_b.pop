@@ -1,0 +1,76 @@
+#base robot_standard.pop
+#base robot_giant.pop
+#base robot_gatebot.pop
+
+WaveSchedule
+{
+	StartingCurrency 2000
+	RespawnWaveTime 1
+	FixedRespawnWaveTime Yes
+	CanBotsAttackWhileInSpawnRoom No
+
+	Wave
+	{
+		InitWaveOutput
+		{
+			Target BigNet
+			Action RunScriptCode
+			Param "
+				IncludeScript( `slick_lobo.nut` )
+				LOBO.StartDebug()
+			"
+		}
+		StartWaveOutput
+		{
+			Target wave_start_relay
+			Action Trigger
+		}
+		WaveSpawn
+		{
+			Name "1-1"
+			Where spawnbot_front
+			TotalCount 1
+			MaxActive 1
+			SpawnCount 1
+			TotalCurrency 100
+			TFBot
+			{
+				Class Scout
+				WeaponRestrictions MeleeOnly
+				Tag testtag
+			}
+		}
+	}
+
+	Wave
+	{
+		InitWaveOutput
+		{
+			Target BigNet
+			Action RunScriptCode
+			Param "
+				IncludeScript( `slick_lobo.nut` )
+				LOBO.StartDebug()
+			"
+		}
+		StartWaveOutput
+		{
+			Target wave_start_relay
+			Action Trigger
+		}
+		WaveSpawn
+		{
+			Name "2-1"
+			Where spawnbot_front
+			TotalCount 1
+			MaxActive 1
+			SpawnCount 1
+			TotalCurrency 100
+			TFBot
+			{
+				Class Scout
+				WeaponRestrictions MeleeOnly
+			}
+		}
+	}
+}
