@@ -362,7 +362,7 @@ __CollectGameEventCallbacks( LOBO.CORE_CALLBACKS )
 __CollectGameEventCallbacks( LOBO.TAGS_CALLBACKS )
 
 // We need to be careful of unhandled waste.
-if ( !( "LOBO_FIRSTLOAD" ) in __root )
+if ( !( "LOBO_FIRSTLOAD" in __root ) )
 {
 	::LOBO_FIRSTLOAD <- null
 
