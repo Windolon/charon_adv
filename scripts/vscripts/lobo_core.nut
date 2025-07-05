@@ -250,11 +250,11 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 			foreach ( tagname, func_table in LOBO.TAGS )
 			{
-				if ( !bot.HasBotTag( tagname ) || !( "OnSpawn" in func_table ) )
+				if ( !bot.IsAlive() || !bot.HasBotTag( tagname ) || !( "OnSpawn" in func_table ) )
 					continue
 
 				bot.GetScriptScope().OnSpawn <- func_table.OnSpawn
-				EntFireByHandle( bot, "RunScriptCode", "OnSpawn( self )", -1, null, null )
+				EntFireByHandle( bot, "RunScriptCode", "OnSpawn( self )", 0.03, null, null )
 			}
 		}
 
