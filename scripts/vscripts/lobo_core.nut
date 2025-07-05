@@ -208,7 +208,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		}
 
 		local line = ""
-		for ( local i = 0; i < indent; i++)
+		for ( local i = 0; i < indent; i++ )
 			line += " "
 
 		line += typeof scope == "table" ? "{" : "["
@@ -238,7 +238,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		indent -= 4
 
 		line = ""
-		for ( local i = 0; i < indent; i++)
+		for ( local i = 0; i < indent; i++ )
 			line += " "
 
 		line += typeof scope == "table" ? "}" : "]"
