@@ -196,6 +196,53 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 	steamid = "[U:1:1027064487]"
 
+	// function code from PopExt
+	PrintScope = function( scope, indent = 0 )
+	{
+		if ( !scope )
+		{
+			ClientPrint( null, 2, "null" )
+			return
+		}
+
+		local line = ""
+		for ( local i = 0; i < indent; i++)
+			line += " "
+
+		line += typeof scope == "table" ? "{" : "["
+		ClientPrint( null, 2, line )
+
+		indent += 4
+		foreach ( k, v in scope )
+		{
+			line = ""
+			for ( local i = 0; i < indent; i++ )
+				line += " "
+
+			line += k.tostring() + " ="
+
+			if ( typeof v == "table" || typeof v == "array" )
+			{
+				ClientPrint( null, 2, line )
+				LOBO.PrintScope( v, indent )
+			}
+			else
+			{
+				try { line += v.tostring() }
+				catch ( e ) { line += typeof v }
+				ClientPrint( null, 2, line )
+			}
+		}
+		indent -= 4
+
+		line = ""
+		for ( local i = 0; i < indent; i++)
+			line += " "
+
+		line += typeof scope == "table" ? "}" : "]"
+		ClientPrint( null, 2, line )
+	}
+
 	// debugging functionalities with inspiration from Pealover
 	StartDebug = function()
 	{
