@@ -374,6 +374,7 @@ if ( !( "LOBO_FIRSTLOAD" in __root ) )
 		if ( !scope )
 		{
 			p.ValidateScriptScope()
+			scope = p.GetScriptScope()
 		}
 		else
 		{
@@ -381,7 +382,7 @@ if ( !( "LOBO_FIRSTLOAD" in __root ) )
 			LOBO.CleanupScriptScope( p )
 		}
 
-		if ( p.GetTeam() == TF_TEAM_PVE_INVADERS && p.IsBotOfType( TF_BOT_TYPE ) )
+		if ( p.IsBotOfType( TF_BOT_TYPE ) )
 		{
 			scope.OnSpawnTagCheck <- function()
 			{
