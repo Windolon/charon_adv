@@ -19,7 +19,7 @@ LOBO.AddHookedTag( "testtag",
 
 	OnTakeDamagePost = function( bot, params )
 	{
-		printl( bot + " took " params.damageamount + " damage, now at " + params.health + " HP" )
+		printl( bot + " took " + params.damageamount + " damage, now at " + params.health + " HP" )
 	}
 
 	OnDeath = function( bot, params )
