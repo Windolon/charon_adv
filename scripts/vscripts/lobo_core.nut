@@ -113,10 +113,17 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		return item
 	}
 
-	CleanupScriptScope = function( ent )
+	CleanupScriptScope = function( ent, additional_keys = null )
 	{
 		local scope = ent.GetScriptScope()
 		local protected_keys = [ "self", "__vrefs", "__vname" ]
+
+		if ( additional_keys )
+		{
+			foreach ( key in additional_keys )
+				protected_keys.append( key )
+		}
+
 		foreach ( k, v in scope )
 		{
 			if ( protected_keys.find( k ) == null )
@@ -250,16 +257,6 @@ if ( !( "ConstantNamingConvention" in __root ) )
 			if ( params.team != TF_TEAM_PVE_INVADERS || !bot.IsBotOfType( TF_BOT_TYPE ) )
 				return
 
-			bot.GetScriptScope().OnSpawnTagCheck <- function()
-			{
-				foreach ( tagname, func_table in LOBO.TAGS )
-				{
-					if ( !self.HasBotTag( tagname ) || !( "OnSpawn" in func_table ) )
-						continue
-
-					func_table.OnSpawn( self )
-				}
-			}
 			EntFireByHandle( bot, "CallScriptFunction", "OnSpawnTagCheck", -1, null, null )
 		}
 
@@ -348,7 +345,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 				return
 
 			LOBO.ResetThink( bot )
-			LOBO.CleanupScriptScope( bot )
+			LOBO.CleanupScriptScope( bot, [ "OnSpawnTagCheck" ] )
 		}
 
 		OnGameEvent_recalculate_holidays = function( _ )
@@ -366,20 +363,36 @@ if ( !( "ConstantNamingConvention" in __root ) )
 __CollectGameEventCallbacks( LOBO.CORE_CALLBACKS )
 __CollectGameEventCallbacks( LOBO.TAGS_CALLBACKS )
 
-// We need to be careful of unhandled waste.
 if ( !( "LOBO_FIRSTLOAD" in __root ) )
 {
 	::LOBO_FIRSTLOAD <- null
 
 	foreach ( p in LOBO.GetAllPlayers( { check_alive = false } ) )
 	{
-		if ( !p.GetScriptScope() )
+		local scope = p.GetScriptScope()
+
+		if ( !scope )
 		{
 			p.ValidateScriptScope()
-			continue
+		}
+		else
+		{
+			LOBO.ResetThink( p )
+			LOBO.CleanupScriptScope( p )
 		}
 
-		LOBO.ResetThink( p )
-		LOBO.CleanupScriptScope( p )
+		if ( p.GetTeam() == TF_TEAM_PVE_INVADERS && p.IsBotOfType( TF_BOT_TYPE ) )
+		{
+			scope.OnSpawnTagCheck <- function()
+			{
+				foreach ( tagname, func_table in LOBO.TAGS )
+				{
+					if ( !self.HasBotTag( tagname ) || !( "OnSpawn" in func_table ) )
+						continue
+
+					func_table.OnSpawn( self )
+				}
+			}
+		}
 	}
 }
