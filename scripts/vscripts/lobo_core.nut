@@ -196,9 +196,9 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		thinker.ValidateScriptScope()
 		thinker.GetScriptScope().InstantReadyThink <- function()
 		{
-			if ( NetProps.GetPropBoolArray( gamerules_ent, "m_bPlayerReady", 1 ) )
+			if ( NetProps.GetPropBoolArray( LOBO.gamerules_ent, "m_bPlayerReady", 1 ) )
 			{
-				NetProps.SetPropFloat( gamerules_ent, "m_flRestartRoundTime", Time() )
+				NetProps.SetPropFloat( LOBO.gamerules_ent, "m_flRestartRoundTime", Time() )
 				LOBO.ResetThink( self )
 				EntFireByHandle( self, "Kill", null, 1, null, null )
 			}
