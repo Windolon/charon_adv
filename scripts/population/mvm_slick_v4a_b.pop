@@ -28,14 +28,14 @@ WaveSchedule
 		WaveSpawn
 		{
 			Name "1-1"
-			Where spawnbot_front
+			Where spawnbot
 			TotalCount 1
 			MaxActive 1
 			SpawnCount 1
 			TotalCurrency 100
 			TFBot
 			{
-				Class Scout
+				Class Heavy
 				WeaponRestrictions MeleeOnly
 				Tag testtag
 			}
