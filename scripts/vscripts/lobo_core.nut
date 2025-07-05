@@ -329,7 +329,6 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 		foreach ( key in keys_to_cleanup )
 		{
-			printl( key )
 			if ( key in getroottable() )
 				delete getroottable()[ key ]
 		}
