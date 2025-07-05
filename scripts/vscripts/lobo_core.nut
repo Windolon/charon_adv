@@ -279,7 +279,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 	// debugging functionalities with inspiration from Pealover
 	StartDebug = function()
 	{
-		ClientPrint( null, 3, "\x07FF0000DEBUG MODE ON" )
+		ClientPrint( null, 3, "\x07FFB4B4DEBUG MODE ON" )
 
 		local thinker = Entities.CreateByClassname( "logic_relay" )
 		thinker.ValidateScriptScope()
