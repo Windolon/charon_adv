@@ -188,9 +188,9 @@ if ( !( "ConstantNamingConvention" in __root ) )
 	// objects defined in the table do not exist until after the closing brace
 	popfile_name = NetProps.GetPropString( Entities.FindByClassname( null, "tf_objective_resource" ), "m_iszMvMPopfileName" )
 
-	wave = NetProps.GetPropString( Entities.FindByClassname( null, "tf_objective_resource" ), "m_nMannVsMachineWaveCount" )
+	wave = NetProps.GetPropInt( Entities.FindByClassname( null, "tf_objective_resource" ), "m_nMannVsMachineWaveCount" )
 
-	max_wave = NetProps.GetPropString( Entities.FindByClassname( null, "tf_objective_resource" ), "m_nMannVsMachineMaxWaveCount" )
+	max_wave = NetProps.GetPropInt( Entities.FindByClassname( null, "tf_objective_resource" ), "m_nMannVsMachineMaxWaveCount" )
 
 	GetSteamID = @( p ) NetProps.GetPropString( p, "m_szNetworkIDString" )
 
