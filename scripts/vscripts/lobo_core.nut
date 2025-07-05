@@ -439,10 +439,25 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 		OnGameEvent_recalculate_holidays = function( _ )
 		{
-			if ( GetRoundState() != GR_STATE_PREROUND || LOBO.GetPopfileName() == LOBO.popfile_name )
+			if ( GetRoundState() != GR_STATE_PREROUND )
 				return
 
-			LOBO.Core_Cleanup()
+			// mission unload
+			if ( LOBO.GetPopfileName() != LOBO.popfile_name )
+			{
+				LOBO.Core_Cleanup()
+				return
+			}
+
+			// mission reset, e.g. wave lost
+			foreach ( p in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_INVADERS, check_alive = false } ) )
+			{
+				if ( !p.IsBotOfType( TF_BOT_TYPE ) )
+					continue
+
+				LOBO.ResetThink( p )
+				LOBO.CleanUpScriptScope( p, [ "OnSpawnTagCheck" ] )
+			}
 		}
 	}
 }
