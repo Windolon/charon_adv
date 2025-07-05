@@ -185,7 +185,8 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 	GetMaxWave = @() NetProps.GetPropInt( LOBO.obj_res_ent, "m_nMannVsMachineMaxWaveCount" )
 
-	// objects defined in the table do not exist until after the closing brace
+	// objects defined in the table do not exist until after the closing brace,
+	//	hence we can't outright use gamerules_/obj_res_ent
 	popfile_name = NetProps.GetPropString( Entities.FindByClassname( null, "tf_objective_resource" ), "m_iszMvMPopfileName" )
 
 	wave = NetProps.GetPropInt( Entities.FindByClassname( null, "tf_objective_resource" ), "m_nMannVsMachineWaveCount" )
