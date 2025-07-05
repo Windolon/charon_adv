@@ -387,6 +387,13 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 	CORE_CALLBACKS =
 	{
+		// connecting players are not caught anywhere in the core script
+		OnGameEvent_player_spawn = function( params )
+		{
+			if ( params.team == TEAM_UNASSIGNED )
+				GetPlayerFromUserID( params.userid ).ValidateScriptScope()
+		}
+
 		OnGameEvent_player_death = function( params )
 		{
 			local bot = GetPlayerFromUserID( params.userid )
