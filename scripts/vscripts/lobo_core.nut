@@ -172,17 +172,17 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 	obj_res_ent = Entities.FindByClassname( null, "tf_objective_resource" )
 
-	GetPopfileName = @() NetProps.GetPropString( LOBO.obj_res_ent, "m_iszMvMPopfileName" )
+	GetPopfileName = @() NetProps.GetPropString( obj_res_ent, "m_iszMvMPopfileName" )
 
-	GetCurrentWave = @() NetProps.GetPropString( LOBO.obj_res_ent, "m_nMannVsMachineWaveCount" )
+	GetCurrentWave = @() NetProps.GetPropString( obj_res_ent, "m_nMannVsMachineWaveCount" )
 
-	GetMaxWave = @() NetProps.GetPropString( LOBO.obj_res_ent, "m_nMannVsMachineMaxWaveCount" )
+	GetMaxWave = @() NetProps.GetPropString( obj_res_ent, "m_nMannVsMachineMaxWaveCount" )
 
-	popfile_name = LOBO.GetPopfileName()
+	popfile_name = GetPopfileName()
 
-	wave = LOBO.GetCurrentWave()
+	wave = GetCurrentWave()
 
-	max_wave = LOBO.GetMaxWave()
+	max_wave = GetMaxWave()
 
 	GetSteamID = @( p ) NetProps.GetPropString( p, "m_szNetworkIDString" )
 
