@@ -418,6 +418,7 @@ if ( !( "LOBO_FIRSTLOAD" in __root ) )
 
 	foreach ( p in LOBO.GetAllPlayers( { check_alive = false } ) )
 	{
+		// ----- Scope initialisation -----
 		local scope = p.GetScriptScope()
 
 		if ( !scope )
@@ -429,8 +430,9 @@ if ( !( "LOBO_FIRSTLOAD" in __root ) )
 		{
 			LOBO.ResetThink( p )
 			LOBO.CleanupScriptScope( p )
-		}
+		} // Scope initialisation
 
+		// ----- Hooked tags -----
 		if ( p.IsBotOfType( TF_BOT_TYPE ) )
 		{
 			scope.OnSpawnTagCheck <- function()
@@ -443,6 +445,6 @@ if ( !( "LOBO_FIRSTLOAD" in __root ) )
 					func_table.OnSpawn( self )
 				}
 			}
-		}
+		} // Hooked tags
 	}
 }
