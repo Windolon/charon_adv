@@ -202,6 +202,10 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 	// ----- Meta objects -----
 
+	bignet_ent = Entities.FindByName( null, "BigNet" )
+
+	worldspawn_ent = Entities.First()
+
 	gamerules_ent = Entities.FindByClassname( null, "tf_gamerules" )
 
 	obj_res_ent = Entities.FindByClassname( null, "tf_objective_resource" )
@@ -298,6 +302,8 @@ if ( !( "ConstantNamingConvention" in __root ) )
 			p.SetHealth( 90001 )
 			p.SetMoveType( MOVETYPE_NOCLIP, MOVECOLLIDE_DEFAULT )
 			p.AddCurrency( 20000 )
+			p.AddCondEx( TF_COND_CRITBOOSTED_CARD_EFFECT, 9999, null )
+			p.AddCondEx( TF_COND_RUNE_HASTE, 9999, null )
 		}
 
 		__CollectGameEventCallbacks( LOBO.DEBUG_CALLBACKS )
