@@ -172,17 +172,18 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 	obj_res_ent = Entities.FindByClassname( null, "tf_objective_resource" )
 
-	GetPopfileName = @() NetProps.GetPropString( obj_res_ent, "m_iszMvMPopfileName" )
+	GetPopfileName = @() NetProps.GetPropString( LOBO.obj_res_ent, "m_iszMvMPopfileName" )
 
-	GetCurrentWave = @() NetProps.GetPropString( obj_res_ent, "m_nMannVsMachineWaveCount" )
+	GetCurrentWave = @() NetProps.GetPropString( LOBO.obj_res_ent, "m_nMannVsMachineWaveCount" )
 
-	GetMaxWave = @() NetProps.GetPropString( obj_res_ent, "m_nMannVsMachineMaxWaveCount" )
+	GetMaxWave = @() NetProps.GetPropString( LOBO.obj_res_ent, "m_nMannVsMachineMaxWaveCount" )
 
-	popfile_name = GetPopfileName()
+	// objects defined in the table do not exist until after the closing brace
+	popfile_name = NetProps.GetPropString( Entities.FindByClassname( null, "tf_objective_resource" ), "m_iszMvMPopfileName" )
 
-	wave = GetCurrentWave()
+	wave = NetProps.GetPropString( Entities.FindByClassname( null, "tf_objective_resource" ), "m_nMannVsMachineWaveCount" )
 
-	max_wave = GetMaxWave()
+	max_wave = NetProps.GetPropString( Entities.FindByClassname( null, "tf_objective_resource" ), "m_nMannVsMachineMaxWaveCount" )
 
 	GetSteamID = @( p ) NetProps.GetPropString( p, "m_szNetworkIDString" )
 
