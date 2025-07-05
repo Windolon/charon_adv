@@ -181,9 +181,9 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 	GetPopfileName = @() NetProps.GetPropString( LOBO.obj_res_ent, "m_iszMvMPopfileName" )
 
-	GetCurrentWave = @() NetProps.GetPropString( LOBO.obj_res_ent, "m_nMannVsMachineWaveCount" )
+	GetCurrentWave = @() NetProps.GetPropInt( LOBO.obj_res_ent, "m_nMannVsMachineWaveCount" )
 
-	GetMaxWave = @() NetProps.GetPropString( LOBO.obj_res_ent, "m_nMannVsMachineMaxWaveCount" )
+	GetMaxWave = @() NetProps.GetPropInt( LOBO.obj_res_ent, "m_nMannVsMachineMaxWaveCount" )
 
 	// objects defined in the table do not exist until after the closing brace
 	popfile_name = NetProps.GetPropString( Entities.FindByClassname( null, "tf_objective_resource" ), "m_iszMvMPopfileName" )
