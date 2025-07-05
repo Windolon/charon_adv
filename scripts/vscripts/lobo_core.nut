@@ -248,14 +248,17 @@ if ( !( "ConstantNamingConvention" in __root ) )
 			if ( params.team != TF_TEAM_PVE_INVADERS || !bot.IsBotOfType( TF_BOT_TYPE ) )
 				return
 
-			foreach ( tagname, func_table in LOBO.TAGS )
+			bot.GetScriptScope().OnSpawnTagCheck <- function()
 			{
-				if ( !bot.IsAlive() || !bot.HasBotTag( tagname ) || !( "OnSpawn" in func_table ) )
-					continue
+				foreach ( tagname, func_table in LOBO.TAGS )
+				{
+					if ( !self.HasBotTag( tagname ) || !( "OnSpawn" in func_table ) )
+						continue
 
-				bot.GetScriptScope().OnSpawn <- func_table.OnSpawn
-				EntFireByHandle( bot, "RunScriptCode", "OnSpawn( self )", 0.03, null, null )
+					func_table.OnSpawn( self )
+				}
 			}
+			EntFireByHandle( bot, "CallScriptFunction", "OnSpawnTagCheck", 0.03, null, null )
 		}
 
 		// currently only supports OnTakeDamage hook
