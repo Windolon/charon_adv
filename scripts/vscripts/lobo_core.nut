@@ -258,7 +258,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 					func_table.OnSpawn( self )
 				}
 			}
-			EntFireByHandle( bot, "CallScriptFunction", "OnSpawnTagCheck", 0.03, null, null )
+			EntFireByHandle( bot, "CallScriptFunction", "OnSpawnTagCheck", -1, null, null )
 		}
 
 		// currently only supports OnTakeDamage hook
