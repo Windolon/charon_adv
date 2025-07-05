@@ -1,5 +1,7 @@
 // this file is courtesy entirely to lite
 
+const DEG2RAD = 0.0174532924
+
 local Params = {}
 if("HomingParams" in this)
 	foreach(Key, Value in HomingParams)
@@ -91,4 +93,4 @@ function HomingThink()
 	}
 	return -1
 }
-PopExtUtil.AddThinkToEnt(self, "HomingThink")
+AddThinkToEnt(self, "HomingThink")
