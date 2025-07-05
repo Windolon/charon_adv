@@ -131,6 +131,33 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		}
 	}
 
+	// with help from ptyx
+	PlaySoundAt = function( arg, arg_soundname, range = 99999 )
+	{
+		local arg_soundlevel = ( 40 + ( 20 * log10( range / 36.0 ) ) ).tointeger()
+
+		if ( typeof arg == "instance" )
+		{
+			EmitSoundEx(
+			{
+				sound_name = arg_soundname
+				entity = arg
+				sound_level = arg_soundlevel
+				filter_type = RECIPIENT_FILTER_GLOBAL
+			})
+		}
+		else if ( typeof arg == "Vector" )
+		{
+			EmitSoundEx(
+			{
+				sound_name = arg_soundname
+				origin = arg
+				sound_level = arg_soundlevel
+				filter_type = RECIPIENT_FILTER_GLOBAL
+			})
+		}
+	}
+
 	// ----- Think related -----
 
 	SetUpThinkTable = function( ent )
