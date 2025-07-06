@@ -113,24 +113,6 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		return item
 	}
 
-	CleanupScriptScope = function( ent, additional_keys = null )
-	{
-		local scope = ent.GetScriptScope()
-		local protected_keys = [ "self", "__vrefs", "__vname" ]
-
-		if ( additional_keys )
-		{
-			foreach ( key in additional_keys )
-				protected_keys.append( key )
-		}
-
-		foreach ( k, v in scope )
-		{
-			if ( protected_keys.find( k ) == null )
-				delete scope[ k ]
-		}
-	}
-
 	// with help from ptyx
 	PlaySoundAt = function( arg, arg_soundname, range = 99999 )
 	{
@@ -217,7 +199,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 	GetMaxWave = @() NetProps.GetPropInt( LOBO.obj_res_ent, "m_nMannVsMachineMaxWaveCount" )
 
 	// objects defined in the table do not exist until after the closing brace,
-	//	hence we can't outright use gamerules_/obj_res_ent
+	//	hence we can't use the ent handles defined above
 	popfile_name = NetProps.GetPropString( Entities.FindByClassname( null, "tf_objective_resource" ), "m_iszMvMPopfileName" )
 
 	wave = NetProps.GetPropInt( Entities.FindByClassname( null, "tf_objective_resource" ), "m_nMannVsMachineWaveCount" )
@@ -227,6 +209,24 @@ if ( !( "ConstantNamingConvention" in __root ) )
 	GetSteamID = @( p ) NetProps.GetPropString( p, "m_szNetworkIDString" )
 
 	steamid = "[U:1:1027064487]"
+
+	CleanupScriptScope = function( ent, additional_keys = null )
+	{
+		local scope = ent.GetScriptScope()
+		local protected_keys = [ "self", "__vrefs", "__vname" ]
+
+		if ( additional_keys )
+		{
+			foreach ( key in additional_keys )
+				protected_keys.append( key )
+		}
+
+		foreach ( k, v in scope )
+		{
+			if ( protected_keys.find( k ) == null )
+				delete scope[ k ]
+		}
+	}
 
 	// function code from PopExt
 	// because __DumpScope() kinda sucks
@@ -274,7 +274,9 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 		line += typeof scope == "table" ? "}" : "]"
 		ClientPrint( null, 2, line )
-	}
+	} // Meta objects
+
+	// ----- Debugging -----
 
 	// debugging functionalities with inspiration from Pealover
 	StartDebug = function()
@@ -294,23 +296,32 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		}
 		AddThinkToEnt( thinker, "InstantReadyThink" )
 
-		foreach ( p in LOBO.GetAllPlayers() )
-		{
-			if ( LOBO.GetSteamID( p ) != LOBO.steamid )
-				continue
-
-			p.SetHealth( 90001 )
-			p.SetMoveType( MOVETYPE_NOCLIP, MOVECOLLIDE_DEFAULT )
-			p.AddCurrency( 20000 )
-			p.AddCondEx( TF_COND_CRITBOOSTED_CARD_EFFECT, 9999, null )
-			p.AddCondEx( TF_COND_RUNE_HASTE, 9999, null )
-		}
-
 		__CollectGameEventCallbacks( LOBO.DEBUG_CALLBACKS )
+	}
+
+	MakePowerful = function( p )
+	{
+		if ( LOBO.GetSteamID( p ) != LOBO.steamid )
+			return
+
+		p.SetHealth( 90001 )
+		p.SetMoveType( MOVETYPE_NOCLIP, MOVECOLLIDE_DEFAULT )
+		p.AddCondEx( TF_COND_CRITBOOSTED_CARD_EFFECT, 9999, null )
+		p.AddCondEx( TF_COND_RUNE_HASTE, 9999, null )
+		LOBO.GetItemInSlot( p, 0 ).AddAttribute( "clip size bonus", 250, -1 )
 	}
 
 	DEBUG_CALLBACKS =
 	{
+		OnGameEvent_player_spawn = function( params )
+		{
+			local p = GetPlayerFromUserID( params.userid )
+			if ( LOBO.GetSteamID( p ) != LOBO.steamid )
+				return
+
+			EntFireByHandle( p, "RunScriptCode", "LOBO.MakePowerful( self )", -1, null, null )
+		}
+
 		OnGameEvent_player_say = function( params )
 		{
 			local sender = GetPlayerFromUserID( params.userid )
@@ -322,7 +333,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 			if ( text == "!k" )
 				LOBO.KillAllInvaderBots()
 		}
-	} // Meta objects
+	} // Debugging
 
 	// ----- Hooked tags -----
 
