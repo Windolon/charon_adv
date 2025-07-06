@@ -1201,7 +1201,7 @@ LOBO.AddHookedTag( "boss3",
 
 		LOBO.AddThink( bot, "StarfallThink", function()
 		{
-			if ( Time() < next_cast_Time )
+			if ( Time() < next_cast_time )
 				return
 
 			LOBO.CastStarfallAbility( bot, 2 )
