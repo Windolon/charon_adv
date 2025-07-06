@@ -355,7 +355,7 @@ SpawnEntityGroupFromTable( LOBO.tranquility_setup )
 
 LOBO.gateb_captured <- false
 
-LOBO.CALLBACKS =
+LOBO.CALLBACKS <-
 {
 	OnGameEvent_teamplay_point_captured = function( params )
 	{

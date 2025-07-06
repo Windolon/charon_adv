@@ -297,6 +297,14 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		AddThinkToEnt( thinker, "InstantReadyThink" )
 
 		__CollectGameEventCallbacks( LOBO.DEBUG_CALLBACKS )
+
+		foreach ( p in LOBO.GetAllPlayers() )
+		{
+			if ( LOBO.GetSteamID( p ) != LOBO.steamid )
+				continue
+
+			LOBO.MakePowerful( p )
+		}
 	}
 
 	MakePowerful = function( p )
@@ -304,11 +312,14 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		if ( LOBO.GetSteamID( p ) != LOBO.steamid )
 			return
 
-		p.SetHealth( 90001 )
+		p.SetHealth( 150000 )
 		p.SetMoveType( MOVETYPE_NOCLIP, MOVECOLLIDE_DEFAULT )
 		p.AddCondEx( TF_COND_CRITBOOSTED_CARD_EFFECT, 9999, null )
-		p.AddCondEx( TF_COND_RUNE_HASTE, 9999, null )
-		LOBO.GetItemInSlot( p, 0 ).AddAttribute( "clip size bonus", 250, -1 )
+
+		local wep = LOBO.GetItemInSlot( p, 0 )
+		wep.AddAttribute( "hidden primary max ammo bonus", 99, -1 )
+		wep.AddAttribute( "fire rate bonus HIDDEN", 0.2, -1 )
+		wep.AddAttribute( "faster reload rate", -0.8, -1 )
 	}
 
 	DEBUG_CALLBACKS =
