@@ -283,6 +283,8 @@ if ( !( "ConstantNamingConvention" in __root ) )
 	{
 		ClientPrint( null, 3, "\x07FFB4B4DEBUG MODE ON" )
 
+		__CollectGameEventCallbacks( LOBO.DEBUG_CALLBACKS )
+
 		local thinker = Entities.CreateByClassname( "logic_relay" )
 		thinker.ValidateScriptScope()
 		thinker.GetScriptScope().InstantReadyThink <- function()
@@ -296,8 +298,6 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		}
 		AddThinkToEnt( thinker, "InstantReadyThink" )
 
-		__CollectGameEventCallbacks( LOBO.DEBUG_CALLBACKS )
-
 		foreach ( p in LOBO.GetAllPlayers() )
 		{
 			if ( LOBO.GetSteamID( p ) != LOBO.steamid )
@@ -305,6 +305,39 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 			LOBO.MakePowerful( p )
 		}
+
+		seterrorhandler( function( e )
+		{
+			foreach ( p in LOBO.GetAllPlayers( { check_alive = false } ) )
+			{
+				if ( LOBO.GetSteamID( p ) != LOBO.steamid )
+					continue
+
+				local Chat = @( m ) ( printl( m ), ClientPrint( p, 2, m ) )
+				ClientPrint( p, 3, format( "\x07FF0000AN ERROR HAS OCCURRED [%s].\nCheck console for details", e ) )
+
+				Chat( format( "\n====== TIMESTAMP: %g ======\nAN ERROR HAS OCCURRED [%s]", Time(), e ) )
+				Chat( "CALLSTACK" )
+				local s, l = 2
+				while ( s = getstackinfos( l++ ) )
+					Chat( format( "*FUNCTION [%s()] %s line [%d]", s.func, s.src, s.line ) )
+
+				Chat( "LOCALS" )
+				if ( s = getstackinfos( 2 ) )
+				{
+					foreach ( n, v in s.locals )
+					{
+						local t = type( v )
+						t ==    "null" ? Chat( format( "[%s] NULL"  , n ) )    :
+						t == "integer" ? Chat( format( "[%s] %d"    , n, v ) ) :
+						t ==   "float" ? Chat( format( "[%s] %.14g" , n, v ) ) :
+						t ==  "string" ? Chat( format( "[%s] \"%s\"", n, v ) ) :
+										 Chat( format( "[%s] %s %s" , n, t, v.tostring() ) )
+					}
+				}
+				return
+			}
+		})
 	}
 
 	MakePowerful = function( p )
@@ -320,6 +353,8 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		wep.AddAttribute( "hidden primary max ammo bonus", 99, -1 )
 		wep.AddAttribute( "fire rate bonus HIDDEN", 0.2, -1 )
 		wep.AddAttribute( "faster reload rate", -0.8, -1 )
+
+		p.Regenerate( true )
 	}
 
 	DEBUG_CALLBACKS =
