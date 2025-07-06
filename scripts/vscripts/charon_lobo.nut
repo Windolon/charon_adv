@@ -765,7 +765,7 @@ LOBO.AddHookedTag( "boss2",
 		{
 			for ( local projectile; projectile = Entities.FindByClassname( projectile, "tf_projectile_*" ); )
 			{
-				if ( projectile.IsEFlagSet( EFL_PROJECTILE ) || GetPropEntity( projectile, "m_hOwnerEntity" ) != self )
+				if ( projectile.IsEFlagSet( EFL_PROJECTILE ) || NetProps.GetPropEntity( projectile, "m_hOwnerEntity" ) != self )
 					continue
 
 				EntFireByHandle( projectile, "DispatchEffect", "ParticleEffectStop", -1, null, null )

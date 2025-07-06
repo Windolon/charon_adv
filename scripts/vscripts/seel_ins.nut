@@ -35,6 +35,10 @@
 
 //////////////////////////////////////////////////////////
 
+foreach(k,v in NetProps.getclass())
+	if (k != "IsValid")
+		__root[k] <- NetProps[k].bindenv(NetProps);
+
 local iMaxEnemyCount = 0
 local iCurrentEnemyCount = 0
 local flWaveProgress = 1
@@ -58,7 +62,6 @@ local flWaveProgress = 1
 		}
 
 		// root table cleanup
-		local __root = getroottable()
 		if ( "hTFOR" in __root )
 			delete ::hTFOR
 		if ( "IconCountThink" in __root )
