@@ -65,7 +65,7 @@ WaveSchedule
 			Attributes SuppressFire
 			WeaponRestrictions PrimaryOnly
 			Tag bot_giant
-			Tag lobo_boss1
+			Tag boss1
 			ItemAttributes
 			{
 				ItemName "The Iron Bomber"
@@ -102,8 +102,7 @@ WaveSchedule
 			Attributes UseBossHealthBar
 			Attributes HoldFireUntilFullReload
 			Tag bot_giant
-			Tag lobo_boss2
-			Tag "popext_rocketcustomtrail{ name = `eyeboss_projectile` }"
+			Tag boss2
 			ItemAttributes
 			{
 				ItemName "TF_WEAPON_ROCKETLAUNCHER"
@@ -135,7 +134,7 @@ WaveSchedule
 			Attributes UseBossHealthBar
 			Attributes HoldFireUntilFullReload
 			Tag bot_giant
-			Tag lobo_boss2components
+			Tag boss2components
 			ItemAttributes
 			{
 				ItemName "The Liberty Launcher"
@@ -168,13 +167,13 @@ WaveSchedule
 			Health 4500
 			Item "The Righteous Bison"
 			Item "The Space Bracers"
+			Item "Basic Spellbook"
 			Attributes MiniBoss
 			Attributes UseBossHealthBar
 			WeaponRestrictions SecondaryOnly
 			Tag bot_giant
-			Tag lobo_boss2components
-			Tag lobo_boss2b
-			Tag "popext_spell{ type = SPELL_OVERHEAL, cooldown = 7.5 }"
+			Tag boss2components
+			Tag boss2b
 			ItemAttributes
 			{
 				ItemName "The Righteous Bison"
@@ -208,8 +207,8 @@ WaveSchedule
 			Attributes UseBossHealthBar
 			WeaponRestrictions MeleeOnly
 			Tag bot_giant
-			Tag lobo_boss2components
-			Tag lobo_boss2teleportfirst
+			Tag boss2components
+			Tag boss2teleportfirst
 			CharacterAttributes
 			{
 				"move speed bonus"	0.5
@@ -235,7 +234,7 @@ WaveSchedule
 			Attributes MiniBoss
 			Attributes UseBossHealthBar
 			Tag bot_giant
-			Tag lobo_boss3
+			Tag boss3
 			ItemAttributes
 			{
 				ItemName "TF_WEAPON_MINIGUN"
@@ -280,8 +279,9 @@ WaveSchedule
 			WeaponRestrictions PrimaryOnly
 			Attributes MiniBoss
 			Tag bot_giant
-			Tag "popext_giveweapon{ weapon = `tf_weapon_drg_pomson`, id = ID_POMSON_6000, attr = { `fire rate bonus`: 0.55, `damage penalty`: 0.8, `faster reload rate`: -0.8 } }"
-			Tag "popext_usecustommodel{ model = `models/bots/engineer/bot_engineer.mdl` }"
+			Tag pomson
+			Tag rapidpomson
+			Tag engimodel
 			Item "The Brainiac Hairpiece"
 			Item "The Brainiac Goggles"
 			CharacterAttributes
@@ -599,7 +599,7 @@ WaveSchedule
 			Item "The Cow Mangler 5000"
 			Item "The Concheror"
 			Tag bot_giant
-			Tag lobo_mangler
+			Tag mangler
 			Skill Expert
 			WeaponRestrictions PrimaryOnly
 			Attributes SpawnWithFullCharge
@@ -791,8 +791,8 @@ WaveSchedule
 			Skill Expert
 			MaxVisionRange 1200
 			WeaponRestrictions PrimaryOnly
-			Tag "popext_giveweapon{ weapon = `tf_weapon_drg_pomson`, id = ID_POMSON_6000 }"
-			Tag "popext_usecustommodel{ model = `models/bots/engineer/bot_engineer.mdl` }"
+			Tag pomson
+			Tag engimodel
 			Item "The Brainiac Hairpiece"
 			Item "The Brainiac Goggles"
 			CharacterAttributes
@@ -854,7 +854,7 @@ WaveSchedule
 			ClassIcon soldier_mangler_v2
 			WeaponRestrictions PrimaryOnly
 			Attributes SuppressFire
-			Tag lobo_mangler
+			Tag mangler
 			Item "The Cow Mangler 5000"
 			ItemAttributes
 			{
@@ -873,7 +873,7 @@ WaveSchedule
 			Scale 1.4
 			WeaponRestrictions PrimaryOnly
 			Attributes SuppressFire
-			Tag lobo_mangler
+			Tag mangler
 			Item "The Cow Mangler 5000"
 			ItemAttributes
 			{
@@ -1004,10 +1004,8 @@ WaveSchedule
 				// we start the mission at gate B
 				EntFire( `initB`, `Trigger` )
 
-				// load popext and the mission script
-				IncludeScript( `popextensions_main`, getroottable() )
-				IncludeScript( `charon_lobo`, getroottable() )
-				IncludeScript( `seel_ins`, getroottable() )
+				// load mission script
+				IncludeScript( `charon_lobo.nut` )
 
 				// bomb attributes
 				EntFire( `intel`, `SetReturnTime`, 35 )
@@ -1036,8 +1034,6 @@ WaveSchedule
 				SINS.ChangeIconByName( `medic_kritz_quickfix_split`, `medic` )
 				SINS.ChangeIconByName( `scout_capper_saber_litenys`, `scout_batsaber_nys` )
 				SINS.ChangeIconByName( `soldier_buff_conch_mangler_giant`, `soldier_crit_giant` )
-
-				LOBO.InitialiseInsight()
 			"
 		}
 
@@ -1589,7 +1585,7 @@ WaveSchedule
 					Template T_TFBot_Giant_Soldier
 					ClassIcon soldier_buff_conch_mangler_giant
 					Tag bot_giant
-					Tag lobo_kotg1
+					Tag kotg1
 				}
 				TFBot { Template T_TFBot_Medic_Kritz }
 				TFBot { Template T_TFBot_Medic_Kritz }
@@ -1748,7 +1744,7 @@ WaveSchedule
 			TFBot
 			{
 				Template T_TFBot_Giant_Soldier_Bison_Spammer
-				Tag lobo_kotg2
+				Tag kotg2
 			}
 			StartWaveOutput
 			{
@@ -2152,7 +2148,7 @@ WaveSchedule
 			TFBot
 			{
 				Template T_TFBot_Giant_Demo_Carpetbomber
-				Tag lobo_kotg1
+				Tag kotg1
 			}
 			StartWaveOutput
 			{
@@ -2307,7 +2303,7 @@ WaveSchedule
 			TFBot
 			{
 				Template T_TFBot_Giant_Soldier_Mangler_Conch
-				Tag lobo_kotg2
+				Tag kotg2
 			}
 			StartWaveOutput
 			{
@@ -2563,126 +2559,32 @@ WaveSchedule
 			}
 		}
 
-		WaveSpawn
-		{
-			Name "3-EasterEgg"
-			Where spawnbot_main0
-			Where spawnbot_main1
-			Where spawnbot_main2
-			WaitForAllDead "3-Boss"
-			TotalCount 1
-			MaxActive 1
-			SpawnCount 1
-			WaitBeforeStarting 7.9
-			WaitBetweenSpawns 0
-			TotalCurrency 0
-			RandomChoice
-			{
-				RandomChoice
-				{
-					TFBot
-					{
-						Class Scout
-						Name "What was the wait for?"
-					}
-				}
-			}
-			FirstSpawnOutput
-			{
-				Target BigNet
-				Action RunScriptCode
-				Param "LOBO.KillAllInvaderBots()"
-				Delay 0.1
-			}
-		}
-
 		////////////////////////////////////////////////////////////////////////////////
 
 		// "Precaching" icons for seel_ins.nut
+		// Only needed for potato.tf servers
 
 		WaveSpawn
 		{
-			TotalCount 0
-			MaxActive 0
-			SpawnCount 0
 			Support 1
-			RandomChoice
+			Squad
 			{
-				RandomChoice
-				{
-					TFBot
-					{
-						Class Scout
-						ClassIcon demo_clusterbomb_hyper_lite // carpet bomber boss
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon soldier_barrage_homing_hyper // divider boss
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon soldier_bison_spammer_hyper_giant // nexus boss
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon soldier_spammer_giant // nexus boss, frenzy mode
-					}
+				TFBot { ClassIcon demo_clusterbomb_hyper_lite }
+				TFBot { ClassIcon soldier_barrage_homing_hyper }
+				TFBot { ClassIcon soldier_bison_spammer_hyper_giant }
+				TFBot { ClassIcon soldier_spammer_giant }
 
-					// intermediate icons
-					TFBot
-					{
-						Class Scout
-						ClassIcon pyro_flare_atomic_v2
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon scout_batsaber_nys
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon soldier_crit_giant
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon demo_loch_nys
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon medic_quickfix_seel2
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon scout_capper_lite
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon soldier_buff_burstfire_yoovy_giant
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon heavy_gauntlet_nys
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon medic_kritz2
-					}
-					TFBot
-					{
-						Class Scout
-						ClassIcon soldier_barrage_conch_atomic_giant
-					}
-				}
+				// intermediate icons
+				TFBot { ClassIcon pyro_flare_atomic_v2 }
+				TFBot { ClassIcon scout_batsaber_nys }
+				TFBot { ClassIcon soldier_crit_giant }
+				TFBot { ClassIcon demo_loch_nys }
+				TFBot { ClassIcon medic_quickfix_seel2 }
+				TFBot { ClassIcon scout_capper_lite }
+				TFBot { ClassIcon soldier_buff_burstfire_yoovy_giant }
+				TFBot { ClassIcon heavy_gauntlet_nys }
+				TFBot { ClassIcon medic_kritz2 }
+				TFBot { ClassIcon soldier_barrage_conch_atomic_giant }
 			}
 		}
 	}
