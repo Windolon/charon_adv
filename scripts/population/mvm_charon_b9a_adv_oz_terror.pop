@@ -1,20 +1,30 @@
 // "Oz Terror" for Charon, an advanced mission by Lobotomy
 // Charon by Sntr
 
-// My thanks to:
-// Sntr, for making the map and entertaining my constant nagging of the map;
-// the folks who made PopExt, for killing the need to reinvent the wheel;
-// Seelpit, for her SINS script;
-// fellen, Mince, ocet247, ptyx, lite, ficool2 and a bunch of other folks that I can't remember from the top of my head,
-//     for their help in scripting - without them the gimmicks in this mission would be impossible to realise;
-// Seelpit again, for making wavebar icons;
-// Pealover, for their previous overlay works that I referenced;
-// Revan, for making vscode-vdf for the entirety of the development of this mission (sponsored segment);
-// and to the good people who joined tests and gave valuable fb - you know who you are.
+// Credits:
+//	lite
+//		charon_homingprojectiles.nut (adapted from TankExtensions)
+//		indicator_circle_long.mdl
+//		various wave bar icons
+//	Seelpit
+//		seel_ins.nut
+//		various wave bar icons
+//	Sntr
+//		map
 
-// I'm going to make this mission pure vscript because why not
-// No wait, pure vscript means that this gimmicky ass mission is workshop compatible!!
-// (No randomguy, I'm balls deep into popext I can't go back)
+// Thank you to:
+//	NYS
+//		various wave bar icons
+//	Pealover
+//		overlay references, vscript inspiration
+//	Revan
+//		vscode-vdf
+//	PopExtensionsPlus authors
+//		some vscript functionalities
+//	The people who frequent the #scripting channel in potato.tf
+//		vscript help
+//	Anyone who joined the testing of this mission
+//		valuable feedback
 
 // ===== MAP INFO =====
 
