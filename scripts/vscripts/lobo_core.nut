@@ -142,7 +142,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 	// ----- Think related -----
 
-	SetUpThinkTable = function( ent )
+	SetupThinkTable = function( ent )
 	{
 		local scope = ent.GetScriptScope()
 		if ( !scope )

@@ -529,7 +529,7 @@ LOBO.AddHookedTag( "boss1",
 {
 	OnSpawn = function( bot )
 	{
-		LOBO.SetUpThinkTable( bot )
+		LOBO.SetupThinkTable( bot )
 
 		EntFire( "boss_title", "Display" )
 		EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
@@ -707,7 +707,7 @@ LOBO.AddHookedTag( "boss2",
 {
 	OnSpawn = function( bot )
 	{
-		LOBO.SetUpThinkTable( bot )
+		LOBO.SetupThinkTable( bot )
 
 		EntFire( "boss_name", "AddOutput", "message THE DIVIDER" )
 		EntFire( "boss_hp", "AddOutput", "message \n\n27000 HP" )
@@ -838,7 +838,7 @@ LOBO.AddHookedTag( "boss2b",
 {
 	OnSpawn = function( bot )
 	{
-		LOBO.SetUpThinkTable( bot )
+		LOBO.SetupThinkTable( bot )
 
 		bot.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
 
@@ -1106,7 +1106,7 @@ LOBO.AddHookedTag( "boss3",
 {
 	OnSpawn = function( bot )
 	{
-		LOBO.SetUpThinkTable( bot )
+		LOBO.SetupThinkTable( bot )
 
 		bot.KeyValueFromString( "targetname", "kotg" )
 		EntFire( "boss_title", "AddOutput", "message TERROR SOURCE\n\n" )
