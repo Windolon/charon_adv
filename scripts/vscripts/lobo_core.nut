@@ -397,6 +397,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 				return
 
 			EntFireByHandle( bot, "CallScriptFunction", "OnSpawnTagCheck", -1, null, null )
+			EntFireByHandle( bot, "RunScriptCode", "if ( self.IsMiniBoss() ) self.AddBotTag( `bot_giant` )", -1, null, null )
 		}
 
 		// currently only supports OnTakeDamage hook
@@ -505,15 +506,16 @@ if ( !( "ConstantNamingConvention" in __root ) )
 				LOBO.Core_Cleanup()
 				return
 			}
-
-			// mission reset, e.g. wave lost
-			foreach ( p in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_INVADERS, check_alive = false } ) )
+			else // mission reset, e.g. wave lost
 			{
-				if ( !p.IsBotOfType( TF_BOT_TYPE ) )
-					continue
+				foreach ( p in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_INVADERS, check_alive = false } ) )
+				{
+					if ( !p.IsBotOfType( TF_BOT_TYPE ) )
+						continue
 
-				LOBO.ResetThink( p )
-				LOBO.CleanUpScriptScope( p, [ "OnSpawnTagCheck" ] )
+					LOBO.ResetThink( p )
+					LOBO.CleanUpScriptScope( p, [ "OnSpawnTagCheck" ] )
+				}
 			}
 		}
 	}
