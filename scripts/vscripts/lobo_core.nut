@@ -514,7 +514,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 						continue
 
 					LOBO.ResetThink( p )
-					LOBO.CleanUpScriptScope( p, [ "OnSpawnTagCheck" ] )
+					LOBO.CleanupScriptScope( p, [ "OnSpawnTagCheck" ] )
 				}
 			}
 		}
