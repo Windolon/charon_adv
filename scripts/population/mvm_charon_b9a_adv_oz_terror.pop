@@ -1487,7 +1487,7 @@ WaveSchedule
 						text = `This sound is played on activation.`
 						follow_entindex = Entities.FindByName( null, `tranquility1_bp` ).entindex()
 						lifetime = 7
-						play_sound = `oz_terror_sfx/tranquility.mp3`
+						play_sound = `tranquility.wav`
 					})
 					EntFire( `tranquility1_ready_particles`, `Stop` )
 					EntFire( `tranquility2_ready_particles`, `Stop` )

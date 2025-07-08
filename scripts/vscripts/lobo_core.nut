@@ -274,6 +274,22 @@ if ( !( "ConstantNamingConvention" in __root ) )
 
 		line += typeof scope == "table" ? "}" : "]"
 		ClientPrint( null, 2, line )
+	}
+
+	// can be used to precache models, sound paths and soundscripts
+	// NOTE: we could have used "else if ( PrecacheScriptSound( path ) ) ;"
+	//	but that generates a console warning, albeit harmless. still not pretty.
+	PrecacheModelAndSound = function( arr )
+	{
+		foreach ( path in arr )
+		{
+			if ( path.find( ".mdl" ) != null )
+				PrecacheModel( path )
+			else if ( path.find( ".mp3" ) != null || path.find( ".wav" ) != null )
+				PrecacheSound( path )
+			else
+				PrecacheScriptSound( path )
+		}
 	} // Meta objects
 
 	// ----- Debugging -----

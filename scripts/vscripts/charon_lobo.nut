@@ -4,17 +4,14 @@ catch ( e ) { ClientPrint( null, 3, "\x07FFB4B4Failed to find or run script file
 try { IncludeScript( "seel_ins.nut", __root ) }
 catch ( e ) { ClientPrint( null, 3, "\x07FFB4B4Failed to find or run script file seel_ins.nut. Some information on the wave bar will be lost. Please make sure the map is on the latest version." ) }
 
-// ----- Precaching assets -----
-
-PrecacheSound( "oz_terror_sfx/tranquility.mp3" )
-PrecacheSound( "oz_terror_sfx/starfallcaster1.mp3" )
-PrecacheSound( "oz_terror_sfx/warstompbirth1.wav" )
-PrecacheSound( "oz_terror_sfx/thunderclapcaster.mp3" )
-PrecacheSound( "oz_terror_sfx/howlofterror.mp3" )
-PrecacheSound( "oz_terror_sfx/keimou_in.mp3" )
-PrecacheSound( "oz_terror_sfx/keimou_out.mp3" )
-PrecacheModel( "models/props_mvm/indicator/indicator_circle_long.mdl" )
-// Precaching assets
+LOBO.PrecacheModelAndSound(
+[
+	"tranquility.wav",
+	"weapons/cow_mangler_over_charge_shot.wav",
+	"weapons/cow_mangler_explode.wav",
+	"vo/mvm/mght/heavy_mvm_m_domination13.mp3", // i promise you, pain without end
+	"models/props_mvm/indicator/indicator_circle_long.mdl"
+])
 
 // ----- Handling entity templates -----
 
@@ -623,23 +620,13 @@ LOBO.AddHookedTag( "boss1",
 			})
 
 			// play similiar sound to starfall on cast as an "audio tutorial".
-			EmitSoundEx( { sound_name = "oz_terror_sfx/starfallcaster1.mp3" } )
-			EmitSoundEx( { sound_name = "oz_terror_sfx/starfallcaster1.mp3" } )
-			EmitSoundEx( { sound_name = "oz_terror_sfx/starfallcaster1.mp3" } )
-			EmitSoundEx( { sound_name = "oz_terror_sfx/starfallcaster1.mp3" } )
+			EmitSoundEx( { sound_name = "weapons/cow_mangler_over_charge_shot.wav" } )
 
 			// find radius is about 16 * 2.21 * modelscale, WTF?????
 			EntFireByHandle( bot, "RunScriptCode", @"
 				local origin = self.GetOrigin()
 
-				LOBO.PlaySoundAt( self, `oz_terror_sfx/warstompbirth1.wav` )
-				LOBO.PlaySoundAt( self, `oz_terror_sfx/thunderclapcaster.mp3` )
-				LOBO.PlaySoundAt( self, `oz_terror_sfx/warstompbirth1.wav` )
-				LOBO.PlaySoundAt( self, `oz_terror_sfx/thunderclapcaster.mp3` )
-				LOBO.PlaySoundAt( self, `oz_terror_sfx/warstompbirth1.wav` )
-				LOBO.PlaySoundAt( self, `oz_terror_sfx/thunderclapcaster.mp3` )
-				LOBO.PlaySoundAt( self, `oz_terror_sfx/warstompbirth1.wav` )
-				LOBO.PlaySoundAt( self, `oz_terror_sfx/thunderclapcaster.mp3` )
+				LOBO.PlaySoundAt( self, `weapons/cow_mangler_explode.wav` )
 
 				local affected = LOBO.GetAllPlayers(
 				{
@@ -894,10 +881,7 @@ LOBO.is_first_kotg_spawned  <- false
 
 LOBO.CastTranquilityAbility <- function( bot, cast_count )
 {
-	EmitSoundEx( { sound_name = "oz_terror_sfx/tranquility.mp3" } )
-	EmitSoundEx( { sound_name = "oz_terror_sfx/tranquility.mp3" } )
-	EmitSoundEx( { sound_name = "oz_terror_sfx/tranquility.mp3" } )
-	EmitSoundEx( { sound_name = "oz_terror_sfx/tranquility.mp3" } )
+	EmitSoundEx( { sound_name = "tranquility.wav" } )
 	bot.AddCondEx( TF_COND_RADIUSHEAL_ON_DAMAGE, 9999, null )
 
 	if ( cast_count == 1 )
@@ -1031,10 +1015,7 @@ LOBO.CastStarfallAbility <- function( bot, max_victims )
 
 	local true_victims = max_victims >= victims.len() ? victims : victims.slice( 0, max_victims )
 
-	EmitSoundEx( { sound_name = "oz_terror_sfx/starfallcaster1.mp3" } )
-	EmitSoundEx( { sound_name = "oz_terror_sfx/starfallcaster1.mp3" } )
-	EmitSoundEx( { sound_name = "oz_terror_sfx/starfallcaster1.mp3" } )
-	EmitSoundEx( { sound_name = "oz_terror_sfx/starfallcaster1.mp3" } )
+	EmitSoundEx( { sound_name = "weapons/cow_mangler_over_charge_shot.wav" } )
 	foreach ( player in true_victims )
 	{
 		LOBO.DisplayIndicatorCircle( player, 6.5, 3, false )
@@ -1061,12 +1042,7 @@ LOBO.CastStarfallAbility <- function( bot, max_victims )
 		EntFireByHandle( player, "RunScriptCode", @"
 			DispatchParticleEffect( `powerup_supernova_explode_blue`, starfall_effect_origin, Vector() )
 
-			LOBO.PlaySoundAt( starfall_effect_origin, `oz_terror_sfx/warstompbirth1.wav` )
-			LOBO.PlaySoundAt( starfall_effect_origin, `oz_terror_sfx/thunderclapcaster.mp3` )
-			LOBO.PlaySoundAt( starfall_effect_origin, `oz_terror_sfx/warstompbirth1.wav` )
-			LOBO.PlaySoundAt( starfall_effect_origin, `oz_terror_sfx/thunderclapcaster.mp3` )
-			LOBO.PlaySoundAt( starfall_effect_origin, `oz_terror_sfx/warstompbirth1.wav` )
-			LOBO.PlaySoundAt( starfall_effect_origin, `oz_terror_sfx/thunderclapcaster.mp3` )
+			LOBO.PlaySoundAt( starfall_effect_origin, `weapons/cow_mangler_explode.wav` )
 
 			local affected = LOBO.GetAllPlayers(
 			{
@@ -1146,10 +1122,7 @@ LOBO.AddHookedTag( "boss3",
 			ClientPrint( null, 3, "\x0799CCFFThe Nexus is entering \x07FFFF66frenzy mode\x0799CCFF, shooting rockets instead of lasers!" )
 			SINS.ChangeClassIcon( bot, "soldier_spammer_giant" )
 
-			EmitSoundEx( { sound_name = "oz_terror_sfx/howlofterror.mp3" } )
-			EmitSoundEx( { sound_name = "oz_terror_sfx/howlofterror.mp3" } )
-			EmitSoundEx( { sound_name = "oz_terror_sfx/howlofterror.mp3" } )
-			EmitSoundEx( { sound_name = "oz_terror_sfx/howlofterror.mp3" } )
+			EmitSoundEx( { sound_name = "vo/mvm/mght/heavy_mvm_m_domination13.mp3" } )
 
 			bot.SetCustomModelWithClassAnimations( "models/bots/heavy/bot_heavy.mdl" )
 			bot.HandleTauntCommand( 0 )
