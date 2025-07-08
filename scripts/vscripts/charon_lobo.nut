@@ -1015,7 +1015,9 @@ LOBO.CastStarfallAbility <- function( bot, max_victims )
 
 	local true_victims = max_victims >= victims.len() ? victims : victims.slice( 0, max_victims )
 
-	EmitSoundEx( { sound_name = "weapons/cow_mangler_over_charge_shot.wav" } )
+	if ( true_victims.len() > 0 )
+		EmitSoundEx( { sound_name = "weapons/cow_mangler_over_charge_shot.wav" } )
+
 	foreach ( player in true_victims )
 	{
 		LOBO.DisplayIndicatorCircle( player, 6.5, 3, false )
@@ -1042,6 +1044,7 @@ LOBO.CastStarfallAbility <- function( bot, max_victims )
 		EntFireByHandle( player, "RunScriptCode", @"
 			DispatchParticleEffect( `powerup_supernova_explode_blue`, starfall_effect_origin, Vector() )
 
+			LOBO.PlaySoundAt( starfall_effect_origin, `weapons/cow_mangler_explode.wav` )
 			LOBO.PlaySoundAt( starfall_effect_origin, `weapons/cow_mangler_explode.wav` )
 
 			local affected = LOBO.GetAllPlayers(
