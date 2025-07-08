@@ -414,8 +414,10 @@ LOBO.AddHookedTag( "mangler",
 					banner.PrimaryAttack()
 					return
 				}
+				// please can you stop being stuck, i beg of you
 				else
 				{
+					LOBO.ReleaseButton( bot, IN_ATTACK )
 					bot.Weapon_Switch( mangler )
 					return
 				}
