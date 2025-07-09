@@ -1047,7 +1047,6 @@ LOBO.CastStarfallAbility <- function( bot, max_victims )
 			DispatchParticleEffect( `powerup_supernova_explode_blue`, starfall_effect_origin, Vector() )
 
 			LOBO.PlaySoundAt( starfall_effect_origin, `weapons/cow_mangler_explode.wav` )
-			LOBO.PlaySoundAt( starfall_effect_origin, `weapons/cow_mangler_explode.wav` )
 
 			local affected = LOBO.GetAllPlayers(
 			{
