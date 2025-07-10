@@ -624,28 +624,28 @@ LOBO.AddHookedTag( "boss1",
 			// play similiar sound to starfall on cast as an "audio tutorial".
 			EmitSoundEx( { sound_name = "weapons/cow_mangler_over_charge_shot.wav" } )
 
-			// find radius is about 16 * 2.21 * modelscale, WTF?????
-			origin <- self.GetOrigin()
+			// need to do this so that DispatchParticleEffect doesn't glitch out
+			LOBO.boss1_ability_origin <- self.GetOrigin()
 			EntFireByHandle( bot, "RunScriptCode", @"
 				LOBO.PlaySoundAt( self, `weapons/cow_mangler_explode.wav` )
 
 				local affected = LOBO.GetAllPlayers(
 				{
 					team = TF_TEAM_PVE_DEFENDERS
-					region = [ origin, 318 ]
+					region = [ LOBO.boss1_ability_origin, 318 ] // find radius is about 16 * 2.21 * modelscale, WTF?????
 				})
 				foreach ( player in affected )
 				{
 					player.TakeDamage( 50, DMG_MELEE, self )
 
-					local unitvec_direction = player.GetOrigin() - origin
+					local unitvec_direction = player.GetOrigin() - LOBO.boss1_ability_origin
 					unitvec_direction.z >= 0 ? unitvec_direction.z += 75 : unitvec_direction.z -= 75
 					unitvec_direction *= 1 / unitvec_direction.Length()
 
 					player.SetAbsVelocity( unitvec_direction * 1000 )
 				}
 
-				for ( local building; building = Entities.FindByClassnameWithin( building, `obj_*`, origin, 318 ); )
+				for ( local building; building = Entities.FindByClassnameWithin( building, `obj_*`, LOBO.boss1_ability_origin, 318 ); )
 				{
 					if ( building.GetTeam() != TF_TEAM_PVE_DEFENDERS )
 						continue
@@ -654,7 +654,7 @@ LOBO.AddHookedTag( "boss1",
 				}
 
 				EntFire( `warstomp_particle`, `Stop` )
-				DispatchParticleEffect( `powerup_supernova_explode_blue`, origin, Vector() )
+				DispatchParticleEffect( `powerup_supernova_explode_blue`, LOBO.boss1_ability_origin, Vector() )
 			", 3, null, null )
 
 			EntFireByHandle( bot, "RunScriptCode", "self.StopTaunt( true )", 4, null, null )
