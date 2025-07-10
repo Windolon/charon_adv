@@ -625,9 +625,8 @@ LOBO.AddHookedTag( "boss1",
 			EmitSoundEx( { sound_name = "weapons/cow_mangler_over_charge_shot.wav" } )
 
 			// find radius is about 16 * 2.21 * modelscale, WTF?????
+			origin <- self.GetOrigin()
 			EntFireByHandle( bot, "RunScriptCode", @"
-				local origin = self.GetOrigin()
-
 				LOBO.PlaySoundAt( self, `weapons/cow_mangler_explode.wav` )
 
 				local affected = LOBO.GetAllPlayers(
