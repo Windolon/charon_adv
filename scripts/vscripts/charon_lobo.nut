@@ -389,6 +389,10 @@ __CollectGameEventCallbacks( LOBO.CALLBACKS )
 const SLOT_PRIMARY   = 0
 const SLOT_SECONDARY = 1
 
+LOBO.drop_b 	<- Vector( 1428, -1911, -325 )
+LOBO.drop_a 	<- Vector( 3990, -722, -561 )
+LOBO.drop_main 	<- Vector( 942, 979, -455 )
+
 LOBO.AddHookedTag( "mangler",
 {
 	OnSpawn = function( bot )
@@ -433,6 +437,20 @@ LOBO.AddHookedTag( "mangler",
 			mangler.SecondaryAttack()
 		}
 		AddThinkToEnt( bot, "ManglerThink" )
+
+		// the nuclear option for spawn room stuckage.
+		scope.spawnroom_stuck_check <- null
+		EntFireByHandle( bot, "RunScriptCode", @"
+			if ( `spawnroom_stuck_check` in this && self.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) )
+			{
+				if ( LOBO.gateb_captured )
+					self.SetLocalOrigin( LOBO.drop_b )
+				else if ( LOBO.gatea_captured )
+					self.SetLocalOrigin( LOBO.drop_a )
+				else
+					self.SetLocalOrigin( LOBO.drop_main )
+			}
+		", 20, null, null )
 	}
 })
 // Tags: mangler
