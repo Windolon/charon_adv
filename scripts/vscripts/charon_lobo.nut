@@ -599,7 +599,7 @@ LOBO.AddHookedTag( "boss1",
 			if ( Time() < next_cast_time )
 				return
 
-			LOBO.DisplayIndicatorCircle( bot, 9, 3, true )
+			LOBO.DisplayIndicatorCircle( bot, 9, 3, false )
 			EntFire( "warstomp_particle", "Start" )
 
 			local botmodel = "models/bots/demo_boss/bot_demo_boss.mdl"
@@ -685,9 +685,6 @@ LOBO.AddHookedTag( "boss1",
 		NetProps.SetPropInt( bot, "m_clrRender", 0xFFFFFF )
 		NetProps.SetPropInt( bot, "m_nRenderMode", kRenderNormal )
 		bot.SetCustomModelWithClassAnimations( "models/bots/demo_boss/bot_demo_boss.mdl" )
-
-		for ( local p; p = Entities.FindByName( p, "warstomp_particle" ); )
-			p.Kill()
 
 		// prevent this from somehow running twice or more
 		bot.TakeDamageCustom( params.inflictor, params.attacker, params.weapon,
