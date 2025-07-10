@@ -396,7 +396,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 			{
 				LOBO.KillAllInvaderBots()
 			}
-			else if ( text.startswith( "!t" ) )
+			else if ( startswith( text, "!t" ) )
 			{
 				if ( IsDedicatedServer() )
 				{
