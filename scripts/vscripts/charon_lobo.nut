@@ -664,6 +664,34 @@ LOBO.AddHookedTag( "boss1",
 		})
 	}
 
+	// when the boss is taunting, it dying will spawn human gibs
+	//	we dont want that
+	OnTakeDamage = function( bot, params )
+	{
+		if ( !bot.IsTaunting() || params.damage < bot.GetHealth() )
+			return
+
+		// stop taunt immediately and switch back to normal model
+		// we want to execute as fast as possible, so we even override the original
+		//	think for handling taunt stop
+		bot.StopTaunt( true )
+		bot.RemoveCond( TF_COND_TAUNTING )
+		LOBO.RemoveThink( bot, "BonemergeModelThink" )
+
+		local scope = bot.GetScriptScope()
+		if ( scope.bonemerge_model != null )
+			scope.bonemerge_model.Destroy()
+
+		NetProps.SetPropInt( bot, "m_clrRender", 0xFFFFFF )
+		NetProps.SetPropInt( bot, "m_nRenderMode", kRenderNormal )
+		bot.SetCustomModelWithClassAnimations( "models/bots/demo_boss/bot_demo_boss.mdl" )
+
+		// prevent this from somehow running twice or more
+		bot.TakeDamageCustom( params.inflictor, params.attacker, params.weapon,
+							  params.damage_force, params.damage_position, 999 * params.damage,
+							  params.damage_type, params.damage_stats )
+	}
+
 	OnDeath = function( bot, params )
 	{
 		for ( local p; p = Entities.FindByName( p, "warstomp_particle" ); )
