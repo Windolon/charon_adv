@@ -475,6 +475,7 @@ if ( !( "ConstantNamingConvention" in __root ) )
 		{
 			LOBO.ResetThink( p )
 			p.TerminateScriptScope()
+			p.SetScriptOverlayMaterial( null )
 		}
 
 		local keys_to_cleanup =
@@ -524,13 +525,15 @@ if ( !( "ConstantNamingConvention" in __root ) )
 			}
 			else // mission reset, e.g. wave lost
 			{
-				foreach ( p in LOBO.GetAllPlayers( { team = TF_TEAM_PVE_INVADERS, check_alive = false } ) )
+				foreach ( p in LOBO.GetAllPlayers( { check_alive = false } ) )
 				{
-					if ( !p.IsBotOfType( TF_BOT_TYPE ) )
-						continue
+					p.SetScriptOverlayMaterial( null )
 
-					LOBO.ResetThink( p )
-					LOBO.CleanupScriptScope( p, [ "OnSpawnTagCheck" ] )
+					if ( p.GetTeam() == TF_TEAM_PVE_INVADERS && p.IsBotOfType( TF_BOT_TYPE ) )
+					{
+						LOBO.ResetThink( p )
+						LOBO.CleanupScriptScope( p, [ "OnSpawnTagCheck" ] )
+					}
 				}
 			}
 		}
