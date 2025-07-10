@@ -393,7 +393,19 @@ if ( !( "ConstantNamingConvention" in __root ) )
 			local text = params.text
 
 			if ( text == "!k" )
+			{
 				LOBO.KillAllInvaderBots()
+			}
+			else if ( text.startswith( "!t" ) )
+			{
+				if ( IsDedicatedServer() )
+				{
+					ClientPrint( null, 3, "\x07FFB4B4Timescale command is only available on listen servers (local host)." )
+					return
+				}
+
+				SendToConsole( "host_timescale " + text.slice( 3 ) )
+			}
 		}
 	} // Debugging
 
