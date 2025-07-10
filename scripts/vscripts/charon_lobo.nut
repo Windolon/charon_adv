@@ -686,6 +686,9 @@ LOBO.AddHookedTag( "boss1",
 		NetProps.SetPropInt( bot, "m_nRenderMode", kRenderNormal )
 		bot.SetCustomModelWithClassAnimations( "models/bots/demo_boss/bot_demo_boss.mdl" )
 
+		for ( local p; p = Entities.FindByName( p, "warstomp_particle" ); )
+			p.Kill()
+
 		// prevent this from somehow running twice or more
 		bot.TakeDamageCustom( params.inflictor, params.attacker, params.weapon,
 							  params.damage_force, params.damage_position, 999 * params.damage,
