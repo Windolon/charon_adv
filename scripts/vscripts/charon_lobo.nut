@@ -533,7 +533,7 @@ LOBO.AddHookedTag( "boss1",
 		EntFire( "boss_title", "Display" )
 		EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
 		EntFire( "boss_hp", "Display", null, 0.83 + 0.865 ) // (17+2)*0.035 + 0.2
-		SINS.ChangeClassIcon( bot, "demo_clusterbomb_hyper_lite" )
+		SINS.ChangeClassIcon( bot, "demo_ironbomber_hyper_lite" )
 
 		local scope = bot.GetScriptScope()
 
@@ -1151,7 +1151,7 @@ LOBO.AddHookedTag( "boss3",
 				return
 
 			ClientPrint( null, 3, "\x0799CCFFThe Nexus is entering \x07FFFF66frenzy mode\x0799CCFF, shooting rockets instead of lasers!" )
-			SINS.ChangeClassIcon( bot, "soldier_spammer_giant" )
+			SINS.ChangeClassIcon( bot, "soldier_spammer_hyper_lite" )
 
 			EmitSoundEx( { sound_name = "vo/mvm/mght/heavy_mvm_m_domination13.mp3" } )
 

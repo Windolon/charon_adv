@@ -209,7 +209,7 @@ WaveSchedule
 			Class Soldier
 			Skill Expert
 			Name "Blunt Component"
-			ClassIcon soldier_escape_giant
+			ClassIcon soldier_escapeplan_lobo_giant
 			Health 4500
 			Item "The Escape Plan"
 			Item "The Jupiter Jumpers"
@@ -318,7 +318,7 @@ WaveSchedule
 		{
 			Class Medic
 			Name "Kritzkrieg Medic"
-			ClassIcon medic_kritz_quickfix_split
+			ClassIcon medic_kritz_quickfix_split_liteseel
 			Skill Normal
 			Attributes SpawnWithFullCharge
 			Item "The Kritzkrieg"
@@ -669,7 +669,7 @@ WaveSchedule
 		{
 			Class Demoman
 			Name "Lesser Carpet Bomber"
-			ClassIcon demo_clusterbomb_giant
+			ClassIcon demo_ironbomber_lite_giant
 			Health 3300
 			Skill Expert
 			WeaponRestrictions PrimaryOnly
@@ -720,7 +720,7 @@ WaveSchedule
 			Name "Bigheal Medic"
 			Skill Normal
 			Item "The Quick-Fix"
-			ClassIcon medic_kritz_quickfix_split
+			ClassIcon medic_kritz_quickfix_split_liteseel
 			ItemAttributes
 			{
 				ItemName "The Quick-Fix"
@@ -816,7 +816,7 @@ WaveSchedule
 		{
 			Class Soldier
 			Name "Bison Soldier"
-			ClassIcon soldier_bison
+			ClassIcon soldier_bison_daan
 			Skill Expert
 			MaxVisionRange 1200
 			Item "The Righteous Bison"
@@ -1041,7 +1041,7 @@ WaveSchedule
 				SINS.ChangeIconByName( `heavy_fist_nys`, `heavy_gru` )
 				SINS.ChangeIconFlags( `heavy_gru`, 1 )
 
-				SINS.ChangeIconByName( `medic_kritz_quickfix_split`, `medic` )
+				SINS.ChangeIconByName( `medic_kritz_quickfix_split_liteseel`, `medic` )
 				SINS.ChangeIconByName( `scout_capper_saber_litenys`, `scout_batsaber_nys` )
 				SINS.ChangeIconByName( `soldier_buff_conch_mangler_giant`, `soldier_crit_giant` )
 			"
@@ -1077,7 +1077,7 @@ WaveSchedule
 				TFBot
 				{
 					Template T_TFBot_Medic_QuickFix
-					ClassIcon medic_kritz_quickfix_split
+					ClassIcon medic_kritz_quickfix_split_liteseel
 				}
 			}
 		}
@@ -1102,7 +1102,7 @@ WaveSchedule
 				TFBot
 				{
 					Template T_TFBot_Medic_QuickFix
-					ClassIcon medic_kritz_quickfix_split
+					ClassIcon medic_kritz_quickfix_split_liteseel
 				}
 			}
 		}
@@ -1338,7 +1338,7 @@ WaveSchedule
 					SINS.ChangeIconByName( `soldier_crit_giant`, `soldier_buff_burstfire_yoovy_giant` )
 					SINS.ChangeIconFlags( `soldier_buff_burstfire_yoovy_giant`, 1 | 8 )
 
-					SINS.ChangeIconByName( `medic_quickfix_seel2`, `medic_kritz_quickfix_split` )
+					SINS.ChangeIconByName( `medic_quickfix_seel2`, `medic_kritz_quickfix_split_liteseel` )
 					SINS.ChangeIconByName( `heavy_gru`, `heavy_gauntlet_nys` )
 				"
 			}
@@ -1610,7 +1610,7 @@ WaveSchedule
 
 					LOBO.is_first_kotg_spawned = true
 
-					SINS.ChangeIconByName( `medic_kritz_quickfix_split`, `medic_kritz2` )
+					SINS.ChangeIconByName( `medic_kritz_quickfix_split_liteseel`, `medic_kritz_lite` )
 					SINS.ChangeIconByName( `soldier_buff_burstfire_yoovy_giant`, `soldier_giant` )
 					SINS.ChangeIconByName( `pyro_phlog_v2`, `pyro` )
 				"
@@ -1689,7 +1689,7 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					SINS.ChangeIconByName( `medic_kritz2`, `medic_quickfix_seel2` )
+					SINS.ChangeIconByName( `medic_kritz_lite`, `medic_quickfix_seel2` )
 					SINS.ChangeIconByName( `soldier_and_demo`, `soldier` )
 					SINS.ChangeIconByName( `soldier_giant`, `soldier_buff_burstfire_yoovy_giant` )
 				"
@@ -2579,10 +2579,10 @@ WaveSchedule
 			Support 1
 			Squad
 			{
-				TFBot { ClassIcon demo_clusterbomb_hyper_lite }
+				TFBot { ClassIcon demo_ironbomber_hyper_lite }
 				TFBot { ClassIcon soldier_barrage_homing_hyper }
 				TFBot { ClassIcon soldier_bison_spammer_hyper_giant }
-				TFBot { ClassIcon soldier_spammer_giant }
+				TFBot { ClassIcon soldier_spammer_hyper_lite }
 
 				// intermediate icons
 				TFBot { ClassIcon pyro_flare_atomic_v2 }
@@ -2593,7 +2593,7 @@ WaveSchedule
 				TFBot { ClassIcon scout_capper_lite }
 				TFBot { ClassIcon soldier_buff_burstfire_yoovy_giant }
 				TFBot { ClassIcon heavy_gauntlet_nys }
-				TFBot { ClassIcon medic_kritz2 }
+				TFBot { ClassIcon medic_kritz_lite }
 				TFBot { ClassIcon soldier_barrage_conch_atomic_giant }
 			}
 		}
