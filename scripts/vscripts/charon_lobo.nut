@@ -451,7 +451,7 @@ LOBO.AddHookedTag( "mangler",
 				else
 					self.SetLocalOrigin( LOBO.drop_main )
 
-				LOBO.PlaySoundAt( self, `mvm/mvm_tele_deliver.wav` )
+				LOBO.PlaySoundAt( self, `mvm/mvm_tele_deliver.wav`, 2048 )
 
 				local d_title = `\n\n== Oz Terror Diagnostic ==\n`
 				local d_t1 = `A stuck banner soldier has been detected. It has been forcefully teleported to the currently active robot drop.\n`
