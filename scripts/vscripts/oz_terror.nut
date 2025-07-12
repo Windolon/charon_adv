@@ -1181,6 +1181,8 @@ LOBO.AddHookedTag( "boss3",
 			ClientPrint( null, 3, "\x0799CCFFThe Nexus is entering \x07FFFF66frenzy mode\x0799CCFF, shooting rockets instead of lasers!" )
 			SINS.ChangeClassIcon( bot, "soldier_spammer_hyper_lite" )
 
+			// needs to be a tad bit louder.
+			EmitSoundEx( { sound_name = "vo/mvm/mght/heavy_mvm_m_domination13.mp3" } )
 			EmitSoundEx( { sound_name = "vo/mvm/mght/heavy_mvm_m_domination13.mp3" } )
 
 			bot.SetCustomModelWithClassAnimations( "models/bots/heavy/bot_heavy.mdl" )
