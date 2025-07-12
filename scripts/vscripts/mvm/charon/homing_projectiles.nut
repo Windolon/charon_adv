@@ -69,7 +69,7 @@ function HomingThink()
 
 	vecOrigin = self.GetOrigin()
 	local flTime            = Time()
-	local iCurrentDeflected = GetPropInt(self, "m_iDeflected")
+	local iCurrentDeflected = NetProps.GetPropInt(self, "m_iDeflected")
 	if(iDeflected != iCurrentDeflected)
 	{
 		iDeflected = iCurrentDeflected

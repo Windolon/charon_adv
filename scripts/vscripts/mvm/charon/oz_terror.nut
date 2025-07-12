@@ -1,12 +1,12 @@
-try { IncludeScript( "lobo_core.nut" ) }
+try { IncludeScript( "mvm/charon/lobo_core.nut" ) }
 catch ( e ) { ClientPrint( null, 3, "\x07FFB4B4Failed to find or run script file lobo_core.nut. This mission will not function correctly. Please make sure the map is on the latest version." ) }
 
-try { IncludeScript( "seel_ins.nut", __root ) }
+try { IncludeScript( "mvm/charon/seel_ins.nut", __root ) }
 catch ( e ) { ClientPrint( null, 3, "\x07FFB4B4Failed to find or run script file seel_ins.nut. Some information on the wave bar will be lost. Please make sure the map is on the latest version." ) }
 
 LOBO.PrecacheModelAndSound(
 [
-	"tranquility.wav",
+	"mvm/tranquility.wav",
 	"weapons/cow_mangler_over_charge_shot.wav",
 	"weapons/cow_mangler_explode.wav",
 	"vo/mvm/mght/heavy_mvm_m_domination13.mp3", // i promise you, pain without end
@@ -791,7 +791,7 @@ LOBO.AddHookedTag( "boss2",
 					AccelerationTime      = -1
 					AccelerationTimeStart = 0
 				}
-				IncludeScript( "charon_homingprojectiles.nut", rocket_scope )
+				IncludeScript( "mvm/charon/homing_projectiles.nut", rocket_scope )
 			}
 		})
 
@@ -913,7 +913,7 @@ LOBO.AddHookedTag( "boss2b",
 					AccelerationTime      = -1
 					AccelerationTimeStart = 0
 				}
-				IncludeScript( "charon_homingprojectiles.nut", ray_scope )
+				IncludeScript( "mvm/charon/homing_projectiles.nut", ray_scope )
 			}
 		})
 
@@ -938,7 +938,7 @@ LOBO.is_first_kotg_spawned  <- false
 
 LOBO.CastTranquilityAbility <- function( bot, cast_count )
 {
-	EmitSoundEx( { sound_name = "tranquility.wav" } )
+	EmitSoundEx( { sound_name = "mvm/tranquility.wav" } )
 	bot.AddCondEx( TF_COND_RADIUSHEAL_ON_DAMAGE, 9999, null )
 
 	if ( cast_count == 1 )

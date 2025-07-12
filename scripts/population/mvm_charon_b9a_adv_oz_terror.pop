@@ -1014,8 +1014,7 @@ WaveSchedule
 				// we start the mission at gate B
 				EntFire( `initB`, `Trigger` )
 
-				// load mission script
-				IncludeScript( `charon_lobo.nut` )
+				IncludeScript( `mvm/charon/oz_terror.nut` )
 
 				// bomb attributes
 				EntFire( `intel`, `SetReturnTime`, 35 )
