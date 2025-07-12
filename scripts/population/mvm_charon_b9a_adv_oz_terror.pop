@@ -2567,34 +2567,5 @@ WaveSchedule
 				}
 			}
 		}
-
-		////////////////////////////////////////////////////////////////////////////////
-
-		// "Precaching" icons for seel_ins.nut
-		// Only needed for potato.tf servers
-
-		WaveSpawn
-		{
-			Support 1
-			Squad
-			{
-				TFBot { ClassIcon demo_ironbomber_hyper_lite }
-				TFBot { ClassIcon soldier_barrage_homing_hyper }
-				TFBot { ClassIcon soldier_bison_spammer_hyper_lite_giant }
-				TFBot { ClassIcon soldier_spammer_hyper_lite }
-
-				// intermediate icons
-				TFBot { ClassIcon pyro_flare_atomic_v2 }
-				TFBot { ClassIcon scout_batsaber_nys }
-				TFBot { ClassIcon soldier_crit_giant }
-				TFBot { ClassIcon demo_loch_nys }
-				TFBot { ClassIcon medic_quickfix_seel2 }
-				TFBot { ClassIcon scout_capper_lite }
-				TFBot { ClassIcon soldier_buff_burstfire_yoovy_giant }
-				TFBot { ClassIcon heavy_gauntlet_nys }
-				TFBot { ClassIcon medic_kritz_lite }
-				TFBot { ClassIcon soldier_barrage_conch_atomic_giant }
-			}
-		}
 	}
 }
