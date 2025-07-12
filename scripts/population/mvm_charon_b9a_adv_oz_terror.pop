@@ -1328,7 +1328,7 @@ WaveSchedule
 					EntFire( `break1_relay`, `Kill` )
 
 					foreach ( player in LOBO.GetAllPlayers( { check_alive = false } ) )
-						player.SetScriptOverlayMaterial( `oz_terror_overlays/break1_announcement` )
+						player.SetScriptOverlayMaterial( `overlays/break1_announcement` )
 
 					LOBO.KillAllInvaderBots()
 
@@ -1375,7 +1375,7 @@ WaveSchedule
 				Action RunScriptCode
 				Param "
 					foreach ( player in LOBO.GetAllPlayers( { check_alive = false } ) )
-						player.SetScriptOverlayMaterial( `oz_terror_overlays/bomb_resets_40_sec` )
+						player.SetScriptOverlayMaterial( `overlays/bomb_resets_40_sec` )
 				"
 			}
 		}
@@ -1968,7 +1968,7 @@ WaveSchedule
 					LOBO.gateb_captured = false
 
 					foreach ( player in LOBO.GetAllPlayers( { check_alive = false } ) )
-						player.SetScriptOverlayMaterial( `oz_terror_overlays/break2_announcement` )
+						player.SetScriptOverlayMaterial( `overlays/break2_announcement` )
 
 					LOBO.KillAllInvaderBots()
 
@@ -1996,7 +1996,7 @@ WaveSchedule
 				Action RunScriptCode
 				Param "
 					foreach ( player in LOBO.GetAllPlayers( { check_alive = false } ) )
-						player.SetScriptOverlayMaterial( `oz_terror_overlays/bomb_resets_45_sec` )
+						player.SetScriptOverlayMaterial( `overlays/bomb_resets_45_sec` )
 				"
 			}
 		}

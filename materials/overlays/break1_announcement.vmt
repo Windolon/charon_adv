@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$translucent" 1
+	"$basetexture" "oz_terror_overlays/break_announcement_overlay"
+	"$basetexturetransform" "center 0.5 0.25 scale 5 5.625 rotate 0 translate 0 0"
+	"$frame" "0"
+}
