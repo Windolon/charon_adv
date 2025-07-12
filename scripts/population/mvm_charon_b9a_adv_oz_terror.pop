@@ -2581,7 +2581,7 @@ WaveSchedule
 			{
 				TFBot { ClassIcon demo_ironbomber_hyper_lite }
 				TFBot { ClassIcon soldier_barrage_homing_hyper }
-				TFBot { ClassIcon soldier_bison_spammer_hyper_giant }
+				TFBot { ClassIcon soldier_bison_spammer_hyper_lite_giant }
 				TFBot { ClassIcon soldier_spammer_hyper_lite }
 
 				// intermediate icons

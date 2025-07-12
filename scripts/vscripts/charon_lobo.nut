@@ -1140,7 +1140,7 @@ LOBO.AddHookedTag( "boss3",
 		EntFire( "boss_title", "Display" )
 		EntFire( "boss_name", "Display", null, 0.655 ) // 13*0.035 + 0.2
 		EntFire( "boss_hp", "Display", null, 0.655 + 0.585 ) // (9+2)*0.035 + 0.2
-		SINS.ChangeClassIcon( bot, "soldier_bison_spammer_hyper_giant" )
+		SINS.ChangeClassIcon( bot, "soldier_bison_spammer_hyper_lite_giant" )
 
 		EntFire( "boss_title", "Kill", null, 10 )
 		EntFire( "boss_name", "Kill", null, 10 )
