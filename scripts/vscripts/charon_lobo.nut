@@ -10,6 +10,8 @@ LOBO.PrecacheModelAndSound(
 	"weapons/cow_mangler_over_charge_shot.wav",
 	"weapons/cow_mangler_explode.wav",
 	"vo/mvm/mght/heavy_mvm_m_domination13.mp3", // i promise you, pain without end
+	"mvm/mvm_tele_deliver.wav",
+
 	"models/props_mvm/indicator/indicator_circle_long.mdl"
 ])
 
@@ -439,9 +441,8 @@ LOBO.AddHookedTag( "mangler",
 		AddThinkToEnt( bot, "ManglerThink" )
 
 		// the nuclear option for spawn room stuckage.
-		scope.spawnroom_stuck_check <- null
 		EntFireByHandle( bot, "RunScriptCode", @"
-			if ( `spawnroom_stuck_check` in this && self.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) )
+			if ( self.IsAlive() && self.HasBotTag( `mangler` ) && self.InCond( TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED ) )
 			{
 				if ( LOBO.gateb_captured )
 					self.SetLocalOrigin( LOBO.drop_b )
@@ -449,6 +450,14 @@ LOBO.AddHookedTag( "mangler",
 					self.SetLocalOrigin( LOBO.drop_a )
 				else
 					self.SetLocalOrigin( LOBO.drop_main )
+
+				LOBO.PlaySoundAt( self, `mvm/mvm_tele_deliver.wav` )
+
+				local d_title = `\n\n== Oz Terror Diagnostic ==\n`
+				local d_t1 = `A stuck banner soldier has been detected. It has been forcefully teleported to the currently active robot drop.\n`
+				local d_t2 = `This bug has no VScript fix. If you are a developer for TF2, please consider fixing this regression by looking at GitHub PR#1365.\n`
+				local d_t3 = `This failsafe will be removed once the regression is fixed.\n\n`
+				ClientPrint( null, 2, d_title + d_t1 + d_t2 + d_t3 )
 			}
 		", 20, null, null )
 	}
