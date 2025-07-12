@@ -457,7 +457,8 @@ LOBO.AddHookedTag( "mangler",
 				local d_t1 = `A stuck banner soldier has been detected. It has been forcefully teleported to the currently active robot drop.\n`
 				local d_t2 = `This bug has no VScript fix. If you are a developer for TF2, please consider fixing this regression by looking at GitHub PR#1365.\n`
 				local d_t3 = `This failsafe will be removed once the regression is fixed.\n\n`
-				ClientPrint( null, 2, d_title + d_t1 + d_t2 + d_t3 )
+				ClientPrint( null, 2, d_title + d_t1 )
+				ClientPrint( null, 2, d_t2 + d_t3 )
 			}
 		", 20, null, null )
 	}
