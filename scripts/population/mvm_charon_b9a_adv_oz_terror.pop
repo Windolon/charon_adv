@@ -1014,7 +1014,7 @@ WaveSchedule
 				// we start the mission at gate B
 				EntFire( `initB`, `Trigger` )
 
-				IncludeScript( `mvm/charon/oz_terror.nut` )
+				IncludeScript( `oz_terror.nut` )
 
 				// bomb attributes
 				EntFire( `intel`, `SetReturnTime`, 35 )
@@ -1486,7 +1486,7 @@ WaveSchedule
 						text = `This sound is played on activation.`
 						follow_entindex = Entities.FindByName( null, `tranquility1_bp` ).entindex()
 						lifetime = 7
-						play_sound = `tranquility.wav`
+						play_sound = `misc/tranquility.wav`
 					})
 					EntFire( `tranquility1_ready_particles`, `Stop` )
 					EntFire( `tranquility2_ready_particles`, `Stop` )
