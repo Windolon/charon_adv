@@ -209,7 +209,7 @@ WaveSchedule
 			Class Soldier
 			Skill Expert
 			Name "Blunt Component"
-			ClassIcon soldier_escapeplan_lobo_giant
+			ClassIcon soldier_escapeplan_lite
 			Health 4500
 			Item "The Escape Plan"
 			Item "The Jupiter Jumpers"
