@@ -1,8 +1,8 @@
 try { IncludeScript( "lobo_core.nut" ) }
 catch ( e ) { ClientPrint( null, 3, "\x07FFB4B4Failed to find or run script file lobo_core.nut. This mission will not function correctly. Please make sure the map is on the latest version." ) }
 
-try { IncludeScript( "seel_ins.nut", __root ) }
-catch ( e ) { ClientPrint( null, 3, "\x07FFB4B4Failed to find or run script file seel_ins.nut. Some information on the wave bar will be lost. Please make sure the map is on the latest version." ) }
+try { IncludeScript( "seel_ins_packed.nut", __root ) }
+catch ( e ) { ClientPrint( null, 3, "\x07FFB4B4Failed to find or run script file seel_ins_packed.nut. Some information on the wave bar will be lost. Please make sure the map is on the latest version." ) }
 
 LOBO.PrecacheModelAndSound(
 [
@@ -561,7 +561,7 @@ LOBO.AddHookedTag( "boss1",
 		EntFire( "boss_title", "Display" )
 		EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
 		EntFire( "boss_hp", "Display", null, 0.83 + 0.865 ) // (17+2)*0.035 + 0.2
-		SINS.ChangeClassIcon( bot, "demo_ironbomber_hyper_lite" )
+		SINS_Packed.ChangeClassIcon( bot, "demo_ironbomber_hyper_lite" )
 
 		local scope = bot.GetScriptScope()
 
@@ -758,7 +758,7 @@ LOBO.AddHookedTag( "boss2",
 		EntFire( "boss_title", "Display" )
 		EntFire( "boss_name", "Display", null, 0.83 ) // 18*0.035 + 0.2
 		EntFire( "boss_hp", "Display", null, 0.83 + 0.655 ) // (11+2)*0.035 + 0.2
-		SINS.ChangeClassIcon( bot, "soldier_barrage_homing_hyper" )
+		SINS_Packed.ChangeClassIcon( bot, "soldier_barrage_homing_hyper" )
 
 		bot.AddCondEx( TF_COND_SODAPOPPER_HYPE, 9999, null )
 
@@ -1150,7 +1150,7 @@ LOBO.AddHookedTag( "boss3",
 		EntFire( "boss_title", "Display" )
 		EntFire( "boss_name", "Display", null, 0.655 ) // 13*0.035 + 0.2
 		EntFire( "boss_hp", "Display", null, 0.655 + 0.585 ) // (9+2)*0.035 + 0.2
-		SINS.ChangeClassIcon( bot, "soldier_bison_spammer_hyper_lite_giant" )
+		SINS_Packed.ChangeClassIcon( bot, "soldier_bison_spammer_hyper_lite_giant" )
 
 		EntFire( "boss_title", "Kill", null, 10 )
 		EntFire( "boss_name", "Kill", null, 10 )
@@ -1179,7 +1179,7 @@ LOBO.AddHookedTag( "boss3",
 				return
 
 			ClientPrint( null, 3, "\x0799CCFFThe Nexus is entering \x07FFFF66frenzy mode\x0799CCFF, shooting rockets instead of lasers!" )
-			SINS.ChangeClassIcon( bot, "soldier_spammer_hyper_lite" )
+			SINS_Packed.ChangeClassIcon( bot, "soldier_spammer_hyper_lite" )
 
 			// needs to be a tad bit louder.
 			EmitSoundEx( { sound_name = "vo/mvm/mght/heavy_mvm_m_domination13.mp3" } )

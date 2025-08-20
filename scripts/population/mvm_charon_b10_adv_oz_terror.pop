@@ -1029,20 +1029,20 @@ WaveSchedule
 			Param "
 				EntFire( `wave_start_relay`, `Trigger` )
 
-				SINS.ChangeIconFlags( `engineer_pomson_v2`, 1 )
+				SINS_Packed.ChangeIconFlags( `engineer_pomson_v2`, 1 )
 
-				SINS.ChangeIconByName( `pyro_phlog_v2`, `pyro_flare_atomic_v2` )
-				SINS.ChangeIconFlags( `pyro_flare_atomic_v2`, 1 )
+				SINS_Packed.ChangeIconByName( `pyro_phlog_v2`, `pyro_flare_atomic_v2` )
+				SINS_Packed.ChangeIconFlags( `pyro_flare_atomic_v2`, 1 )
 
-				SINS.ChangeIconByName( `soldier_and_demo`, `soldier` )
-				SINS.ChangeIconFlags( `soldier`, 1 )
+				SINS_Packed.ChangeIconByName( `soldier_and_demo`, `soldier` )
+				SINS_Packed.ChangeIconFlags( `soldier`, 1 )
 
-				SINS.ChangeIconByName( `heavy_fist_nys`, `heavy_gru` )
-				SINS.ChangeIconFlags( `heavy_gru`, 1 )
+				SINS_Packed.ChangeIconByName( `heavy_fist_nys`, `heavy_gru` )
+				SINS_Packed.ChangeIconFlags( `heavy_gru`, 1 )
 
-				SINS.ChangeIconByName( `medic_kritz_quickfix_split_liteseel`, `medic` )
-				SINS.ChangeIconByName( `scout_capper_saber_litenys`, `scout_batsaber_nys` )
-				SINS.ChangeIconByName( `soldier_buff_conch_mangler_giant`, `soldier_crit_giant` )
+				SINS_Packed.ChangeIconByName( `medic_kritz_quickfix_split_liteseel`, `medic` )
+				SINS_Packed.ChangeIconByName( `scout_capper_saber_litenys`, `scout_batsaber_nys` )
+				SINS_Packed.ChangeIconByName( `soldier_buff_conch_mangler_giant`, `soldier_crit_giant` )
 			"
 		}
 
@@ -1137,8 +1137,8 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					SINS.ChangeIconByName( `pyro_flare_atomic_v2`, `pyro` )
-					SINS.ChangeIconByName( `soldier`, `demo_loch_nys` )
+					SINS_Packed.ChangeIconByName( `pyro_flare_atomic_v2`, `pyro` )
+					SINS_Packed.ChangeIconByName( `soldier`, `demo_loch_nys` )
 				"
 				Delay 3.5
 			}
@@ -1196,7 +1196,7 @@ WaveSchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "SINS.ChangeIconByName( `medic`, `medic_quickfix_seel2` )"
+				Param "SINS_Packed.ChangeIconByName( `medic`, `medic_quickfix_seel2` )"
 			}
 		}
 		WaveSpawn
@@ -1260,8 +1260,8 @@ WaveSchedule
 					EntFire( `nav_interface`, `RecomputeBlockers`, null, 1 )
 					EntFire( `nav_interface`, `RecomputeBlockers`, null, 2 )
 
-					SINS.ChangeIconByName( `scout_batsaber_nys`, `scout_capper_lite` )
-					SINS.ChangeIconByName( `pyro`, `pyro_phlog_v2` )
+					SINS_Packed.ChangeIconByName( `scout_batsaber_nys`, `scout_capper_lite` )
+					SINS_Packed.ChangeIconByName( `pyro`, `pyro_phlog_v2` )
 				"
 			}
 			FirstSpawnOutput
@@ -1332,13 +1332,13 @@ WaveSchedule
 
 					LOBO.KillAllInvaderBots()
 
-					SINS.ChangeIconByName( `demo_loch_nys`, `soldier_and_demo` )
+					SINS_Packed.ChangeIconByName( `demo_loch_nys`, `soldier_and_demo` )
 
-					SINS.ChangeIconByName( `soldier_crit_giant`, `soldier_buff_burstfire_yoovy_giant` )
-					SINS.ChangeIconFlags( `soldier_buff_burstfire_yoovy_giant`, 1 | 8 )
+					SINS_Packed.ChangeIconByName( `soldier_crit_giant`, `soldier_buff_burstfire_yoovy_giant` )
+					SINS_Packed.ChangeIconFlags( `soldier_buff_burstfire_yoovy_giant`, 1 | 8 )
 
-					SINS.ChangeIconByName( `medic_quickfix_seel2`, `medic_kritz_quickfix_split_liteseel` )
-					SINS.ChangeIconByName( `heavy_gru`, `heavy_gauntlet_nys` )
+					SINS_Packed.ChangeIconByName( `medic_quickfix_seel2`, `medic_kritz_quickfix_split_liteseel` )
+					SINS_Packed.ChangeIconByName( `heavy_gru`, `heavy_gauntlet_nys` )
 				"
 			}
 			FirstSpawnWarningSound vo/mvm_get_to_upgrade01.mp3 // Get to an upgrade station before they return.
@@ -1609,9 +1609,9 @@ WaveSchedule
 
 					LOBO.is_first_kotg_spawned = true
 
-					SINS.ChangeIconByName( `medic_kritz_quickfix_split_liteseel`, `medic_kritz_lite` )
-					SINS.ChangeIconByName( `soldier_buff_burstfire_yoovy_giant`, `soldier_giant` )
-					SINS.ChangeIconByName( `pyro_phlog_v2`, `pyro` )
+					SINS_Packed.ChangeIconByName( `medic_kritz_quickfix_split_liteseel`, `medic_kritz_lite` )
+					SINS_Packed.ChangeIconByName( `soldier_buff_burstfire_yoovy_giant`, `soldier_giant` )
+					SINS_Packed.ChangeIconByName( `pyro_phlog_v2`, `pyro` )
 				"
 				Delay 0.1
 			}
@@ -1688,9 +1688,9 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					SINS.ChangeIconByName( `medic_kritz_lite`, `medic_quickfix_seel2` )
-					SINS.ChangeIconByName( `soldier_and_demo`, `soldier` )
-					SINS.ChangeIconByName( `soldier_giant`, `soldier_buff_burstfire_yoovy_giant` )
+					SINS_Packed.ChangeIconByName( `medic_kritz_lite`, `medic_quickfix_seel2` )
+					SINS_Packed.ChangeIconByName( `soldier_and_demo`, `soldier` )
+					SINS_Packed.ChangeIconByName( `soldier_giant`, `soldier_buff_burstfire_yoovy_giant` )
 				"
 				Delay 8
 			}
@@ -1809,7 +1809,7 @@ WaveSchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "SINS.ChangeIconByName( `pyro`, `pyro_flare_atomic_v2` )"
+				Param "SINS_Packed.ChangeIconByName( `pyro`, `pyro_flare_atomic_v2` )"
 			}
 		}
 		WaveSpawn
@@ -1876,7 +1876,7 @@ WaveSchedule
 					// reset just before boss spawns, makes him carry the bomb
 					EntFire( `intel`, `ForceResetSilent`, null, 9.9 )
 
-					SINS.ChangeIconByName( `pyro_flare_atomic_v2`, `pyro_phlog_v2` )
+					SINS_Packed.ChangeIconByName( `pyro_flare_atomic_v2`, `pyro_phlog_v2` )
 				"
 			}
 			FirstSpawnOutput
@@ -1974,14 +1974,14 @@ WaveSchedule
 
 					LOBO.gatea_captured <- false
 
-					SINS.ChangeIconFlags( `pyro_phlog_v2`, 1 | 16 )
-					SINS.ChangeIconFlags( `engineer_pomson_v2`, 1 | 16 )
-					SINS.ChangeIconFlags( `heavy_gauntlet_nys`, 1 | 16 )
+					SINS_Packed.ChangeIconFlags( `pyro_phlog_v2`, 1 | 16 )
+					SINS_Packed.ChangeIconFlags( `engineer_pomson_v2`, 1 | 16 )
+					SINS_Packed.ChangeIconFlags( `heavy_gauntlet_nys`, 1 | 16 )
 
-					SINS.ChangeIconByName( `soldier`, `soldier_and_demo` )
-					SINS.ChangeIconFlags( `soldier_and_demo`, 1 | 16 )
+					SINS_Packed.ChangeIconByName( `soldier`, `soldier_and_demo` )
+					SINS_Packed.ChangeIconFlags( `soldier_and_demo`, 1 | 16 )
 
-					SINS.ChangeIconByName( `soldier_buff_burstfire_yoovy_giant`, `soldier_barrage_conch_atomic_giant` )
+					SINS_Packed.ChangeIconByName( `soldier_buff_burstfire_yoovy_giant`, `soldier_barrage_conch_atomic_giant` )
 				"
 			}
 			FirstSpawnWarningSound vo/mvm_get_to_upgrade04.mp3 // Get to an upgrade station.
@@ -2107,11 +2107,11 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					SINS.ChangeIconByName( `scout`, `scout_fan` )
-					SINS.ChangeIconByName( `pyro_phlog_v2`, `pyro_flare_atomic_v2` )
+					SINS_Packed.ChangeIconByName( `scout`, `scout_fan` )
+					SINS_Packed.ChangeIconByName( `pyro_phlog_v2`, `pyro_flare_atomic_v2` )
 
-					SINS.ChangeIconByName( `soldier_and_demo`, `demo_burst` )
-					SINS.ChangeIconFlags( `demo_burst`, 1 )
+					SINS_Packed.ChangeIconByName( `soldier_and_demo`, `demo_burst` )
+					SINS_Packed.ChangeIconFlags( `demo_burst`, 1 )
 				"
 			}
 		}
@@ -2217,8 +2217,8 @@ WaveSchedule
 				Target BigNet
 				Action RunScriptCode
 				Param "
-					SINS.ChangeIconByName( `demo_burst`, `soldier_crit` )
-					SINS.ChangeIconFlags( `soldier_crit`, 1 | 16 )
+					SINS_Packed.ChangeIconByName( `demo_burst`, `soldier_crit` )
+					SINS_Packed.ChangeIconFlags( `soldier_crit`, 1 | 16 )
 				"
 			}
 		}
@@ -2266,7 +2266,7 @@ WaveSchedule
 			{
 				Target BigNet
 				Action RunScriptCode
-				Param "SINS.ChangeIconByName( `pyro_flare_atomic_v2`, `pyro_phlog_v2` )"
+				Param "SINS_Packed.ChangeIconByName( `pyro_flare_atomic_v2`, `pyro_phlog_v2` )"
 			}
 		}
 		WaveSpawn
@@ -2326,7 +2326,7 @@ WaveSchedule
 				Action RunScriptCode
 				Param "
 					LOBO.is_first_kotg_spawned = true
-					SINS.ChangeIconByName( `pyro_phlog_v2`, `pyro_flare_atomic_v2` )
+					SINS_Packed.ChangeIconByName( `pyro_phlog_v2`, `pyro_flare_atomic_v2` )
 				"
 				Delay 0.1
 			}
@@ -2440,10 +2440,10 @@ WaveSchedule
 
 					EntFire( `intel`, `ForceResetSilent`, null, 14.9 )
 
-					SINS.ChangeIconByName( `scout_fan`, `scout` )
+					SINS_Packed.ChangeIconByName( `scout_fan`, `scout` )
 
-					SINS.ChangeIconByName( `soldier_crit`, `soldier_and_demo` )
-					SINS.ChangeIconFlags( `soldier_and_demo`, 1 )
+					SINS_Packed.ChangeIconByName( `soldier_crit`, `soldier_and_demo` )
+					SINS_Packed.ChangeIconFlags( `soldier_and_demo`, 1 )
 				"
 			}
 			FirstSpawnOutput
